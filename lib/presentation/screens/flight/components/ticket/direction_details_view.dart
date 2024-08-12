@@ -31,7 +31,7 @@ class DirectionDetailsView extends StatelessWidget {
         8.verticalSpace,
         Text(
           flight.segments!.length > 1
-              ? '${flight.segments![0].techStops} Stops'
+              ? '${flight.segments!.length - 1} Stops'
               : 'Direct',
           style: TextStylesManager.mediumStyle(fontSize: 12.sp),
         ),

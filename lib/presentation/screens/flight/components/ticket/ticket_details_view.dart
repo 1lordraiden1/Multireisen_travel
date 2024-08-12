@@ -44,7 +44,9 @@ class TicketDetailsView extends StatelessWidget {
                   time: flight
                       .segments![flight.segments!.length - 1].destination!.time
                       .toString(),
-                  title: flight.segments![0].destination!.name.toString(),
+                  title: flight
+                      .segments![flight.segments!.length - 1].destination!.name
+                      .toString(),
                 ),
               ],
             ),

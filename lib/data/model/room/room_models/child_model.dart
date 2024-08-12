@@ -7,8 +7,6 @@ class Child {
     required this.age,
   });
 
-
-  
   factory Child.empty() {
     return Child(
       id: 1,
@@ -20,5 +18,13 @@ class Child {
       id: id,
       age: 2,
     );
+  }
+
+  static List<int> getChildrenAges(List<Child> children) {
+    List<int> ages = [];
+    for (var child in children) {
+      ages.add(child.age);
+    }
+    return ages;
   }
 }

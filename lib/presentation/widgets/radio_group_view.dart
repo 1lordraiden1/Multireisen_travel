@@ -28,26 +28,26 @@ class RadioGroupView extends StatelessWidget {
                   style: TextStylesManager.semiBoldStyle(fontSize: 22.sp),
                 ),
               ),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  itemCount: homeCubit.classTypes.length,
-                  itemBuilder: (context, index) {
-                    String selectedClassType =
-                        homeCubit.classTypes[homeCubit.selectedClassType];
-                    return RadioListTile<String>(
-                      value: homeCubit.classTypes[index],
-                      groupValue:
-                          selectedClassType, // Your selected value (e.g., 'circle', 'square', etc.)
-                      onChanged: (value) {
-                        // Handle the selection
-                        selectedClassType = value!;
-                        homeCubit.handleClassTypeSelection(value);
-                      },
-                      title: Text(homeCubit.classTypes[index]),
-                    );
-                  },
-                ),
+              ListView.builder(
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: homeCubit.classTypes.length,
+                itemBuilder: (context, index) {
+                  String selectedClassType =
+                      homeCubit.classTypes[homeCubit.selectedClassType];
+                  return RadioListTile<String>(
+                    value: homeCubit.classTypes[index],
+                    groupValue:
+                        selectedClassType, // Your selected value (e.g., 'circle', 'square', etc.)
+                    onChanged: (value) {
+                      // Handle the selection
+                      selectedClassType = value!;
+                      homeCubit.handleClassTypeSelection(value);
+                    },
+                    title: Text(homeCubit.classTypes[index]),
+                  );
+                },
               )
             ],
           );

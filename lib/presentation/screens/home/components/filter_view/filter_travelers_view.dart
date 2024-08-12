@@ -19,64 +19,66 @@ class FilterTravelersView extends StatelessWidget {
       bloc: homeCubit,
       listener: (context, state) {},
       builder: (context, snapshot) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            HeaderFilterView(),
-            FilterOptionView(
-              title: homeCubit.adults > 1 ? 'Adults' : 'Adult',
-              limit: ' 12 years >',
-              homeCubit: homeCubit,
-            ),
-            FilterOptionView(
-              title: homeCubit.children > 1 ? 'Children' : 'Child',
-              limit: ' 12 years > 2 years',
-              homeCubit: homeCubit,
-            ),
-            ListView.separated(
-              padding: EdgeInsets.all(10),
-              shrinkWrap: true, //
-              itemBuilder: (context, index) {
-                return FilterOptionView(
-                  homeCubit: homeCubit,
-                  child: homeCubit.flightChildren[index],
-                  title: 'Child ${homeCubit.flightChildren[index].id}',
-                  limit: ' 2 <  11 ',
-                );
-              },
-              separatorBuilder: (context, index) => 10.verticalSpace,
-              itemCount: homeCubit.flightChildren.length,
-            ),
-            RadioGroupView(
-              homeCubit: homeCubit,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: TextWithValueView(
-                text: 'Direct Flight',
-                value: 'value',
-                widget: Switch(
-                  value: homeCubit.isDirect,
-                  onChanged: (value) => homeCubit.handleDirectFlightChanging(
-                    value,
-                  ),
-                ),
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              HeaderFilterView(),
+              FilterOptionView(
+                title: homeCubit.adults > 1 ? 'Adults' : 'Adult',
+                limit: ' 12 years >',
+                homeCubit: homeCubit,
               ),
-            ),
-            30.verticalSpace,
-            RoundedBtn(
-              title: 'Search',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FlightListScreen(
+              FilterOptionView(
+                title: homeCubit.children > 1 ? 'Children' : 'Child',
+                limit: ' 12 years > 2 years',
+                homeCubit: homeCubit,
+              ),
+              ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true, //
+                itemBuilder: (context, index) {
+                  return FilterOptionView(
                     homeCubit: homeCubit,
+                    child: homeCubit.flightChildren[index],
+                    limit: ' 2 <  11 ',
+                  );
+                },
+                separatorBuilder: (context, index) => 10.verticalSpace,
+                itemCount: homeCubit.flightChildren.length,
+              ),
+              RadioGroupView(
+                homeCubit: homeCubit,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextWithValueView(
+                  text: 'Direct Flight',
+                  value: 'value',
+                  widget: Switch(
+                    value: homeCubit.isDirect,
+                    onChanged: (value) => homeCubit.handleDirectFlightChanging(
+                      value,
+                    ),
                   ),
                 ),
               ),
-            ),
-            20.verticalSpace
-          ],
+              30.verticalSpace,
+              RoundedBtn(
+                title: 'Search',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FlightListScreen(
+                      homeCubit: homeCubit,
+                    ),
+                  ),
+                ),
+              ),
+              20.verticalSpace
+            ],
+          ),
         );
       },
     );

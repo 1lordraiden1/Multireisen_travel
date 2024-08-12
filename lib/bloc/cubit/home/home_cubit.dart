@@ -28,6 +28,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   // Dio
 
   Dio dio = Dio();
+
   /* ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         // Print the original request URL
@@ -339,11 +340,10 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   }
 
   handleSearchingForFlights(
-    String pointOfSale,
+    String origin,
     String destination,
     int adultCount,
-    int childCount,
-    int infantCount,
+    List<int> childAges,
     int classType,
     DateTime departureTime,
     bool isDirect,
@@ -357,8 +357,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         StringsManager.contentType,
         StringsManager.contentType,
         {
-          "adults": "2",
-          "children": ["8"],
+          "adults": adultCount,
+          "children": childAges.join(','),
           "segments": [
             /* {
             "originCode": "BER",
@@ -367,17 +367,19 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
             "departureTime": "0"
         }, */
             {
-              "originCode": "PAR",
-              "destinationCode": "BER",
-              "departureDate": "2025-02-22",
+              "originCode": origin,
+              "destinationCode": destination,
+              "departureDate": departureTime.toString().substring(0, 10),
               "departureTime": "0"
             }
           ],
           "flexSearch": "0",
-          "stops": "-1",
+          "stops": isDirect ? "-1" : "1",
           "class": "0"
         },
       );
+
+      
 
       if (response.error != null) {
         isSearchFlightLoading = false;

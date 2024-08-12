@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfly/config/routes/app_routes.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
+import 'package:qfly/data/model/room/room_models/child_model.dart';
 import 'package:qfly/presentation/screens/flight/components/flight_destination_view.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/ticket_view.dart';
 import 'package:qfly/presentation/screens/review_flight/review_flight_screen.dart';
@@ -36,8 +37,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
           ? "RUH"
           : widget.homeCubit.airportTo.code,
       widget.homeCubit.adults,
-      widget.homeCubit.children,
-      widget.homeCubit.infant,
+      Child.getChildrenAges(widget.homeCubit.flightChildren),
       widget.homeCubit.selectedClassType,
       widget.homeCubit.flightDate,
       widget.homeCubit.isDirect,
@@ -111,7 +111,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
             body: Column(
               children: [
                 CustomAppBarView(
-                  title: 'Time Remaining: ${_seconds ~/ 60}:${_seconds % 60}',
+                  title: 'Time Remaining: ${_seconds ~/ 60} : ${_seconds % 60}',
                 ),
                 FlightDestinationView(
                   homeCubit: widget.homeCubit,
