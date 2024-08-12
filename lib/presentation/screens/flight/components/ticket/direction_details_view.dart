@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:qfly/bloc/cubit/home/home_cubit.dart';
+import 'package:qfly/constant/assets_manager.dart';
+import 'package:qfly/constant/text_styles_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/utils/common.dart';
+
+class DirectionDetailsView extends StatelessWidget {
+  const DirectionDetailsView({
+    super.key,
+    required this.homeCubit,
+    required this.flight,
+  });
+
+  final HomeCubit homeCubit;
+  final Entity flight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          Utility.convertMinutesToTime(flight.segments![0].journeyTime!),
+          style: TextStylesManager.lightStyle(fontSize: 10.sp),
+        ),
+        8.verticalSpace,
+        SvgPicture.asset(ImageAssets.directionIcon),
+        8.verticalSpace,
+        Text(
+          flight.segments!.length > 1
+              ? '${flight.segments![0].techStops} Stops'
+              : 'Direct',
+          style: TextStylesManager.mediumStyle(fontSize: 12.sp),
+        ),
+      ],
+    );
+  }
+}
