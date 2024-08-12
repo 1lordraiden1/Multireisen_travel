@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/direction_details_view.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/footer_ticket_view.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/new_directional_details.dart';
@@ -15,7 +16,7 @@ class DetailedTicketView extends StatelessWidget {
   });
 
   final HomeCubit homeCubit;
-  final Flight flight;
+  final Entity flight;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class DetailedTicketView extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: const EdgeInsets.all(0),
-        itemCount: flight.allData!.segments![0].length,
+        itemCount: flight.segments!.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -36,11 +37,8 @@ class DetailedTicketView extends StatelessWidget {
                     children: [
                       TicketItemDetailsView(
                         homeCubit: homeCubit,
-                        title: flight
-                            .allData!.segments![0][index].origin!.airportCode
-                            .toString(),
-                        time: flight.allData!.segments![0][index].departureTime
-                            .toString(),
+                        title: flight.segments![index].origin!.name.toString(),
+                        time: flight.segments![index].origin!.time.toString(),
                       ),
                       NewDirectionDetailsView(
                         index: index,
@@ -49,11 +47,8 @@ class DetailedTicketView extends StatelessWidget {
                       ),
                       TicketItemDetailsView(
                         homeCubit: homeCubit,
-                        time: flight.allData!.segments![0][index].arrivalTime
-                            .toString(),
-                        title: flight.allData!.segments![0][index].destination!
-                            .airportCode
-                            .toString(),
+                        title: flight.segments![index].origin!.name.toString(),
+                        time: flight.segments![index].origin!.time.toString(),
                       ),
                     ],
                   ),
@@ -62,11 +57,10 @@ class DetailedTicketView extends StatelessWidget {
                 FooterTicketView(
                   homeCubit: homeCubit,
                   totalPrice:
-                      'Ground Time : ${flight.allData!.segments![0][index].groundTime.toString()}',
-                  seats: flight.allData!.segments![0][index].flightNumber
-                      .toString(),
-                  numOfBags: flight.allData!.segments![0][index].includedBaggage
-                      .toString(),
+                      'Ground Time : ${flight.segments![index].flightTime.toString()}',
+                  seats:
+                      flight.segments![index].carrier!.flightNumber.toString(),
+                  numOfBags: flight.segments![index].equipment.toString(),
                 ),
               ],
             ),

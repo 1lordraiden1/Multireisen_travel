@@ -4,6 +4,7 @@ import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/widgets/text_shapes/text_with_value_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,7 +18,7 @@ class FlightDetailsView extends StatelessWidget {
 
   final HomeCubit homeCubit;
   final FareQuote details;
-  final Flight flight;
+  final Entity flight;
 
   @override
   Widget build(BuildContext context) {
@@ -28,32 +29,32 @@ class FlightDetailsView extends StatelessWidget {
           text:
               '${homeCubit.adults} ${homeCubit.adults > 1 ? 'Adults' : 'Adult'}',
           value:
-              '\$${(flight.fareBreakdown![0].totalFare!).toStringAsFixed(2)}',
+              '\$${(flight.price!.priceBreakDown![0].total!).toStringAsFixed(2)}',
         ),
         homeCubit.children > 0
             ? TextWithValueView(
                 text:
                     '${homeCubit.children} ${homeCubit.children > 1 ? 'Children' : 'Child'}',
                 value:
-                    '\$${(flight.fareBreakdown![1].totalFare!).toStringAsFixed(2)}',
+                    '\$${(flight.price!.priceBreakDown![1].total!).toStringAsFixed(2)}',
               )
             : const SizedBox(),
-        homeCubit.infant > 0
+        /* homeCubit.infant > 0
             ? TextWithValueView(
                 text:
                     '${homeCubit.infant} ${homeCubit.infant > 1 ? 'Infants' : 'Infant'}',
                 value:
                     '\$${(flight.fareBreakdown![2].totalFare!).toStringAsFixed(2)}',
               )
-            : const SizedBox(),
+            : const SizedBox(), */
         8.verticalSpace,
         TextWithValueView(
           text: 'Total',
-          value: '\$${flight.fare!.totalFare!.toStringAsFixed(2)}',
+          value: '\$${flight.price!.total!.toStringAsFixed(2)}',
         ),
         8.verticalSpace,
-        Text(
-          'Included Baggage : ${flight.allData!.segments![0][0].includedBaggage.toString()}',
+        /* Text(
+          'Included Baggage : ${flight.segments![0].includedBaggage.toString()}',
           style: TextStylesManager.regularStyle(fontSize: 14.sp),
         ),
         8.verticalSpace,
@@ -65,10 +66,10 @@ class FlightDetailsView extends StatelessWidget {
         Text(
           'Airline Name : ${flight.allData!.segments![0][0].airlineName.toString()}',
           style: TextStylesManager.regularStyle(fontSize: 14.sp),
-        ),
+        ), */
         8.verticalSpace,
         Text(
-          'Is LCC  : ${flight.isLcc.toString()}',
+          'Is LCC  : ${flight.properties!.lcc.toString()}',
           style: TextStylesManager.regularStyle(fontSize: 14.sp),
         ),
         8.verticalSpace,

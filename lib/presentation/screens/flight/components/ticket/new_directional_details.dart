@@ -5,6 +5,7 @@ import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/utils/common.dart';
 
 class NewDirectionDetailsView extends StatelessWidget {
@@ -16,7 +17,7 @@ class NewDirectionDetailsView extends StatelessWidget {
   });
 
   final HomeCubit homeCubit;
-  final Flight flight;
+  final Entity flight;
   final int index;
 
   @override
@@ -24,16 +25,14 @@ class NewDirectionDetailsView extends StatelessWidget {
     return Column(
       children: [
         Text(
-          flight.allData!.segments![0][index].duration!.toString(),
+          flight.segments![index].journeyTime!.toString(),
           style: TextStylesManager.lightStyle(fontSize: 10.sp),
         ),
         8.verticalSpace,
         SvgPicture.asset(ImageAssets.directionIcon),
         8.verticalSpace,
         Text(
-          index == 0
-              ? '${flight.allData!.segments![0].length - 1} Stops'
-              : 'Direct',
+          index == 0 ? '${flight.segments!.length - 1} Stops' : 'Direct',
           style: TextStylesManager.mediumStyle(fontSize: 12.sp),
         ),
       ],

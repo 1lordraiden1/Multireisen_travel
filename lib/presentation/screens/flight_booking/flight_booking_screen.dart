@@ -3,6 +3,7 @@ import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/ticket_view.dart';
 import 'package:qfly/presentation/screens/payment/payment_screen.dart';
 import 'package:qfly/presentation/screens/review_flight/components/flight_amenities_view.dart';
@@ -23,7 +24,7 @@ class FlightBookingScreen extends StatefulWidget {
   });
 
   final HomeCubit homeCubit;
-  final Flight flight;
+  final Entity flight;
   final String itemId;
 
   @override
@@ -46,13 +47,13 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
 
     print(widget.homeCubit.passengers);
 
-    widget.homeCubit.handleGettingFlightDetails(
+    /*  widget.homeCubit.handleGettingFlightDetails(
       widget.flight.allData!.segments![0][0].origin.toString(),
       widget.flight.allData!.segments![0][0].origin.toString(),
       widget.itemId,
       widget.flight.isLcc!,
       widget.flight.companyName!,
-    );
+    ); */
   }
 
   @override
@@ -73,13 +74,12 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (widget.flight.allData!.segments![0].length >
-                            1) // delete this
-                         /*  TicketView(
+                        if (widget.flight.segments!.length > 1) // delete this
+                          TicketView(
                             isDetailed: true,
                             flight: widget.flight,
                             homeCubit: widget.homeCubit,
-                          ), */
+                          ),
                         FlightDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
@@ -102,7 +102,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                                 : RoundedBtn(
                                     title: 'Continue To Payment',
                                     onTap: () {
-                                      Navigator.push(
+                                      /* Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => PaymentScreen(
@@ -110,7 +110,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                                             flight: widget.flight,
                                           ),
                                         ),
-                                      );
+                                      ); */
                                     },
                                   );
                           },

@@ -68,14 +68,13 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /* if (widget.flight.allData!.segments![0].length >
-                            1) // delete this
+                        if (widget.flight.segments!.length > 1) // delete this
                           TicketView(
                             isDetailed: true,
                             flight: widget.flight,
                             homeCubit: widget.homeCubit,
                           ),
-                        FlightDetailsView(
+                        /* FlightDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
                           details: widget.homeCubit.fareQuote,
@@ -84,9 +83,9 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                         TravellerDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
-                        ),
+                        ), */
                         40.verticalSpace,
-                        Column(
+                        /* Column(
                           children: [
                             RoundedBtn(
                               title: 'Next',
@@ -97,7 +96,6 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                                     ? ScaffoldMessenger.of(context)
                                         .showSnackBar(
                                         const SnackBar(
-                                          
                                           content: Text(
                                               "Please Enter All Passengers Data"),
                                         ),
@@ -107,16 +105,17 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               FlightBookingScreen(
-                                                  homeCubit: widget.homeCubit,
-                                                  itemId: widget.itemId,
-                                                  flight: widget.flight),
+                                            homeCubit: widget.homeCubit,
+                                            itemId: widget.itemId,
+                                            flight: widget.flight,
+                                          ),
                                         ),
                                       );
                               },
                             ),
                           ],
-                        ),
-                        20.verticalSpace */
+                        ), */
+                        20.verticalSpace
                       ],
                     ),
                   )

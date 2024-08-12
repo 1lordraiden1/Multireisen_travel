@@ -50,10 +50,10 @@ class TicketView extends StatelessWidget {
                         ],
                       ),
                       child: isDetailed
-                          ? null /* DetailedTicketView(
+                          ? DetailedTicketView(
                               homeCubit: homeCubit,
                               flight: flight,
-                            ) */
+                            )
                           : TicketDetailsView(
                               flight: flight,
                               homeCubit: homeCubit,
