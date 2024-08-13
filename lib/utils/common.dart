@@ -4,8 +4,11 @@ class Utility {
     List<String> parts = s.split(':');
     int hours = int.parse(parts[0]);
     int minutes = int.parse(parts[1]);
-    int seconds = int.parse(parts[2]);
-    return Duration(hours: hours, minutes: minutes, seconds: seconds);
+    //int seconds = int.parse(parts[2]);
+    return Duration(
+      hours: hours,
+      minutes: minutes, /* seconds: seconds */
+    );
   }
 
   static int convertDurationToSeconds(String duration) {

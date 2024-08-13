@@ -65,6 +65,7 @@ class _ApiServices implements ApiServices {
     String contentType,
     Map<String, dynamic> body,
   ) async {
+    print(body);
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{

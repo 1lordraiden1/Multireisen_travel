@@ -358,7 +358,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         StringsManager.contentType,
         {
           "adults": adultCount,
-          "children": childAges.join(','),
+          "children": childAges,
           "segments": [
             /* {
             "originCode": "BER",
@@ -378,8 +378,6 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
           "class": "0"
         },
       );
-
-      
 
       if (response.error != null) {
         isSearchFlightLoading = false;

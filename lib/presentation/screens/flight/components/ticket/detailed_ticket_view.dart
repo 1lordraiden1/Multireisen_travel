@@ -7,6 +7,7 @@ import 'package:qfly/presentation/screens/flight/components/ticket/footer_ticket
 import 'package:qfly/presentation/screens/flight/components/ticket/new_directional_details.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/ticket_item_details_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:qfly/utils/common.dart';
 
 class DetailedTicketView extends StatelessWidget {
   const DetailedTicketView({
@@ -32,23 +33,43 @@ class DetailedTicketView extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: Wrap(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TicketItemDetailsView(
-                        homeCubit: homeCubit,
-                        title: flight.segments![index].origin!.name.toString(),
-                        time: flight.segments![index].origin!.time.toString(),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              flight.segments![index].origin!.name.toString(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              flight.segments![index].origin!.time.toString(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                       NewDirectionDetailsView(
                         index: index,
                         flight: flight,
                         homeCubit: homeCubit,
                       ),
-                      TicketItemDetailsView(
-                        homeCubit: homeCubit,
-                        title: flight.segments![index].destination!.name.toString(),
-                        time: flight.segments![index].destination!.time.toString(),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              flight.segments![index].destination!.name
+                                  .toString(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              flight.segments![index].destination!.time
+                                  .toString(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -56,8 +77,15 @@ class DetailedTicketView extends StatelessWidget {
                 16.verticalSpace,
                 FooterTicketView(
                   homeCubit: homeCubit,
-                  totalPrice:
-                      'Ground Time : ${flight.segments![index].flightTime.toString()}',
+                  totalPrice: index != flight.segments!.length - 1
+                      ? 'Waiting Time : ${Utility.parseDuration(
+                                flight.segments![index + 1].origin!.time!,
+                              ) - Utility.parseDuration(
+                                flight.segments![index].destination!.time!,
+                              )}'
+                          .toString()
+                          .substring(0, 22)
+                      : "no waiting", // temp for now
                   seats:
                       flight.segments![index].carrier!.flightNumber.toString(),
                   numOfBags: flight.segments![index].equipment.toString(),

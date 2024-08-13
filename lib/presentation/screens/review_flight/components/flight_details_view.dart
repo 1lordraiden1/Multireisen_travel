@@ -48,6 +48,16 @@ class FlightDetailsView extends StatelessWidget {
               )
             : const SizedBox(), */
         8.verticalSpace,
+        /* TextWithValueView(
+          text: 'Base Price',
+          value: '\$${flight.price!.basePrice!.toStringAsFixed(2)}',
+        ),
+        8.verticalSpace, */
+        TextWithValueView(
+          text: 'Fees',
+          value: '\$${flight.price!.fees!.toStringAsFixed(2)}',
+        ),
+        8.verticalSpace,
         TextWithValueView(
           text: 'Total',
           value: '\$${flight.price!.total!.toStringAsFixed(2)}',

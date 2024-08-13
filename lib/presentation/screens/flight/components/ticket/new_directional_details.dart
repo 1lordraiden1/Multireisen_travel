@@ -25,7 +25,7 @@ class NewDirectionDetailsView extends StatelessWidget {
     return Column(
       children: [
         Text(
-          flight.segments![index].journeyTime!.toString(),
+          Utility.convertMinutesToTime(flight.segments![index].flightTime!),
           style: TextStylesManager.lightStyle(fontSize: 10.sp),
         ),
         8.verticalSpace,

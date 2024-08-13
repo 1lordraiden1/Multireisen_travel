@@ -68,6 +68,9 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          "${widget.flight.segments![0].operatingCarrier!.name!} Airline",
+                        ),
                         TicketView(
                           isDetailed:
                               widget.flight.segments!.length > 1 ? true : false,
