@@ -14,6 +14,7 @@ import 'package:qfly/presentation/screens/review_flight/components/traveller_det
 import 'package:qfly/presentation/widgets/app_bar/custom_app_bar_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../config/routes/app_routes.dart';
 
@@ -34,6 +35,7 @@ class ReviewFlightScreen extends StatefulWidget {
 }
 
 class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
+  late WebViewController controller;
   @override
   void initState() {
     // TODO: implement initState
@@ -48,6 +50,67 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
     );
 
     print(widget.homeCubit.passengers);
+
+    /* controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onHttpError: (HttpResponseError error) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.flight.links![3].href!)); */
+  }
+
+  void showWebViewPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 16,
+          child: Container(
+            height: 400,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Fare Rules",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: WebViewWidget(
+                    controller: controller,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("Close"),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -77,10 +140,18 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                           flight: widget.flight,
                           homeCubit: widget.homeCubit,
                         ),
+                        10.verticalSpace,
                         FlightDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
                           details: widget.homeCubit.fareQuote,
+                        ),
+                        10.verticalSpace,
+                        ElevatedButton(
+                          onPressed: () {
+                            showWebViewPopup(context);
+                          },
+                          child: const Text("Fare Rules"),
                         ),
                         10.verticalSpace,
                         TravellerDetailsView(

@@ -24,11 +24,14 @@ class FlightListScreen extends StatefulWidget {
 }
 
 class _FlightListScreenState extends State<FlightListScreen> {
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
+    // clear old data
     widget.homeCubit.flight.clear();
 
+    // get init data (page 1)
     widget.homeCubit.handleSearchingForFlights(
       widget.homeCubit.airportFrom.code.isEmpty
           ? "CAI"
@@ -42,13 +45,23 @@ class _FlightListScreenState extends State<FlightListScreen> {
       widget.homeCubit.flightDate,
       widget.homeCubit.isDirect,
     );
+
+    // get remaining pages
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        widget.homeCubit.filterFlightSearch();
+      }
+    });
+
     //_startTimer();
   }
 
   int _seconds = 0;
   bool _isRunning = false;
-  /* //late Timer _timer;
-
+  //late Timer _timer;
+/* 
   void _startTimer() {
     if (!_isRunning) {
       setState(() {
@@ -86,12 +99,13 @@ class _FlightListScreenState extends State<FlightListScreen> {
       );
     }
   }
-
+ */
   @override
   void dispose() {
     //_timer.cancel();
+    _scrollController.dispose();
     super.dispose();
-  } */
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +114,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
         bloc: widget.homeCubit,
         listener: (context, state) {
           if (state is SearchingEntitiesState) {
-            callerWidget = showDataWidget(widget.homeCubit);
+            callerWidget = showDataWidget(widget.homeCubit, _scrollController);
           }
           if (state is NoDataFoundState) {
             callerWidget = const Center(child: Text('No Results Found'));
@@ -138,8 +152,9 @@ Widget callerWidget = Center(
   child: CircularProgressIndicator(),
 );
 
-Widget showDataWidget(HomeCubit homeCubit) {
+Widget showDataWidget(HomeCubit homeCubit, ScrollController scrollController) {
   return ListView.builder(
+    controller: scrollController,
     itemCount: homeCubit.entities.length,
     itemBuilder: (BuildContext context, int index) {
       return InkWell(

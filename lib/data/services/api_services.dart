@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
 
 import 'package:qfly/data/model/responses/flight_response.dart';
@@ -34,6 +35,16 @@ abstract class ApiServices {
     @Header('Accept') String accept,
     @Header('Content') String contentType,
     @Body() Map<String, dynamic> body,
+  );
+
+  @GET(EndPoints.filterFlightSearch)
+  Future<FlightResponse> filterSearch(
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    @Header('Content') String contentType,
+    @Query('page') int page,
   );
 
   // Base URL for your API

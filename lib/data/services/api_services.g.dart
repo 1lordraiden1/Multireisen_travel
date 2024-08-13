@@ -65,7 +65,6 @@ class _ApiServices implements ApiServices {
     String contentType,
     Map<String, dynamic> body,
   ) async {
-    print(body);
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
@@ -87,6 +86,47 @@ class _ApiServices implements ApiServices {
             .compose(
               _dio.options,
               '/flights/search',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = FlightResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FlightResponse> filterSearch(
+    String accessToken,
+    String version,
+    String auth,
+    String accept,
+    String contentType,
+    int page,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'page': page};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Version': version,
+      r'Authorization': auth,
+      r'Accept': accept,
+      r'Content': contentType,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<FlightResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/flights/items',
               queryParameters: queryParameters,
               data: _data,
             )

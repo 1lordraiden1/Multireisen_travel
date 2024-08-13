@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:qfly/constant/app_strings.dart';
+import 'package:qfly/data/Shared/sharedPreferences.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
@@ -122,9 +123,11 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   FareQuote _fareQuote = FareQuote.empty();
 
   int _selectedClassType = 0;
+  int flightSearchPage = 1;
 
   bool isSearchDataLoading = false;
   bool isSearchFlightLoading = false;
+  bool isFilterSearchLoading = false;
   bool isSearchFlightDetailsLoading = false;
   bool isStillBooking = false;
 
@@ -398,6 +401,41 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     } finally {
       isSearchFlightLoading = false;
     }
+  }
+
+  filterFlightSearch() async {
+    isFilterSearchLoading = true;
+    flightSearchPage++;
+
+    print("Starting Filter Search");
+
+    final FlightResponse response = await ApiServices(dio).filterSearch(
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.ourToken,
+      StringsManager.contentType,
+      StringsManager.contentType,
+      flightSearchPage,
+    );
+
+    if (response.error != null) {
+      isFilterSearchLoading = false;
+      print(response.error!.message.toString());
+      return;
+    }
+
+    print(" Number of Entities Before adding : ${_entities.length}");
+
+    _entities.addAll(response.data!.entities!);
+
+    print(" Number of Entities Before adding : ${_entities.length}");
+
+    emit(SearchingEntitiesState(entities: _entities));
+
+    isFilterSearchLoading = false;
+
+    //throw Exception(e.toString());
   }
 
   handleGettingFlightDetails(

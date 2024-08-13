@@ -31,6 +31,8 @@ class EndPoints {
   static const testToken = '/gettoken';
 
   static const newFlightSearch = '/flights/search';
+
+  static const filterFlightSearch = '/flights/items';
   /* 
   static const loginUrl = 'User/Login';
   static const roadmapUrl = 'Course/GetRoadMap';

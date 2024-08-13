@@ -56,7 +56,7 @@ class TicketDetailsView extends StatelessWidget {
             homeCubit: homeCubit,
             totalPrice: '\$${flight.price!.total!.toStringAsFixed(2)}',
             seats:
-                flight.segments![0].operatingCarrier!.flightNumber.toString(),
+                flight.segments![0].carrier!.flightNumber ?? 'Null',
             numOfBags: flight.baggageAllowance!.isEmpty
                 ? "No Baggage Allowed"
                 : flight.baggageAllowance![0].toString(),
