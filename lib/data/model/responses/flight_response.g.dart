@@ -171,7 +171,7 @@ Map<String, dynamic> _$EntityPropertiesToJson(EntityProperties instance) =>
     };
 
 Segment _$SegmentFromJson(Map<String, dynamic> json) => Segment(
-      group: (json['group'] as num?)?.toInt(),
+      group: 0, //(json['group'] as num?)?.toInt() ??
       segmentClass: json['class'] == null
           ? null
           : SegmentClass.fromJson(json['class'] as Map<String, dynamic>),

@@ -88,7 +88,9 @@ class DetailedTicketView extends StatelessWidget {
                       : "no waiting", // temp for now
                   seats:
                       flight.segments![index].carrier!.flightNumber.toString(),
-                  numOfBags: flight.segments![index].equipment.toString(),
+                  numOfBags: flight.baggageAllowance!.isEmpty
+                      ? "No Baggage Allowed"
+                      : flight.baggageAllowance![0].toString(),
                 ),
               ],
             ),

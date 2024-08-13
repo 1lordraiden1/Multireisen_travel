@@ -47,6 +47,8 @@ abstract class ApiServices {
     @Query('page') int page,
   );
 
+  
+
   // Base URL for your API
   /*  static const String baseUrl =
       'https://api2-test.multireisen.com/'; // EndPoints.baseUrl;

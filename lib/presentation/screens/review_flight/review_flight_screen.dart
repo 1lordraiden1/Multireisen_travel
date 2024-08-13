@@ -41,7 +41,7 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
     // TODO: implement initState
     super.initState();
     // clear data
-    widget.homeCubit.details.clear();
+    // widget.homeCubit.details.clear();
 
     widget.homeCubit.createPassengers(
       widget.homeCubit.adults +
@@ -51,7 +51,7 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
 
     print(widget.homeCubit.passengers);
 
-    /* controller = WebViewController()
+    controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
@@ -71,7 +71,7 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
           },
         ),
       )
-      ..loadRequest(Uri.parse(widget.flight.links![3].href!)); */
+      ..loadRequest(Uri.parse(widget.flight.links![0].href!));
   }
 
   void showWebViewPopup(BuildContext context) {
@@ -132,7 +132,7 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${widget.flight.segments![0].operatingCarrier!.name!} Airline",
+                          "${widget.flight.segments![0].carrier!.name!} Airline",
                         ),
                         TicketView(
                           isDetailed:
