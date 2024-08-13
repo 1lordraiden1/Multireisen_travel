@@ -29,10 +29,10 @@ class TicketItemDetailsView extends StatelessWidget {
           time,
           style: TextStylesManager.regularStyle(fontSize: 12.sp),
         ),
-        Text(
+        /*      Text(
           time,
           style: TextStylesManager.regularStyle(fontSize: 12.sp),
-        ),
+        ), */
       ],
     );
   }

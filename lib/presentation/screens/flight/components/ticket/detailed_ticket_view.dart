@@ -21,7 +21,7 @@ class DetailedTicketView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: const EdgeInsets.all(0),
         itemCount: flight.segments!.length,
@@ -32,8 +32,8 @@ class DetailedTicketView extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Wrap(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TicketItemDetailsView(
                         homeCubit: homeCubit,
@@ -47,8 +47,8 @@ class DetailedTicketView extends StatelessWidget {
                       ),
                       TicketItemDetailsView(
                         homeCubit: homeCubit,
-                        title: flight.segments![index].origin!.name.toString(),
-                        time: flight.segments![index].origin!.time.toString(),
+                        title: flight.segments![index].destination!.name.toString(),
+                        time: flight.segments![index].destination!.time.toString(),
                       ),
                     ],
                   ),

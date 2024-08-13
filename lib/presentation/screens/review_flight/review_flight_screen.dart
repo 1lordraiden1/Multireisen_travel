@@ -68,13 +68,13 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (widget.flight.segments!.length > 1) // delete this
-                          TicketView(
-                            isDetailed: true,
-                            flight: widget.flight,
-                            homeCubit: widget.homeCubit,
-                          ),
-                        /* FlightDetailsView(
+                        TicketView(
+                          isDetailed:
+                              widget.flight.segments!.length > 1 ? true : false,
+                          flight: widget.flight,
+                          homeCubit: widget.homeCubit,
+                        ),
+                        FlightDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
                           details: widget.homeCubit.fareQuote,
@@ -83,7 +83,7 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                         TravellerDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
-                        ), */
+                        ),
                         40.verticalSpace,
                         /* Column(
                           children: [

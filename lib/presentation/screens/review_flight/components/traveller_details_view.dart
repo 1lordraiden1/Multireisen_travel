@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qfly/data/Shared/countries.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
 import 'package:qfly/data/model/passenger_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
 
 import 'package:qfly/presentation/screens/payment/payment_screen.dart';
 import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
@@ -24,7 +25,7 @@ class TravellerDetailsView extends StatelessWidget {
   });
 
   final HomeCubit homeCubit;
-  final Flight flight;
+  final Entity flight;
 
   @override
   Widget build(BuildContext context) {
@@ -327,6 +328,7 @@ class OutlinedInputFieldWidget extends StatelessWidget {
     this.onSaved,
     this.showDate,
     this.controller,
+    this.controllerValue,
   });
   final HomeCubit homeCubit;
   final String label;
@@ -335,6 +337,7 @@ class OutlinedInputFieldWidget extends StatelessWidget {
   final void Function(String?)? onSaved;
   final DateTime? Function(String?)? showDate;
   final TextEditingController? controller;
+  final String? controllerValue;
 
   @override
   Widget build(BuildContext context) {
@@ -386,6 +389,7 @@ class OutlinedInputFieldWidget extends StatelessWidget {
             },
           )
         : TextFormField(
+            initialValue: controllerValue,
             enabled: !isDate!,
             decoration: InputDecoration(
               labelText: label,
