@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/screens/payment/components/card_payment_view.dart';
 import 'package:qfly/presentation/screens/payment/components/payment_ways_view.dart';
 import 'package:qfly/presentation/widgets/app_bar/custom_app_bar_view.dart';
@@ -12,11 +13,16 @@ import 'package:qfly/presentation/widgets/text_shapes/text_with_value_view.dart'
 import 'package:readmore/readmore.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen(
-      {super.key, required this.homeCubit, required this.flight});
+  const PaymentScreen({
+    super.key,
+    required this.homeCubit,
+    required this.flight,
+    required this.itemId,
+  });
 
   final HomeCubit homeCubit;
-  final Flight flight;
+  final Entity flight;
+  final String itemId;
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -27,60 +33,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.homeCubit.ticketData.clear();
-    try {
-      widget.flight.isLcc!
-          ? widget.homeCubit.handleGettingTicketDetails(
-              fare: widget.homeCubit.details['fareQuote']['Result'][0]['Fare'],
-              fareRules: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['FareRules'][0],
-              segment: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['Segments'][0],
-              airlineCode: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['ValidatingAirline'],
-              companyName: widget.flight.companyName!,
-              desAirportCode: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['Destination'],
-              isLcc: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['IsLcc'],
-              origin: widget.flight.allData!.origin!,
-              originAirportCode: widget.homeCubit.details['fareQuote']['Result']
-                  [0]['Origin'],
-              pointOfSale: widget.flight.allData!.origin!,
-              responseTime: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['ResponseTime'],
-              resultId: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['ResultId'],
-            )
-          : widget.homeCubit.handleBookingTicketProcess(
-              fare: widget.homeCubit.details['fareQuote']['Result'][0]['Fare'],
-              fareRules: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['FareRules'][0],
-              segment: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['Segments'][0],
-              airlineCode: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['ValidatingAirline'],
-              companyName: widget.flight.companyName!,
-              desAirportCode: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['Destination'],
-              isLcc: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['IsLcc'],
-              origin: widget.flight.allData!.origin!,
-              originAirportCode: widget.homeCubit.details['fareQuote']['Result']
-                  [0]['Origin'],
-              pointOfSale: widget.flight.allData!.origin!,
-              responseTime: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['ResponseTime'],
-              resultId: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['ResultId'],
-              lastTicketDate: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['LastTicketDate'],
-              ticketAdvisory: widget.homeCubit.details['fareQuote']['Result'][0]
-                  ['TicketAdvisory'],
-              userSearchTime:
-                  widget.homeCubit.flightDate.toString().substring(0, 10),
-            );
-    } catch (e) {
+
+    // Clear Data
+    widget.homeCubit.savePassengersResponse.data = null;
+
+    // Get Data
+    widget.homeCubit.savePassengers(widget.itemId);
+
+    try {} catch (e) {
       callerWidget = Center(
         child: Text(
           "Sorry There's A server error, Please try to search again or contact tech support",
@@ -122,7 +82,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return BlocConsumer<HomeCubit, HomeState>(
         bloc: widget.homeCubit,
         listener: (context, state) {
-          if (state is GettingAlreadyBookedTicketState &&
+          /* if (state is GettingAlreadyBookedTicketState &&
               widget.homeCubit.details.isEmpty) {
             callerWidget = Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -143,6 +103,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           }
           if (state is GettingTicketDetailsState) {
             callerWidget = showPaymentWidget(widget.homeCubit);
+          } */
+
+          if (state is FinalizingBookingState) {
+            callerWidget = showPaymentWidget(widget.homeCubit);
           }
         },
         builder: (context, state) {
@@ -160,7 +124,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     title: 'Payment',
                     canPop: false,
                   ),
-                  widget.homeCubit.isStillBooking
+                  widget.homeCubit.isBookingFinalizationLoading
                       ? const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -198,7 +162,8 @@ Widget showPaymentWidget(HomeCubit homeCubit) {
           5.verticalSpace,
           TextWithValueView(
             text: 'Ticket Number',
-            value: homeCubit.ticketData['PNR'].toString(),
+            value:
+                homeCubit.finalizeBookingResponse.data!.bookingId!.toString(),
           ),
           5.verticalSpace,
           TextWithValueView(

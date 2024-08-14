@@ -135,6 +135,9 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   bool isSearchFlightDetailsLoading = false;
   bool isStillBooking = false;
 
+  bool isSavePassengersLoading = false;
+  bool isBookingFinalizationLoading = false;
+
   bool _isDirect = false;
 
   Map<String, dynamic> _ticketData = {};
@@ -484,7 +487,10 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   }
 
   selectFlight(String itemId) async {
+    // Loading
     isFlightSelectionLoading = true;
+
+    // getting response
     final SelectFlightResponse response = await ApiServices(dio).selectFlight(
       itemId,
       await SharedPreferencesUtil.getAuthToken("accessToken") ??
@@ -497,7 +503,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     _selectFlightResponse = response;
 
     if (response.error != null) {
-      isSearchFlightLoading = false;
+      isFlightSelectionLoading = false;
       print(response.error!.message.toString());
       emit(NoDataFoundState());
       return;
@@ -505,12 +511,177 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
     print(_selectFlightResponse.data!.payModes![0].id);
 
+    emit(FlightSelectionState(selectFlightResponse: _selectFlightResponse));
+
     //_entities = response.data!.entities!;
 
-    isSearchFlightLoading = false;
+    isFlightSelectionLoading = false;
   }
 
-  
+  savePassengers(itemId) async {
+    isSavePassengersLoading = true;
+
+    // getting response
+    final SavePassengersResponse response =
+        await ApiServices(dio).savePassengers(
+      itemId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.ourToken,
+      StringsManager.contentType,
+      StringsManager.contentType,
+      {
+        "passengers": [
+          {
+            "type": "ADT",
+            "title": "MR",
+            "firstName": "John",
+            "lastName": "Doe",
+            "birthDate": "1978-01-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "1234567",
+              "issueCountry": "DE",
+              "expiry": "2025-05-01"
+            },
+            /* "options": {
+              "1": {"id": "OutwardLuggageOptions", "value": "1"},
+              "2": {"id": "ReturnLuggageOptions", "value": "1"}
+            } */
+          },
+          /* {
+            "type": "ADT",
+            "title": "MRS",
+            "firstName": "Helene",
+            "lastName": "Doe",
+            "birthDate": "1963-08-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "456546",
+              "issueCountry": "DE",
+              "expiry": "2025-09-01"
+            },
+            /* "options": {
+              "1": {"id": "OutwardLuggageOptions", "value": "1"},
+              "2": {"id": "ReturnLuggageOptions", "value": "1"}
+            } */
+          },
+          {
+            "type": "CHD",
+            "title": "MR",
+            "firstName": "Jason",
+            "lastName": "Doe",
+            "birthDate": "2016-06-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "3456786783456",
+              "issueCountry": "DE",
+              "expiry": "2029-10-11"
+            }
+          },
+          {
+            "type": "INF",
+            "title": "MS",
+            "firstName": "Baby",
+            "lastName": "Doe",
+            "birthDate": "2024-02-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "3456783456",
+              "issueCountry": "DE",
+              "expiry": "2029-10-11"
+            }
+          } */
+        ],
+        "contact": {
+          "title": "MR",
+          "firstName": "Contact",
+          "lastName": "Person",
+          "phone": "+49-12-3456789",
+          "email": "user_23432@gmail.com",
+          "country": "DE",
+          "zip": "34663",
+          "city": "Berlin",
+          "address": "Some street 1."
+        },
+        /* "invoice": {
+        "name": "Multiresisen Gmbh.",
+        "country": "DE",
+        "zip": "34663",
+        "city": "Berlin",
+        "address": "Some street 1."
+    },
+    "options": [
+        {
+            "id": "SpeedyBoarding",
+            "value": "1"
+        }
+    ], */
+        "paymentId": "9"
+      },
+    );
+
+    _savePassengersResponse = response;
+
+    if (response.data == null) {
+      isSavePassengersLoading = false;
+      print("Error in User Data");
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Booking ID!! : ${_savePassengersResponse.data!.bookingId!.toString()}",
+    );
+
+    emit(SavingPassengerState(savePassengersResponse: _savePassengersResponse));
+
+    finalizeBooking(itemId);
+
+    isSavePassengersLoading = false;
+  }
+
+  finalizeBooking(String itemId) async {
+    isBookingFinalizationLoading = true;
+
+    // getting response
+    final FinalizeBookingResponse response =
+        await ApiServices(dio).finalizeBooking(
+      itemId,
+      _savePassengersResponse.data!.bookingId!.toString(),
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.ourToken,
+      StringsManager.contentType,
+      StringsManager.contentType,
+    );
+
+    _finalizeBookingResponse = response;
+
+    if (response.error != null) {
+      isBookingFinalizationLoading = false;
+      print(response.error!.message.toString());
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Final Booking ID!! : ${_savePassengersResponse.data!.bookingId!.toString()}",
+    );
+    emit(FinalizingBookingState(
+      finalizeBookingResponse: _finalizeBookingResponse,
+    ));
+
+    //_entities = response.data!.entities!;
+
+    isBookingFinalizationLoading = false;
+  }
 
   handleGettingFlightDetails(
     String pointOfSale,

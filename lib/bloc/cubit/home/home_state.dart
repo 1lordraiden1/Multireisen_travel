@@ -215,6 +215,30 @@ class SearchingEntitiesState extends HomeState {
   }) : _entities = entities;
 }
 
+class FlightSelectionState extends HomeState {
+  final SelectFlightResponse _selectFlightResponse;
+
+  FlightSelectionState({
+    required SelectFlightResponse selectFlightResponse,
+  }) : _selectFlightResponse = selectFlightResponse;
+}
+
+class SavingPassengerState extends HomeState {
+  final SavePassengersResponse _savePassengersResponse;
+
+  SavingPassengerState({
+    required SavePassengersResponse savePassengersResponse,
+  }) : _savePassengersResponse = savePassengersResponse;
+}
+
+class FinalizingBookingState extends HomeState {
+  final FinalizeBookingResponse _finalizeBookingResponse;
+
+  FinalizingBookingState({
+    required FinalizeBookingResponse finalizeBookingResponse,
+  }) : _finalizeBookingResponse = finalizeBookingResponse;
+}
+
 class NoDataFoundState extends HomeState {}
 
 class NoHotelDataFoundState extends HomeState {

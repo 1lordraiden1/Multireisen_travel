@@ -110,7 +110,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                             RoundedBtn(
                               title: 'Next',
                               onTap: () {
-                                widget.homeCubit.passengers.any(
+                              /*   widget.homeCubit.passengers.any(
                                   (element) => element.isEmpty(),
                                 )
                                     ? ScaffoldMessenger.of(context)
@@ -121,15 +121,16 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                                           ),
                                         ),
                                       )
-                                    : null; /* Navigator.push(
+                                    :  */ Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => PaymentScreen(
                                             homeCubit: widget.homeCubit,
                                             flight: widget.flight,
+                                            itemId : widget.itemId,
                                           ),
                                         ),
-                                      ); */
+                                      );
                               },
                             ),
                           ],
