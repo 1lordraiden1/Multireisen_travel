@@ -174,6 +174,7 @@ class _ApiServices implements ApiServices {
               _dio.options.baseUrl,
               baseUrl,
             ))));
+    _result;
     final value = SelectFlightResponse.fromJson(_result.data!);
     return value;
   }

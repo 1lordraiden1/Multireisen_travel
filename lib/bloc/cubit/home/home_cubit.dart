@@ -484,37 +484,33 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   }
 
   selectFlight(String itemId) async {
-    try {
-      final SelectFlightResponse response = await ApiServices(dio).selectFlight(
-        itemId,
-        await AuthService().getOurAuth(),
-        'v1',
-        StringsManager.ourToken,
-        StringsManager.contentType,
-      );
+    isFlightSelectionLoading = true;
+    final SelectFlightResponse response = await ApiServices(dio).selectFlight(
+      itemId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.ourToken,
+      StringsManager.contentType,
+    );
 
-      _selectFlightResponse = response;
+    _selectFlightResponse = response;
 
-      if (response.error != null) {
-        isSearchFlightLoading = false;
-        print(response.error!.message.toString());
-        emit(NoDataFoundState());
-        return;
-      }
-
-      //_entities = response.data!.entities!;
-      print(_selectFlightResponse);
-      print(" Number of Entities : ${_entities}");
-
-      emit(SearchingEntitiesState(entities: _entities));
-    } catch (e) {
-      onError(e, StackTrace.current);
-      emit(NoDataFoundState());
-      //throw Exception(e.toString());
-    } finally {
+    if (response.error != null) {
       isSearchFlightLoading = false;
+      print(response.error!.message.toString());
+      emit(NoDataFoundState());
+      return;
     }
+
+    print(_selectFlightResponse.data!.payModes![0].id);
+
+    //_entities = response.data!.entities!;
+
+    isSearchFlightLoading = false;
   }
+
+  
 
   handleGettingFlightDetails(
     String pointOfSale,

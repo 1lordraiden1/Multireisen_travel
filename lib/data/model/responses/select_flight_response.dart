@@ -136,7 +136,7 @@ class OptionalService {
 @JsonSerializable()
 class Option {
     @JsonKey(name: "value")
-    String? value;
+    int? value;
     @JsonKey(name: "bags")
     String? bags;
     @JsonKey(name: "maxweight")
