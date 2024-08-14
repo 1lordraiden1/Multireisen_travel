@@ -39,11 +39,18 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
     // clear data
     widget.homeCubit.details.clear();
 
+  
+
     widget.homeCubit.createPassengers(
       widget.homeCubit.adults +
           widget.homeCubit.children +
           widget.homeCubit.infant,
     );
+
+
+    widget.homeCubit.selectFlight(widget.itemId);
+
+
 
     print(widget.homeCubit.passengers);
 
@@ -67,42 +74,54 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
               child: Column(
                 children: [
                   CustomAppBarView(
-                    title: 'Review Your Flight',
+                    title: 'Enter Passengers Info',
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (widget.flight.segments!.length > 1) // delete this
-                          TicketView(
-                            isDetailed: true,
-                            flight: widget.flight,
-                            homeCubit: widget.homeCubit,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            "${widget.flight.segments![0].carrier!.name!} Airline",
                           ),
+                        ),
+                        TicketView(
+                          isDetailed:
+                              widget.flight.segments!.length > 1 ? true : false,
+                          flight: widget.flight,
+                          homeCubit: widget.homeCubit,
+                        ),
+                        10.verticalSpace,
                         FlightDetailsView(
                           homeCubit: widget.homeCubit,
                           flight: widget.flight,
                           details: widget.homeCubit.fareQuote,
                         ),
+                        10.verticalSpace,
+                        TravellerDetailsView(
+                          homeCubit: widget.homeCubit,
+                          flight: widget.flight,
+                        ),
                         40.verticalSpace,
-                        BlocConsumer<HomeCubit, HomeState>(
-                          bloc: widget.homeCubit,
-                          listener: (context, state) {},
-                          builder: (context, snapshot) {
-                            return widget.homeCubit.isSearchFlightDetailsLoading
-                                ? const Center(
-                                    child: Column(
-                                      children: [
-                                        CircularProgressIndicator(),
-                                        Text("Calculating Payment...")
-                                      ],
-                                    ),
-                                  )
-                                : RoundedBtn(
-                                    title: 'Continue To Payment',
-                                    onTap: () {
-                                      /* Navigator.push(
+                        Column(
+                          children: [
+                            RoundedBtn(
+                              title: 'Next',
+                              onTap: () {
+                                widget.homeCubit.passengers.any(
+                                  (element) => element.isEmpty(),
+                                )
+                                    ? ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Please Enter All Passengers Data",
+                                          ),
+                                        ),
+                                      )
+                                    : null; /* Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => PaymentScreen(
@@ -111,9 +130,9 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                                           ),
                                         ),
                                       ); */
-                                    },
-                                  );
-                          },
+                              },
+                            ),
+                          ],
                         ),
                         20.verticalSpace
                       ],

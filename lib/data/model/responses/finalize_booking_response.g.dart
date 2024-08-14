@@ -18,6 +18,9 @@ FinalizeBookingResponse _$FinalizeBookingResponseFromJson(
       data: json['data'] == null
           ? null
           : Data.fromJson(json['data'] as Map<String, dynamic>),
+      error: json['error'] == null
+          ? null
+          : Error.fromJson(json['error'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FinalizeBookingResponseToJson(
@@ -28,6 +31,7 @@ Map<String, dynamic> _$FinalizeBookingResponseToJson(
       'serverDate': instance.serverDate?.toIso8601String(),
       'server': instance.server,
       'data': instance.data,
+      'error': instance.error,
     };
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
@@ -143,4 +147,14 @@ Map<String, dynamic> _$TaxBreakDownToJson(TaxBreakDown instance) =>
     <String, dynamic>{
       'id': instance.id,
       'value': instance.value,
+    };
+
+Error _$ErrorFromJson(Map<String, dynamic> json) => Error(
+      code: (json['code'] as num?)?.toInt(),
+      message: json['message'] as String?,
+    );
+
+Map<String, dynamic> _$ErrorToJson(Error instance) => <String, dynamic>{
+      'code': instance.code,
+      'message': instance.message,
     };

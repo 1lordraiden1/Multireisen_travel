@@ -23,6 +23,8 @@ class SelectFlightResponse {
     String? server;
     @JsonKey(name: "data")
     Data? data;
+    @JsonKey(name: "error")
+    Error? error;
 
     SelectFlightResponse({
         this.accessToken,
@@ -30,6 +32,7 @@ class SelectFlightResponse {
         this.serverDate,
         this.server,
         this.data,
+        this.error,
     });
 
     factory SelectFlightResponse.fromJson(Map<String, dynamic> json) => _$SelectFlightResponseFromJson(json);
@@ -133,7 +136,7 @@ class OptionalService {
 @JsonSerializable()
 class Option {
     @JsonKey(name: "value")
-    int? value;
+    String? value;
     @JsonKey(name: "bags")
     String? bags;
     @JsonKey(name: "maxweight")
@@ -420,4 +423,21 @@ class SupplierInfo {
     factory SupplierInfo.fromJson(Map<String, dynamic> json) => _$SupplierInfoFromJson(json);
 
     Map<String, dynamic> toJson() => _$SupplierInfoToJson(this);
+}
+
+@JsonSerializable()
+class Error {
+    @JsonKey(name: "code")
+    int? code;
+    @JsonKey(name: "message")
+    String? message;
+
+    Error({
+        this.code,
+        this.message,
+    });
+
+    factory Error.fromJson(Map<String, dynamic> json) => _$ErrorFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ErrorToJson(this);
 }

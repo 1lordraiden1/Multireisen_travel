@@ -131,8 +131,11 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "${widget.flight.segments![0].carrier!.name!} Airline",
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            "${widget.flight.segments![0].carrier!.name!} Airline",
+                          ),
                         ),
                         TicketView(
                           isDetailed:
@@ -154,41 +157,20 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
                           child: const Text("Fare Rules"),
                         ),
                         10.verticalSpace,
-                        TravellerDetailsView(
-                          homeCubit: widget.homeCubit,
-                          flight: widget.flight,
-                        ),
                         40.verticalSpace,
-                        /* Column(
-                          children: [
-                            RoundedBtn(
-                              title: 'Next',
-                              onTap: () {
-                                widget.homeCubit.passengers.any(
-                                  (element) => element.isEmpty(),
-                                )
-                                    ? ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                              "Please Enter All Passengers Data"),
-                                        ),
-                                      )
-                                    : Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              FlightBookingScreen(
-                                            homeCubit: widget.homeCubit,
-                                            itemId: widget.itemId,
-                                            flight: widget.flight,
-                                          ),
-                                        ),
-                                      );
-                              },
+                        RoundedBtn(
+                          title: "Select Flight",
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FlightBookingScreen(
+                                homeCubit: widget.homeCubit,
+                                itemId: widget.itemId,
+                                flight: widget.flight,
+                              ),
                             ),
-                          ],
-                        ), */
+                          ),
+                        ),
                         20.verticalSpace
                       ],
                     ),

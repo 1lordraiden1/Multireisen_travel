@@ -11,7 +11,10 @@ import 'package:qfly/data/model/Flight/Flight_model.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
 import 'package:qfly/data/model/passenger_model.dart';
 import 'package:qfly/data/model/airport_model.dart';
+import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/data/model/responses/save_passengers_response.dart';
+import 'package:qfly/data/model/responses/select_flight_response.dart';
 import 'package:qfly/data/model/room/room_data_model.dart';
 import 'package:qfly/data/model/room/room_models/child_model.dart';
 import 'package:qfly/data/services/api_services.dart';
@@ -128,6 +131,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   bool isSearchDataLoading = false;
   bool isSearchFlightLoading = false;
   bool isFilterSearchLoading = false;
+  bool isFlightSelectionLoading = false;
   bool isSearchFlightDetailsLoading = false;
   bool isStillBooking = false;
 
@@ -174,6 +178,43 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   Map<String, dynamic> get bookedTicket => _bookedTicket;
 
   List<Passenger> get passengers => _passengers;
+
+  // Responses
+
+  FlightResponse _flightResponse = FlightResponse.fromJson(
+    {},
+  );
+
+  FlightResponse _filterFlightResponse = FlightResponse.fromJson(
+    {},
+  );
+
+  SelectFlightResponse _selectFlightResponse = SelectFlightResponse.fromJson(
+    {},
+  );
+
+  SavePassengersResponse _savePassengersResponse =
+      SavePassengersResponse.fromJson(
+    {},
+  );
+
+  FinalizeBookingResponse _finalizeBookingResponse =
+      FinalizeBookingResponse.fromJson(
+    {},
+  );
+
+  // Responses' getters
+
+  FlightResponse get flightResponse => _flightResponse;
+
+  FlightResponse get filterFlightResponse => _filterFlightResponse;
+
+  SelectFlightResponse get selectFlightResponse => _selectFlightResponse;
+
+  SavePassengersResponse get savePassengersResponse => _savePassengersResponse;
+
+  FinalizeBookingResponse get finalizeBookingResponse =>
+      _finalizeBookingResponse;
 
   // Flight Functions
 /* 
@@ -382,6 +423,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         },
       );
 
+      _flightResponse = response;
+
       if (response.error != null) {
         isSearchFlightLoading = false;
         print(response.error!.message.toString());
@@ -419,6 +462,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
       flightSearchPage,
     );
 
+    _filterFlightResponse = response;
+
     if (response.error != null) {
       isFilterSearchLoading = false;
       print(response.error!.message.toString());
@@ -439,7 +484,36 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   }
 
   selectFlight(String itemId) async {
-    
+    try {
+      final SelectFlightResponse response = await ApiServices(dio).selectFlight(
+        itemId,
+        await AuthService().getOurAuth(),
+        'v1',
+        StringsManager.ourToken,
+        StringsManager.contentType,
+      );
+
+      _selectFlightResponse = response;
+
+      if (response.error != null) {
+        isSearchFlightLoading = false;
+        print(response.error!.message.toString());
+        emit(NoDataFoundState());
+        return;
+      }
+
+      //_entities = response.data!.entities!;
+      print(_selectFlightResponse);
+      print(" Number of Entities : ${_entities}");
+
+      emit(SearchingEntitiesState(entities: _entities));
+    } catch (e) {
+      onError(e, StackTrace.current);
+      emit(NoDataFoundState());
+      //throw Exception(e.toString());
+    } finally {
+      isSearchFlightLoading = false;
+    }
   }
 
   handleGettingFlightDetails(
