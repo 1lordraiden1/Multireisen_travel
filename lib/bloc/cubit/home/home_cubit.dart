@@ -438,6 +438,10 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     //throw Exception(e.toString());
   }
 
+  selectFlight(String itemId) async {
+    
+  }
+
   handleGettingFlightDetails(
     String pointOfSale,
     String origin,

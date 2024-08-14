@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
+import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 
 import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/data/model/responses/save_passengers_response.dart';
+import 'package:qfly/data/model/responses/select_flight_response.dart';
 import 'package:qfly/data/network/constant/end_points.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/dio.dart';
@@ -47,7 +50,37 @@ abstract class ApiServices {
     @Query('page') int page,
   );
 
-  
+  @GET("/flights/items/{itemId}/select")
+  Future<SelectFlightResponse> selectFlight(
+    @Path('itemId') String itemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    //@Header('Content') String contentType,
+  );
+
+  @POST("/flights/items/{itemId}/passengers")
+  Future<SavePassengersResponse> savePassengers(
+    @Path('itemId') String itemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    @Header('Content') String contentType,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @PUT("/flights/items/{itemId}/book/{bookingId}")
+  Future<FinalizeBookingResponse> finalizeBooking(
+    @Path('itemId') String itemId,
+    @Path('bookingId') String bookingId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    @Header('Content') String contentType,
+  );
 
   // Base URL for your API
   /*  static const String baseUrl =

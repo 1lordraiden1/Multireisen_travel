@@ -33,6 +33,19 @@ class EndPoints {
   static const newFlightSearch = '/flights/search';
 
   static const filterFlightSearch = '/flights/items';
+
+  static String selectFlight(String itemId) {
+    return "/flights/items/${itemId}/select";
+  }
+
+  static String savePassengers(String itemId) {
+    return "/flights/items/${itemId}/passengers";
+  }
+
+  static String finalizeBooking(String itemId) {
+    return "/flights/items/${itemId}/select";
+  }
+
   /* 
   static const loginUrl = 'User/Login';
   static const roadmapUrl = 'Course/GetRoadMap';
