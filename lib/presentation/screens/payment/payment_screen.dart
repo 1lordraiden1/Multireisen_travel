@@ -161,13 +161,19 @@ Widget showPaymentWidget(HomeCubit homeCubit) {
           ),
           5.verticalSpace,
           TextWithValueView(
-            text: 'Ticket Number',
+            text: 'Booking ID',
             value:
                 homeCubit.finalizeBookingResponse.data!.bookingId!.toString(),
           ),
           5.verticalSpace,
           TextWithValueView(
-            text: 'Tracking ID',
+            text: 'Is Refundable',
+            value:
+                homeCubit.finalizeBookingResponse.data!.refundable!.toString(),
+          ),
+          5.verticalSpace,
+          TextWithValueView(
+            text: 'Booking Number',
             value: ReadMoreText(
               // some work here to trim the read more text
               trimMode: TrimMode.Line,
@@ -177,20 +183,20 @@ Widget showPaymentWidget(HomeCubit homeCubit) {
 
               trimLines: 1,
               //isExpandable: true,
-              homeCubit.ticketData['TrackingId'].toString(),
+              homeCubit
+                  .finalizeBookingResponse.data!.bookings![0].bookingNumber!
+                  .toString(),
             ).data,
           ),
           8.verticalSpace,
           PaymentWaysView(),
           20.verticalSpace,
           CardPaymentView(),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: RoundedBtn(
-                title: 'Apply',
-                onTap: () {},
-              ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: RoundedBtn(
+              title: 'Get Ticket',
+              onTap: () {},
             ),
           ),
           47.verticalSpace

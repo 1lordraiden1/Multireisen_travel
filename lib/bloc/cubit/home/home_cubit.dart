@@ -461,7 +461,6 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
       'v1',
       StringsManager.ourToken,
       StringsManager.contentType,
-      StringsManager.contentType,
       flightSearchPage,
     );
 

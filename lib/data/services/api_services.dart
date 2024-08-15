@@ -1,11 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
+import 'package:qfly/data/model/responses/check_booking_cancellation_response.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 
 import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/data/model/responses/get_booking_response.dart';
+import 'package:qfly/data/model/responses/get_rules_response.dart';
+import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
+import 'package:qfly/data/model/responses/void_ticket_response.dart';
 import 'package:qfly/data/network/constant/end_points.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/dio.dart';
@@ -46,8 +52,18 @@ abstract class ApiServices {
     @Header('Version') String version,
     @Header('Authorization') String auth,
     @Header('Accept') String accept,
-    @Header('Content') String contentType,
+    //@Header('Content') String contentType,
     @Query('page') int page,
+  );
+
+  @GET("/flights/items/{itemId}/farerules")
+  Future<GetRulesResponse> getRules(
+    @Path('itemId') String itemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    //@Header('Content') String contentType,
   );
 
   @GET("/flights/items/{itemId}/select")
@@ -82,6 +98,76 @@ abstract class ApiServices {
     @Header('Content') String contentType,
   );
 
+  @PATCH("/bookings/{bookingId}/issue/{bookingItemId}")
+  Future<IssueTicketResponse> issueTicket(
+    @Path('bookingId') String bookingId,
+    @Path('bookingItemId') String bookingItemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/bookings/{bookingId}")
+  Future<GetBookingResponse> getBookingDetails(
+    @Path('bookingId') String bookingId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/bookings/{bookingId}/voucher/{bookingItemId}")
+  Future<GetTicketResponse> getTicket(
+    @Path('bookingId') String bookingId,
+    @Path('bookingItemId') String bookingItemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/bookings/{bookingId}/cancelcheck/{bookingItemId}")
+  Future<CheckBookingCancellationResponse> checkBookingCancellation(
+    @Path('bookingId') String bookingId,
+    @Path('bookingItemId') String bookingItemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
+
+  @DELETE("/bookings/{bookingId}/cancel/{bookingItemId}")
+  Future<VoidTicketResponse> cancelBooking(
+    @Path('bookingId') String bookingId,
+    @Path('bookingItemId') String bookingItemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
+
+  @DELETE("/bookings/{bookingId}/void/{bookingItemId}")
+  Future<VoidTicketResponse> voidTicket(
+    @Path('bookingId') String bookingId,
+    @Path('bookingItemId') String bookingItemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
   // Base URL for your API
   /*  static const String baseUrl =
       'https://api2-test.multireisen.com/'; // EndPoints.baseUrl;
