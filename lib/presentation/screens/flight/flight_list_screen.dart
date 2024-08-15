@@ -29,7 +29,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
   void initState() {
     super.initState();
     // clear old data
-    widget.homeCubit.flight.clear();
+    widget.homeCubit.entities.clear();
 
     // get init data (page 1)
     widget.homeCubit.handleSearchingForFlights(

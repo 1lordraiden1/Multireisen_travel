@@ -1,24 +1,88 @@
 class Country {
-  final String code;
-  final String name;
-
-  final String icon;
+  String? countryCode;
+  String? countryName;
 
   Country({
-    required this.code,
-    required this.name,
-    required this.icon,
+    this.countryCode,
+    this.countryName,
   });
 
   factory Country.empty() {
-    return Country(code: '', name: '', icon: '');
+    return Country(
+      countryCode: '',
+      countryName: '',
+    );
   }
 
   factory Country.fromJson(Map<String, dynamic> json) {
     return Country(
-      code: json['code'] as String,
-      name: json['name'] as String,
-      icon: json['icon'] as String,
+      countryCode: json['CountryCode'],
+      countryName: json['CountryName'],
     );
+  }
+
+  factory Country.fromHotelJson(Map<String, dynamic> json) {
+    return Country(
+      countryCode: json['Code'],
+      countryName: json['Name'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'CountryCode': countryCode,
+      'CountryName': countryName,
+    };
+  }
+
+  Map<String, dynamic> toHotelJson() {
+    return {
+      'Code': countryCode,
+      'Name': countryName,
+    };
+  }
+}
+
+class City {
+  String? countryCode;
+  String? countryName;
+
+  City({
+    this.countryCode,
+    this.countryName,
+  });
+
+  factory City.empty() {
+    return City(
+      countryCode: '',
+      countryName: '',
+    );
+  }
+
+  factory City.fromJson(Map<String, dynamic> json) {
+    return City(
+      countryCode: json['CountryCode'],
+      countryName: json['CountryName'],
+    );
+  }
+  factory City.fromHotelJson(Map<String, dynamic> json) {
+    return City(
+      countryCode: json['Code'],
+      countryName: json['Name'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'CountryCode': countryCode,
+      'CountryName': countryName,
+    };
+  }
+
+  Map<String, dynamic> toHotelJson() {
+    return {
+      'Code': countryCode,
+      'Name': countryName,
+    };
   }
 }

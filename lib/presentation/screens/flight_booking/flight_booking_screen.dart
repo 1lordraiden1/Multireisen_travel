@@ -37,9 +37,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
     // TODO: implement initState
     super.initState();
     // clear data
-    widget.homeCubit.details.clear();
-
-  
+    widget.homeCubit.selectFlightResponse.data = null;
 
     widget.homeCubit.createPassengers(
       widget.homeCubit.adults +
@@ -47,10 +45,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
           widget.homeCubit.infant,
     );
 
-
     widget.homeCubit.selectFlight(widget.itemId);
-
-
 
     print(widget.homeCubit.passengers);
 
@@ -71,46 +66,49 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
         builder: (context, snapshot) {
           return Scaffold(
             body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  CustomAppBarView(
-                    title: 'Enter Passengers Info',
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              child: widget.homeCubit.isFlightSelectionLoading
+                  ? callerWidget // Loading Screen
+                  : Column(
                       children: [
+                        CustomAppBarView(
+                          title: 'Enter Passengers Info',
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            "${widget.flight.segments![0].carrier!.name!} Airline",
-                          ),
-                        ),
-                        TicketView(
-                          isDetailed:
-                              widget.flight.segments!.length > 1 ? true : false,
-                          flight: widget.flight,
-                          homeCubit: widget.homeCubit,
-                        ),
-                        10.verticalSpace,
-                        FlightDetailsView(
-                          homeCubit: widget.homeCubit,
-                          flight: widget.flight,
-                          details: widget.homeCubit.fareQuote,
-                        ),
-                        10.verticalSpace,
-                        TravellerDetailsView(
-                          homeCubit: widget.homeCubit,
-                          flight: widget.flight,
-                        ),
-                        40.verticalSpace,
-                        Column(
-                          children: [
-                            RoundedBtn(
-                              title: 'Next',
-                              onTap: () {
-                              /*   widget.homeCubit.passengers.any(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  "${widget.flight.segments![0].carrier!.name!} Airline",
+                                ),
+                              ),
+                              TicketView(
+                                isDetailed: widget.flight.segments!.length > 1
+                                    ? true
+                                    : false,
+                                flight: widget.flight,
+                                homeCubit: widget.homeCubit,
+                              ),
+                              10.verticalSpace,
+                              FlightDetailsView(
+                                homeCubit: widget.homeCubit,
+                                flight: widget.flight,
+                                details: widget.homeCubit.fareQuote,
+                              ),
+                              10.verticalSpace,
+                              TravellerDetailsView(
+                                homeCubit: widget.homeCubit,
+                                flight: widget.flight,
+                              ),
+                              40.verticalSpace,
+                              Column(
+                                children: [
+                                  RoundedBtn(
+                                    title: 'Next',
+                                    onTap: () {
+                                      /*   widget.homeCubit.passengers.any(
                                   (element) => element.isEmpty(),
                                 )
                                     ? ScaffoldMessenger.of(context)
@@ -121,26 +119,27 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                                           ),
                                         ),
                                       )
-                                    :  */ Navigator.push(
+                                    :  */
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => PaymentScreen(
                                             homeCubit: widget.homeCubit,
                                             flight: widget.flight,
-                                            itemId : widget.itemId,
+                                            itemId: widget.itemId,
                                           ),
                                         ),
                                       );
-                              },
-                            ),
-                          ],
-                        ),
-                        20.verticalSpace
+                                    },
+                                  ),
+                                ],
+                              ),
+                              20.verticalSpace
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
             ),
           );
         });

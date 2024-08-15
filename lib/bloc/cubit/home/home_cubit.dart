@@ -8,11 +8,14 @@ import 'package:qfly/constant/app_strings.dart';
 import 'package:qfly/data/Shared/sharedPreferences.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/global/country_model.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
-import 'package:qfly/data/model/passenger_model.dart';
+
 import 'package:qfly/data/model/airport_model.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
 import 'package:qfly/data/model/room/room_data_model.dart';
@@ -138,6 +141,9 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   bool isSavePassengersLoading = false;
   bool isBookingFinalizationLoading = false;
 
+  bool isIssuingTicketLoading = false;
+  bool isGettingTicketLoading = false;
+
   bool _isDirect = false;
 
   Map<String, dynamic> _ticketData = {};
@@ -206,6 +212,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     {},
   );
 
+  IssueTicketResponse _issueTicketResponse = IssueTicketResponse.fromJson(
+    {},
+  );
+
+  GetTicketResponse _getTicketResponse = GetTicketResponse.fromJson(
+    {},
+  );
+
   // Responses' getters
 
   FlightResponse get flightResponse => _flightResponse;
@@ -218,6 +232,10 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   FinalizeBookingResponse get finalizeBookingResponse =>
       _finalizeBookingResponse;
+
+  IssueTicketResponse get issueTicketResponse => _issueTicketResponse;
+
+  GetTicketResponse get getTicketResponse => _getTicketResponse;
 
   // Flight Functions
 /* 
@@ -680,6 +698,84 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     //_entities = response.data!.entities!;
 
     isBookingFinalizationLoading = false;
+  }
+
+  issueTicket(String bookingId, String bookingItemId) async {
+    isIssuingTicketLoading = true;
+
+    // getting response
+    final IssueTicketResponse response = await ApiServices(dio).issueTicket(
+      bookingId,
+      bookingItemId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.contentType,
+      StringsManager.ourToken,
+    );
+
+    _issueTicketResponse = response;
+
+    if (response.error != null) {
+      isIssuingTicketLoading = false;
+      print(response.error!.message.toString());
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Issued Ticket Message!! : ${_issueTicketResponse.data!.messages!.first.text!.toString()}",
+    );
+
+    print(
+      " Issued Ticket Status!! : ${_issueTicketResponse.data!.success!.toString()}",
+    );
+    emit(
+      IssuingTicketState(
+        issueTicketResponse: _issueTicketResponse,
+      ),
+    );
+
+    //_entities = response.data!.entities!;
+
+    isIssuingTicketLoading = false;
+
+    getTicket(bookingId, bookingItemId);
+  }
+
+  getTicket(String bookingId, String bookingItemId) async {
+    isGettingTicketLoading = true;
+
+    // getting response
+    final GetTicketResponse response = await ApiServices(dio).getTicket(
+      bookingId,
+      bookingItemId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.contentType,
+      StringsManager.ourToken,
+    );
+
+    _getTicketResponse = response;
+
+    if (response.error != null) {
+      isGettingTicketLoading = false;
+      print(response.error!.message.toString());
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Got Ticket Reserve Code!! : ${_getTicketResponse.data!.properties!.airlineReservationCode!.toString()}",
+    );
+    emit(GettingTicketState(
+      getTicketResponse: _getTicketResponse,
+    ));
+
+    //_entities = response.data!.entities!;
+
+    isGettingTicketLoading = false;
   }
 
   handleGettingFlightDetails(

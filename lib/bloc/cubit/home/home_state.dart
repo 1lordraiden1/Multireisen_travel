@@ -239,6 +239,22 @@ class FinalizingBookingState extends HomeState {
   }) : _finalizeBookingResponse = finalizeBookingResponse;
 }
 
+class IssuingTicketState extends HomeState {
+  final IssueTicketResponse _issueTicketResponse;
+
+  IssuingTicketState({
+    required IssueTicketResponse issueTicketResponse,
+  }) : _issueTicketResponse = issueTicketResponse;
+}
+
+class GettingTicketState extends HomeState {
+  final GetTicketResponse _getTicketResponse;
+
+  GettingTicketState({
+    required GetTicketResponse getTicketResponse,
+  }) : _getTicketResponse = getTicketResponse;
+}
+
 class NoDataFoundState extends HomeState {}
 
 class NoHotelDataFoundState extends HomeState {

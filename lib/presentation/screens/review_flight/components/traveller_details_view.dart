@@ -7,8 +7,9 @@ import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qfly/data/Shared/countries.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
-import 'package:qfly/data/model/passenger_model.dart';
+
 import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/data/model/responses/get_ticket_response.dart';
 
 import 'package:qfly/presentation/screens/payment/payment_screen.dart';
 import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
@@ -182,7 +183,7 @@ class _PassengerFormState extends State<PassengerForm> {
                 },
               ),
               10.verticalSpace,
-              OutlinedInputFieldWidget(
+              /*  OutlinedInputFieldWidget(
                 controller: _phoneController,
                 homeCubit: widget.homeCubit,
                 label: 'Phone Number',
@@ -194,7 +195,7 @@ class _PassengerFormState extends State<PassengerForm> {
                   _phoneController.text = value!;
                 },
               ),
-              10.verticalSpace,
+              10.verticalSpace, */
               FormBuilderDateTimePicker(
                 enableInteractiveSelection: false,
                 name: 'Birth Date',
@@ -205,7 +206,7 @@ class _PassengerFormState extends State<PassengerForm> {
                   icon: Icon(Icons.date_range_outlined),
                 ),
                 onSaved: (newValue) {
-                  widget.passenger.dateOfBirth = newValue;
+                  widget.passenger.birthDate = newValue;
                 },
               ),
 
@@ -262,11 +263,11 @@ class _PassengerFormState extends State<PassengerForm> {
                   return Validation().emptyField(value, 'Address');
                 },
                 onSaved: (value) {
-                  widget.passenger.addressLine1 = value;
+                  widget.passenger.passport!.number = value;
                 },
               ),
               10.verticalSpace,
-              OutlinedInputFieldWidget(
+              /* OutlinedInputFieldWidget(
                 controller: _emailController,
                 homeCubit: widget.homeCubit,
                 label: 'Email',
@@ -277,7 +278,7 @@ class _PassengerFormState extends State<PassengerForm> {
                   widget.passenger.email = value;
                 },
               ),
-              10.verticalSpace,
+              10.verticalSpace, */
               FormBuilderRadioGroup(
                 name: 'Gender',
                 separator: SizedBox(width: 30),
@@ -292,7 +293,6 @@ class _PassengerFormState extends State<PassengerForm> {
                   ),
                 ],
                 onSaved: (newValue) {
-                  widget.passenger.gender = newValue;
                   widget.passenger.title = newValue == 2 ? 'Mrs' : 'Mr';
                 },
               ),

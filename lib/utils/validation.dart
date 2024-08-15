@@ -19,17 +19,17 @@ class Validation {
     }
   }
 
-  String? countryValidation(String? value) {
+  /* String? countryValidation(String? value) {
     if (CountriesData.countries.any(
-          (element) => element.name.contains(value!),
+          (element) => element.countryName!.contains(value!),
         ) ||
         CountriesData.countries.any(
-          (element) => element.code.contains(value!),
+          (element) => element.countryCode!.contains(value!),
         )) {
       return null;
     }
     return "No country with that name";
-  }
+  } */
 
   String? mobileValidator(String? value) {
     String pattern =

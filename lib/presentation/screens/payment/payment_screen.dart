@@ -4,6 +4,7 @@ import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
+import 'package:qfly/presentation/screens/login/login_screen.dart';
 import 'package:qfly/presentation/screens/payment/components/card_payment_view.dart';
 import 'package:qfly/presentation/screens/payment/components/payment_ways_view.dart';
 import 'package:qfly/presentation/widgets/app_bar/custom_app_bar_view.dart';
@@ -36,6 +37,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     // Clear Data
     widget.homeCubit.savePassengersResponse.data = null;
+    widget.homeCubit.finalizeBookingResponse.data = null;
 
     // Get Data
     widget.homeCubit.savePassengers(widget.itemId);
@@ -106,7 +108,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           } */
 
           if (state is FinalizingBookingState) {
-            callerWidget = showPaymentWidget(widget.homeCubit);
+            callerWidget = showPaymentWidget(context, widget.homeCubit);
           }
         },
         builder: (context, state) {
@@ -148,7 +150,7 @@ Widget callerWidget = Center(
   child: CircularProgressIndicator(),
 );
 
-Widget showPaymentWidget(HomeCubit homeCubit) {
+Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
   return Expanded(
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -196,12 +198,85 @@ Widget showPaymentWidget(HomeCubit homeCubit) {
             alignment: Alignment.bottomCenter,
             child: RoundedBtn(
               title: 'Get Ticket',
-              onTap: () {},
+              onTap: () {
+                showDialogPopup(context, homeCubit);
+              },
             ),
           ),
           47.verticalSpace
         ],
       ),
     ),
+  );
+}
+
+void showDialogPopup(BuildContext context, HomeCubit homeCubit) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      homeCubit.issueTicket(
+        homeCubit.finalizeBookingResponse.data!.bookingId.toString(),
+        homeCubit.finalizeBookingResponse.data!.bookings![0].bookingItemId!
+            .toString(),
+      );
+
+      return homeCubit.isIssuingTicketLoading  && homeCubit.isGettingTicketLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 16,
+              child: Container(
+                height: 400,
+                child: Column(
+                  children: <Widget>[
+                    const Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Ticket",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      child: homeCubit.isGettingTicketLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Column(
+                              children: [
+                                Text(
+                                  homeCubit.issueTicketResponse.data!.success!
+                                      ? "Success"
+                                      : "Failed",
+                                ), // Get Ticket
+                                Text(
+                                  homeCubit.issueTicketResponse.data!.success!
+                                      ? "Now your ticket is stored in your trips and you can back login below and ticket much trips as you can"
+                                      : "There is might ",
+                                ),
+                              ],
+                            ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                          (Route<dynamic> route) => false,
+                        ); // Close the dialog
+                      },
+                      child: const Text("Go Back Login"),
+                    ),
+                  ],
+                ),
+              ),
+            );
+    },
   );
 }

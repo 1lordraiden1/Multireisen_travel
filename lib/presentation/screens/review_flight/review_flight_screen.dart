@@ -42,6 +42,7 @@ class _ReviewFlightScreenState extends State<ReviewFlightScreen> {
     super.initState();
     // clear data
     // widget.homeCubit.details.clear();
+    
 
     widget.homeCubit.createPassengers(
       widget.homeCubit.adults +
