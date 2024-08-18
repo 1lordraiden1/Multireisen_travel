@@ -65,9 +65,10 @@ class UsersNumPeopleView extends StatelessWidget {
                             : {
                                 homeCubit.handleChildrenChanges(room, '-'),
                                 homeCubit.handleHotelChildSelection(
-                                    //
-                                    room,
-                                    room.children),
+                                  //
+                                  room,
+                                  room.children,
+                                ),
                               };
                       },
                     ),
@@ -101,9 +102,10 @@ class UsersNumPeopleView extends StatelessWidget {
                           : {
                               homeCubit.handleChildrenChanges(room, '+'),
                               homeCubit.handleHotelChildSelection(
-                                  //
-                                  room,
-                                  room.children),
+                                //
+                                room,
+                                room.children,
+                              ),
                             };
 
                       if (!isAdult) {

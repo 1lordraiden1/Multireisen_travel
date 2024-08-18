@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qfly/data/model/hotel/hotel_model.dart';
-import 'package:qfly/data/model/hotel/hotel_response.dart';
+import 'package:qfly/data/model/responses/hotel/hotel_response.dart';
 
 part 'api_response.g.dart';
 

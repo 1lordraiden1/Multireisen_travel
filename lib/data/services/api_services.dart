@@ -36,6 +36,12 @@ abstract class ApiServices {
     @Header('Content') String contentType,
   );
 
+  // Hotels
+
+  
+
+  // Flights
+
   @POST(EndPoints.newFlightSearch)
   Future<FlightResponse> getFlights(
     @Header('AccessToken') String accessToken,

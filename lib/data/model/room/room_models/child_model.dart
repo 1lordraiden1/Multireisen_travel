@@ -20,6 +20,10 @@ class Child {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        "age": age,
+      };
+
   static List<int> getChildrenAges(List<Child> children) {
     List<int> ages = [];
     for (var child in children) {

@@ -9,15 +9,16 @@ import 'package:qfly/data/Shared/sharedPreferences.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
 import 'package:qfly/data/model/global/country_model.dart';
-import 'package:qfly/data/model/hotel/hotel_model.dart';
 
 import 'package:qfly/data/model/airport_model.dart';
+import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
+import 'package:qfly/data/model/room/request_room_model.dart';
 import 'package:qfly/data/model/room/room_data_model.dart';
 import 'package:qfly/data/model/room/room_models/child_model.dart';
 import 'package:qfly/data/services/api_services.dart';
@@ -1073,6 +1074,10 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   List<Hotel> _hotels = [];
 
+  List<RoomItem> _requestRooms = [];
+
+  List<Room> _availableRooms = [];
+
   // Getters (Can't Set Data!)
 
   DateTime get checkInDate => _checkInDate;
@@ -1086,6 +1091,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   int get rooms => _rooms;
 
   List<RoomData> get hotelRooms => _hotelRooms;
+  List<Room> get availableRooms => _availableRooms;
+  List<RoomItem> get requestRooms => _requestRooms;
   List<Hotel> get hotels => _hotels;
 
   // Loading
@@ -1133,14 +1140,31 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     _rooms = r;
     if (operation == '+') {
       _rooms++;
+      _hotelRooms.add(RoomData.emptyWithId(r - 1));
+
+      // we are using this now !!
+      _requestRooms.add(
+        RoomItem(
+          adults: 1,
+          children: [],
+        ),
+      );
     } else {
       _rooms--;
+      _hotelRooms.remove(hotelRooms.length - 1);
+      // we are using this now !!
+      _requestRooms.remove(
+        _requestRooms[requestRooms.length - 1],
+      );
     }
-    emit(ChangeRooms(rooms: _rooms));
+    emit(ChangeRooms(
+      rooms: _rooms,
+      requestRooms: _requestRooms,
+    ));
   }
 
+  /// for age
   handleHotelChildrenChanges(Child child, String operation) {
-    /// for age
     if (operation == '+') {
       if (child.age < 11) {
         child.age++;
@@ -1244,6 +1268,27 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     }
   }
 
+  // handleChildrenChanges
+  childrenChangesHandler(RoomItem room, String operation) {
+    if (operation == '+') {
+      if (room.children!.length < 5) {
+        room.children!.add(1);
+      }
+    } else {
+      if (room.children!.isNotEmpty) {
+        room.children!.remove(
+          room.children![room.children!.length - 1],
+        );
+      }
+    }
+    emit(
+      RoomDataChangingState(
+        requestRooms: _requestRooms,
+      ),
+    );
+  }
+
+  childrenAgeChangesHandler(RoomItem room, String operation) {}
   /* searchHotelsHandler(
     String cityCode,
     DateTime checkIn,

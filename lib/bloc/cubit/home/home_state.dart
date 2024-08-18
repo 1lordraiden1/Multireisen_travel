@@ -77,9 +77,14 @@ class ChangeHotelChildren extends HomeState {
 class DecreaseChildren extends HomeState {}
 
 class ChangeRooms extends HomeState {
-  final int rooms;
+  final int _rooms;
+  final List<RoomItem> _requestRooms;
 
-  ChangeRooms({required this.rooms});
+  ChangeRooms({
+    required int rooms,
+    required List<RoomItem> requestRooms,
+  })  : _rooms = rooms,
+        _requestRooms = requestRooms;
 }
 
 class DecreaseRooms extends HomeState {}
@@ -182,9 +187,10 @@ class ChangeFlightChildren extends HomeState {
   final int _children;
   final List<Child> _flightChildren;
 
-  ChangeFlightChildren(
-      {required int children, required List<Child> flightChildren})
-      : _children = children,
+  ChangeFlightChildren({
+    required int children,
+    required List<Child> flightChildren,
+  })  : _children = children,
         _flightChildren = flightChildren;
 }
 
@@ -329,4 +335,12 @@ class LoadHotelsState extends HomeState {
   LoadHotelsState({
     required List<Hotel> hotels,
   }) : _hotels = hotels;
+}
+
+class RoomDataChangingState extends HomeState {
+  final List<RoomItem> _requestRooms;
+
+  RoomDataChangingState({
+    required List<RoomItem> requestRooms,
+  }) : _requestRooms = requestRooms;
 }

@@ -184,14 +184,18 @@ class _HotelSearchViewState extends State<HotelSearchView> {
         14.verticalSpace,
         RoundedBtn(
           title: 'Search and book!',
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SelectHotelScreen(
-                homeCubit: widget.homeCubit,
+          onTap: () {
+            print(widget.homeCubit.hotelRooms[0].toJson());
+            print(widget.homeCubit.hotelRooms[1].toJson());
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SelectHotelScreen(
+                  homeCubit: widget.homeCubit,
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );

@@ -34,6 +34,14 @@ class RoomData {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        "adults": adults,
+        "children": children,
+        "childs": childs.isEmpty
+            ? []
+            : List<dynamic>.from(childs.map((x) => x.toJson())),
+      };
+
   static List<int> getAllChildrenAgesInt(List<RoomData> rooms) {
     List<int> ages = [];
     for (var room in rooms) {
@@ -75,3 +83,5 @@ class RoomData {
     //ages.substring(0, ages.lastIndexOf(","))
   }
 }
+
+
