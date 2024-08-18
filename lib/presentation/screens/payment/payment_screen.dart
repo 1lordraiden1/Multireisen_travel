@@ -107,7 +107,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
             callerWidget = showPaymentWidget(widget.homeCubit);
           } */
 
-          if (state is FinalizingBookingState) {
+          if (state is FinalizingBookingState &&
+              widget.homeCubit.isSavePassengersLoading == false) {
             callerWidget = showPaymentWidget(context, widget.homeCubit);
           }
         },
@@ -126,7 +127,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     title: 'Payment',
                     canPop: false,
                   ),
-                  widget.homeCubit.isBookingFinalizationLoading
+                  widget.homeCubit.isBookingFinalizationLoading &&
+                          widget.homeCubit.isSavePassengersLoading
                       ? const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -210,73 +212,80 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
   );
 }
 
-void showDialogPopup(BuildContext context, HomeCubit homeCubit) {
+void showDialogPopup(BuildContext context, HomeCubit homeCubit) async {
+  await homeCubit.issueTicket(
+    homeCubit.finalizeBookingResponse.data!.bookingId.toString(),
+    homeCubit.finalizeBookingResponse.data!.bookings![0].bookingItemId!
+        .toString(),
+  );
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      homeCubit.issueTicket(
-        homeCubit.finalizeBookingResponse.data!.bookingId.toString(),
-        homeCubit.finalizeBookingResponse.data!.bookings![0].bookingItemId!
-            .toString(),
-      );
-
-      return homeCubit.isIssuingTicketLoading  && homeCubit.isGettingTicketLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 16,
-              child: Container(
-                height: 400,
-                child: Column(
-                  children: <Widget>[
-                    const Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Ticket",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+      return BlocConsumer<HomeCubit, HomeState>(
+          bloc: homeCubit,
+          listener: (context, state) {},
+          builder: (context, snapshot) {
+            return homeCubit.isGettingTicketLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 16,
+                    child: Container(
+                      height: 400,
+                      child: Column(
+                        children: <Widget>[
+                          const Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Ticket",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            child: homeCubit.isIssuingTicketLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Column(
+                                    children: [
+                                      Text(
+                                        homeCubit.issueTicketResponse.data!
+                                                .success!
+                                            ? "Success"
+                                            : "Failed",
+                                      ), // Get Ticket
+                                      Text(
+                                        homeCubit.issueTicketResponse.data!
+                                                .success!
+                                            ? "Now your ticket is stored in your trips and you can back login below and ticket much trips as you can"
+                                            : "There is might ",
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                                (Route<dynamic> route) => false,
+                              ); // Close the dialog
+                            },
+                            child: const Text("Go Back Login"),
+                          ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      child: homeCubit.isGettingTicketLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : Column(
-                              children: [
-                                Text(
-                                  homeCubit.issueTicketResponse.data!.success!
-                                      ? "Success"
-                                      : "Failed",
-                                ), // Get Ticket
-                                Text(
-                                  homeCubit.issueTicketResponse.data!.success!
-                                      ? "Now your ticket is stored in your trips and you can back login below and ticket much trips as you can"
-                                      : "There is might ",
-                                ),
-                              ],
-                            ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                          (Route<dynamic> route) => false,
-                        ); // Close the dialog
-                      },
-                      child: const Text("Go Back Login"),
-                    ),
-                  ],
-                ),
-              ),
-            );
+                  );
+          });
     },
   );
 }
