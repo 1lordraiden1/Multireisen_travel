@@ -1074,7 +1074,12 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   List<Hotel> _hotels = [];
 
-  List<RoomItem> _requestRooms = [];
+  List<RoomItem> _requestRooms = [
+    RoomItem(
+      adults: 1,
+      children: [],
+    ),
+  ];
 
   List<Room> _availableRooms = [];
 
@@ -1269,16 +1274,17 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   }
 
   // handleChildrenChanges
-  childrenChangesHandler(RoomItem room, String operation) {
+  childrenChangesHandler(int index, String operation) {
     if (operation == '+') {
-      if (room.children!.length < 5) {
-        room.children!.add(1);
+      if (_requestRooms[index].children.length < 5) {
+        _requestRooms[index].children.add(1);
       }
     } else {
-      if (room.children!.isNotEmpty) {
-        room.children!.remove(
-          room.children![room.children!.length - 1],
-        );
+      if (_requestRooms[index].children.isNotEmpty) {
+        _requestRooms[index].children.remove(
+              _requestRooms[index]
+                  .children[_requestRooms[index].children.length - 1],
+            );
       }
     }
     emit(
@@ -1288,7 +1294,31 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  childrenAgeChangesHandler(RoomItem room, String operation) {}
+  childrenAgeChangesHandler(int index, int childIndex, String operation) {
+    if (operation == '+') {
+      if (_requestRooms[index].children[childIndex] < 11) {
+        _requestRooms[index].children[childIndex]++;
+      }
+    } else {
+      if (_requestRooms[index].children[childIndex] > 1) {
+        _requestRooms[index].children[childIndex]--;
+      }
+    }
+    emit(RoomDataChangingState(requestRooms: _requestRooms));
+  }
+
+  adultsChangesHandler(int index, String operation) {
+    if (operation == '+') {
+      if (_requestRooms[index].adults < 5) {
+        _requestRooms[index].adults++;
+      }
+    } else {
+      if (_requestRooms[index].adults > 1) {
+        _requestRooms[index].adults--;
+      }
+    }
+    emit(RoomDataChangingState(requestRooms: _requestRooms));
+  }
   /* searchHotelsHandler(
     String cityCode,
     DateTime checkIn,

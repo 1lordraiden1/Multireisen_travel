@@ -5,6 +5,7 @@ import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qfly/data/model/room/request_room_model.dart';
 import 'package:qfly/data/model/room/room_data_model.dart';
 import 'package:qfly/presentation/screens/home/components/filter_view/filter_hotel_children.dart';
 import 'package:qfly/presentation/screens/home/components/filter_view/filter_travelers_view.dart';
@@ -13,13 +14,15 @@ import 'icons/add_icon_view.dart';
 
 class UsersNumPeopleView extends StatelessWidget {
   HomeCubit homeCubit;
-  RoomData room;
+  RoomItem room;
+  int? index;
   UsersNumPeopleView({
     super.key,
     required this.title,
     required this.iconPath,
     required this.homeCubit,
     required this.room,
+    this.index,
   });
   final String title;
   final String iconPath;
@@ -54,21 +57,28 @@ class UsersNumPeopleView extends StatelessWidget {
                             ? room.adults > 1
                                 ? null
                                 : grey
-                            : room.children > 0
+                            : room.children.isNotEmpty
                                 ? null
                                 : grey,
                         icon: Icons.minimize,
                       ),
                       onTap: () {
                         isAdult
-                            ? homeCubit.handleAdultsChanges(room, '-')
+                            ? homeCubit.adultsChangesHandler(
+                                index!,
+                                '-',
+                              )
                             : {
-                                homeCubit.handleChildrenChanges(room, '-'),
+                                homeCubit.childrenChangesHandler(
+                                  index!,
+                                  '-',
+                                )
+                                /* homeCubit.handleChildrenChanges(room, '-'),
                                 homeCubit.handleHotelChildSelection(
                                   //
                                   room,
                                   room.children,
-                                ),
+                                ), */
                               };
                       },
                     ),
@@ -92,28 +102,33 @@ class UsersNumPeopleView extends StatelessWidget {
                           ? room.adults < 5
                               ? null
                               : grey
-                          : room.children < 5
+                          : room.children.length < 5
                               ? null
                               : grey,
                     ),
                     onTap: () {
                       isAdult
-                          ? homeCubit.handleAdultsChanges(room, '+')
+                          ? homeCubit.adultsChangesHandler(index!, '+')
                           : {
-                              homeCubit.handleChildrenChanges(room, '+'),
+                              homeCubit.childrenChangesHandler(
+                                index!,
+                                '+',
+                              ),
+                              /* homeCubit.handleChildrenChanges(room, '+'),
                               homeCubit.handleHotelChildSelection(
                                 //
                                 room,
                                 room.children,
-                              ),
+                              ), */
                             };
 
                       if (!isAdult) {
-                        room.children > 0
+                        room.children.isNotEmpty
                             ? BottomSheetShape(
                                 FilterHotelView(
                                   homeCubit: homeCubit,
                                   room: room,
+                                  index: index,
                                 ),
                               ).build(context)
                             : Navigator.pop(context);

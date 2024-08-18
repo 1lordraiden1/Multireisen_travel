@@ -38,12 +38,12 @@ class RequestRoom {
 }
 
 class RoomItem {
-  int? adults;
-  List<int>? children; // ages
+  int adults;
+  List<int> children; // ages
 
   RoomItem({
-    this.adults,
-    this.children,
+    required this.adults,
+    required this.children,
   });
 
   factory RoomItem.fromJson(Map<String, dynamic> json) => RoomItem(
@@ -56,6 +56,6 @@ class RoomItem {
   Map<String, dynamic> toJson() => {
         "adults": adults,
         "children":
-            children == null ? [] : List<dynamic>.from(children!.map((x) => x)),
+            children == null ? [] : List<dynamic>.from(children.map((x) => x)),
       };
 }

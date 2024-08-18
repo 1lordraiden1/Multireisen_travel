@@ -41,7 +41,7 @@ class FilterTravelersView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return FilterOptionView(
                     homeCubit: homeCubit,
-                    child: homeCubit.flightChildren[index],
+                    child: homeCubit.flightChildren[index].age,
                     limit: ' 2 <  11 ',
                   );
                 },

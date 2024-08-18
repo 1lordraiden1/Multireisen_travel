@@ -133,7 +133,7 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.homeCubit.hotelRooms[index].adults > 1
+                            widget.homeCubit.requestRooms[index].adults > 1
                                 ? 'Adults'
                                 : 'Adult',
                           ),
@@ -142,7 +142,8 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                             width: 150,
                             child: Flexible(
                               child: UsersNumPeopleView(
-                                room: widget.homeCubit.hotelRooms[index],
+                                room: widget.homeCubit.requestRooms[index],
+                                index: index,
                                 homeCubit: widget.homeCubit,
                                 title: 'Adult',
                                 iconPath: ImageAssets.userGroupIcon,
@@ -155,7 +156,9 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(widget.homeCubit.hotelRooms[index].children > 1
+                          Text(widget.homeCubit.requestRooms[index].children
+                                      .length >
+                                  1
                               ? 'Children'
                               : 'Child'),
                           30.horizontalSpace,
@@ -163,8 +166,9 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                             width: 150,
                             child: Flexible(
                               child: UsersNumPeopleView(
-                                room: widget.homeCubit.hotelRooms[index],
+                                room: widget.homeCubit.requestRooms[index],
                                 homeCubit: widget.homeCubit,
+                                index: index,
                                 title: 'Children',
                                 iconPath: ImageAssets.userIcon,
                               ),
@@ -179,14 +183,14 @@ class _HotelSearchViewState extends State<HotelSearchView> {
             );
           },
           separatorBuilder: (context, index) => 1.verticalSpace, //10
-          itemCount: widget.homeCubit.rooms,
+          itemCount: widget.homeCubit.requestRooms.length,
         ),
         14.verticalSpace,
         RoundedBtn(
           title: 'Search and book!',
           onTap: () {
-            print(widget.homeCubit.hotelRooms[0].toJson());
-            print(widget.homeCubit.hotelRooms[1].toJson());
+            print(widget.homeCubit.requestRooms[0].toJson());
+            print(widget.homeCubit.requestRooms[1].toJson());
             Navigator.push(
               context,
               MaterialPageRoute(
