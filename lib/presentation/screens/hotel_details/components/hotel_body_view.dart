@@ -23,9 +23,15 @@ class HotelBodyView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          HotelHeaderView(),
+          HotelHeaderView(
+            homeCubit: homeCubit,
+            hotel: hotel,
+          ),
           Expanded(
-            child: HotelTabbarView(),
+            child: HotelTabbarView(
+              homeCubit: homeCubit,
+              hotel: hotel,
+            ),
           ),
         ],
       ),

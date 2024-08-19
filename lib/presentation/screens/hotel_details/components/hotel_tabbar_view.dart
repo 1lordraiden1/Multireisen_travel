@@ -1,14 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/colors.dart';
+import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_details_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_review/hotel_reviews_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_room_details/hotel_room_details_view.dart';
 import 'package:qfly/presentation/widgets/text_shapes/text_with_icon_view.dart';
 
 class HotelTabbarView extends StatefulWidget {
-  const HotelTabbarView({super.key});
+  const HotelTabbarView({
+    super.key,
+    required this.homeCubit,
+    required this.hotel,
+  });
+
+  final HomeCubit homeCubit;
+  final Hotel hotel;
 
   @override
   State<HotelTabbarView> createState() => _HotelTabbarViewState();
@@ -32,7 +41,7 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
         unselectedLabelColor: grey,
         labelColor: primaryColor, dragStartBehavior: DragStartBehavior.start,
 
-        tabs: [
+        tabs: const [
           FittedBox(
             child: Tab(
               child: TextWithIconView(
@@ -69,7 +78,10 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
           physics: NeverScrollableScrollPhysics(),
           children: [
             HotelDetailsView(),
-            HotelRoomDetailsView(),
+            HotelRoomDetailsView(
+              homeCubit: widget.homeCubit,
+              hotel: widget.hotel,
+            ),
             HotelReviewsView(),
           ],
           controller: _tabController,
