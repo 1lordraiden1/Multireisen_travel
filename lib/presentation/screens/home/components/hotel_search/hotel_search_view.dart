@@ -190,7 +190,7 @@ class _HotelSearchViewState extends State<HotelSearchView> {
           title: 'Search and book!',
           onTap: () {
             print(widget.homeCubit.requestRooms[0].toJson());
-            print(widget.homeCubit.requestRooms[1].toJson());
+            //print(widget.homeCubit.requestRooms[1].toJson());
             Navigator.push(
               context,
               MaterialPageRoute(

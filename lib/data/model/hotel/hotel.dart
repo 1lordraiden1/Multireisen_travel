@@ -89,7 +89,7 @@ class Properties {
 @JsonSerializable()
 class Category {
     @JsonKey(name: "numeric")
-    String? numeric;
+    int? numeric;
     @JsonKey(name: "textual")
     dynamic textual;
 

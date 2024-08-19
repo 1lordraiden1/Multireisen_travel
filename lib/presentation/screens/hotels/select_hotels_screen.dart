@@ -19,7 +19,7 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
     // TODO: implement initState
     super.initState();
 
-   /*  widget.homeCubit.searchHotelsHandler(
+    widget.homeCubit.searchHotelsHandler(
       widget.homeCubit.city.countryCode!,
       widget.homeCubit.checkInDate,
       widget.homeCubit.checkOutDate,
@@ -30,7 +30,7 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
       true,
       'all',
       widget.homeCubit.country.countryCode!,
-    ); */
+    );
   }
 
   @override

@@ -15,6 +15,8 @@ import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/hotel/hotel_response.dart'
+    hide Entity, Room;
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
@@ -1319,7 +1321,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     }
     emit(RoomDataChangingState(requestRooms: _requestRooms));
   }
-  /* searchHotelsHandler(
+
+  searchHotelsHandler(
     String cityCode,
     DateTime checkIn,
     DateTime checkOut,
@@ -1333,68 +1336,49 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   ) async {
     isSearchHotelsLoading = true;
 
-    //dart.dev/diagnostics/return_of_invalid_type_from_closure
-    final queryParams = Utility.convertJsonToQueryParams(
+    final HotelResponse response = await ApiServices(dio).getHotels(
+      await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.contentType,
+      StringsManager.contentType,
+      StringsManager.ourToken,
       {
-        'city': '100639',
-        'check_in': '2024-08-27',
-        'check_out': '2024-08-28',
-        'adults': '2',
-        'children': children,
-        'children_ages':"$ages",
-        'refundable': 'true',
-        'nom_room': '0',
-        'meal_type': 'all',
-        'page': '1',
-        'per_page': '5',
-        'guestNationality': 'EG'
+        "cityId": "103078",
+        "checkIn": "2024-09-05",
+        "checkOut": "2024-09-10",
+        "rooms": [
+          {
+            /* "roomType": "double", */
+            "adults": 2,
+            "children": ["8", "1"]
+          }
+        ],
+        "category": "0",
+        "nationality": "DE",
+        "searchTimeout": "60"
       },
-    ); /* Utility.convertJsonToQueryParams(
-      {
-        'city': '100639',
-        'check_in': '2024-08-27',
-        'check_out': '2024-08-28',
-        'adults': '2',
-        'children': '2',
-        'children_ages': [4,5],
-        'refundable': 'true',
-        'nom_room': '0',
-        'meal_type': 'all',
-        'page': '1',
-        'per_page': '5',
-        'guestNationality': 'EG'
-      },
-    ); */
+    );
 
-    print(queryParams);
-
-    try {
-      final ApiResponse data = await ApiServices(dio).getHotels(
-        queryParams,
-        await SharedPreferencesUtil.getAuthToken('authToken') ??
-            await AuthService().authMe(),
-      );
-
-      if (data.data == null || data.status == 201) {
-        isSearchHotelsLoading = false;
-        print(data.errors!["description"].toString());
-        data.errors;
-        emit(NoHotelDataFoundState(error: data.errors!["Description"]));
-        return;
-      }
-
-      _hotels = data.data!.data!;
-
-      print(_hotels);
-
-      emit(LoadHotelsState(hotels: _hotels));
-    } catch (e) {
-      isSearchHotelsLoading = false;
-      onError(e, StackTrace.current);
+    if (response.error != null) {
+      isSearchFlightLoading = false;
+      print(response.error!.message.toString());
       emit(NoDataFoundState());
-      //throw Exception(e.toString());
-    } finally {
-      isSearchHotelsLoading = false;
+      return;
     }
-  } */
+
+    _hotels = response.data!.entities!;
+
+    print(" Got ${_hotels.length} Hotels !!");
+
+    print(_hotels);
+
+    emit(LoadHotelsState(hotels: _hotels));
+
+    isSearchHotelsLoading = false;
+
+    emit(NoDataFoundState());
+    //throw Exception(e.toString());
+
+    //isSearchHotelsLoading = false;
+  }
 }

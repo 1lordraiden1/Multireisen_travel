@@ -8,6 +8,7 @@ import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_booking_response.dart';
 import 'package:qfly/data/model/responses/get_rules_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/hotel/hotel_response.dart';
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
@@ -38,7 +39,15 @@ abstract class ApiServices {
 
   // Hotels
 
-  
+  @POST(EndPoints.searchHotels)
+  Future<HotelResponse> getHotels(
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Content') String contentType,
+    @Header('Authorization') String auth,
+    @Body() Map<String, dynamic> body,
+  );
 
   // Flights
 

@@ -57,6 +57,48 @@ class _ApiServices implements ApiServices {
   }
 
   @override
+  Future<HotelResponse> getHotels(
+    String accessToken,
+    String version,
+    String accept,
+    String contentType,
+    String auth,
+    Map<String, dynamic> body,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Version': version,
+      r'Accept': accept,
+      r'Content': contentType,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<HotelResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/hotels/search',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = HotelResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<FlightResponse> getFlights(
     String accessToken,
     String version,

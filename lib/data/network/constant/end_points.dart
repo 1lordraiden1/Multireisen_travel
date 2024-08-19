@@ -20,7 +20,11 @@ class EndPoints {
   /// Hotels
   static const getCountries = "hotel/";
   static const getCities = "hotel/city/";
-  static const searchHotel = "hotel/search";
+  static const searchHotel = "/hotels/search";
+  static const searchHotels = "/hotels/search";
+
+
+
 
   /// Test API
   //
