@@ -68,7 +68,10 @@ class HotelView extends StatelessWidget {
                         '${hotel.properties!.category!.numeric!}', //'4.9(05 Reviews)',
                   ),
                   7.verticalSpace,
-                  RoomDetailsView(), // lowest price ??
+                  RoomDetailsView(
+                    homeCubit: homeCubit,
+                    hotel: hotel,
+                  ), // lowest price ??
                 ],
               ),
             )

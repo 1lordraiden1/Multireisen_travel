@@ -82,8 +82,8 @@ class RouteGenerator {
       /*  case Routes.selectHotelRoute:
         return MaterialPageRoute(builder: (_) => const SelectHotelScreen()); */
       // hotel details
-      case Routes.hotelDetailsRoute:
-        return MaterialPageRoute(builder: (_) => const HotelDetailsScreen());
+      /*   case Routes.hotelDetailsRoute:
+        return MaterialPageRoute(builder: (_) => const HotelDetailsScreen()); */
       // favorite
       case Routes.favoriteRoute:
         return MaterialPageRoute(builder: (_) => const FavoriteScreen());
@@ -105,8 +105,8 @@ class RouteGenerator {
       case Routes.privacyPolicyRoute:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
       // display images
-      case Routes.displayImagesRoute:
-        return MaterialPageRoute(builder: (_) => DisplayImagesScreen());
+     /*  case Routes.displayImagesRoute:
+        return MaterialPageRoute(builder: (_) => DisplayImagesScreen()); */
       // checkout
       case Routes.checkoutRoute:
         return MaterialPageRoute(builder: (_) => CheckoutScreen());

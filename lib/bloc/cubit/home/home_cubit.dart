@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
 import 'package:qfly/constant/app_strings.dart';
 import 'package:qfly/data/Shared/sharedPreferences.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
@@ -18,7 +18,7 @@ import 'package:qfly/data/model/responses/hotel/cities_response.dart'
     hide Country;
 import 'package:qfly/data/model/responses/hotel/countries_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart'
-    hide Entity, Room;
+    hide Entity, Room, Image;
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
@@ -1104,6 +1104,10 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   List<RoomItem> get requestRooms => _requestRooms;
   List<Hotel> get hotels => _hotels;
 
+  Image selectedImage = Image(
+    url: null,
+  );
+
   // Loading
 
   bool isSearchCityLoading = false;
@@ -1388,5 +1392,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     } finally {
       isSearchHotelsLoading = false;
     }
+  }
+
+  selectHotelImageHandler(Image img) {
+    selectedImage = img;
+    emit(
+      SelectingHotelImageState(
+        img: selectedImage,
+      ),
+    );
   }
 }

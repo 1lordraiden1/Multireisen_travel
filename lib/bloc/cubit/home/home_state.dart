@@ -344,3 +344,11 @@ class RoomDataChangingState extends HomeState {
     required List<RoomItem> requestRooms,
   }) : _requestRooms = requestRooms;
 }
+
+class SelectingHotelImageState extends HomeState {
+  final Image _img;
+
+  SelectingHotelImageState({
+    required Image img,
+  }) : _img = img;
+}
