@@ -8,13 +8,15 @@ import 'package:qfly/constant/app_strings.dart';
 import 'package:qfly/data/Shared/sharedPreferences.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
-import 'package:qfly/data/model/global/country_model.dart';
 
 import 'package:qfly/data/model/airport_model.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/hotel/cities_response.dart'
+    hide Country;
+import 'package:qfly/data/model/responses/hotel/countries_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart'
     hide Entity, Room;
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
@@ -1235,13 +1237,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     try {
       isSearchDataLoading = true;
 
-      final data = await HomeServices().fetchCountriesData();
+      final CountriesResponse response = await ApiServices(dio).getCountries(
+        await AuthService().getOurAuth(),
+        StringsManager.contentType,
+        'v1',
+        StringsManager.ourToken,
+      );
 
-      _countries = data
-          .map(
-            (e) => Country.fromHotelJson(e),
-          )
-          .toList();
+      _countries = response.data!.countries![0];
 
       emit(LoadCountriesState(countries: _countries));
     } catch (e) {
@@ -1256,20 +1259,23 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     try {
       isSearchCityLoading = true;
 
-      final data = await HomeServices().fetchCitiesData(
-        country.countryCode.toString(),
+      final CitiesResponse response = await ApiServices(dio).getCities(
+        country.code.toString(),
+        await AuthService().getOurAuth(),
+        StringsManager.contentType,
+        'v1',
+        StringsManager.ourToken,
+        1,
+        5000,
       );
 
-      _cities = data
-          .map(
-            (e) => City.fromHotelJson(e),
-          )
-          .toList();
+      _cities = response.data!.cities!;
 
       emit(LoadCitiesState(cities: _cities));
     } catch (e) {
       isSearchCityLoading = false;
       onError(e, StackTrace.current);
+      emit(NoHotelDataFoundState(error: e.toString()));
     } finally {
       isSearchCityLoading = false;
     }
@@ -1336,49 +1342,51 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   ) async {
     isSearchHotelsLoading = true;
 
-    final HotelResponse response = await ApiServices(dio).getHotels(
-      await AuthService().getOurAuth(),
-      'v1',
-      StringsManager.contentType,
-      StringsManager.contentType,
-      StringsManager.ourToken,
-      {
-        "cityId": "103078",
-        "checkIn": "2024-09-05",
-        "checkOut": "2024-09-10",
-        "rooms": [
-          {
-            /* "roomType": "double", */
-            "adults": 2,
-            "children": ["8", "1"]
-          }
-        ],
-        "category": "0",
-        "nationality": "DE",
-        "searchTimeout": "60"
-      },
-    );
+    try {
+      final HotelResponse response = await ApiServices(dio).getHotels(
+        await AuthService().getOurAuth(),
+        'v1',
+        StringsManager.contentType,
+        StringsManager.contentType,
+        StringsManager.ourToken,
+        {
+          "cityId": cityCode, //"103078",
+          "checkIn": "2024-09-05",
+          "checkOut": "2024-09-10",
+          "rooms": [
+            {
+              /* "roomType": "double", */
+              "adults": 2,
+              "children": ["8", "1"]
+            }
+          ],
+          "category": "0",
+          "nationality": "DE",
+          "searchTimeout": "60"
+        },
+      );
 
-    if (response.error != null) {
-      isSearchFlightLoading = false;
-      print(response.error!.message.toString());
+      if (response.error != null) {
+        isSearchFlightLoading = false;
+        print(response.error!.message.toString());
+        emit(NoDataFoundState());
+        return;
+      }
+
+      _hotels = response.data!.entities!;
+
+      print(" Got ${_hotels.length} Hotels !!");
+
+      print(_hotels);
+
+      emit(LoadHotelsState(hotels: _hotels));
+    } catch (e) {
+      isSearchHotelsLoading = false;
+      onError(e, StackTrace.current);
       emit(NoDataFoundState());
-      return;
+      //throw Exception(e.toString());
+    } finally {
+      isSearchHotelsLoading = false;
     }
-
-    _hotels = response.data!.entities!;
-
-    print(" Got ${_hotels.length} Hotels !!");
-
-    print(_hotels);
-
-    emit(LoadHotelsState(hotels: _hotels));
-
-    isSearchHotelsLoading = false;
-
-    emit(NoDataFoundState());
-    //throw Exception(e.toString());
-
-    //isSearchHotelsLoading = false;
   }
 }

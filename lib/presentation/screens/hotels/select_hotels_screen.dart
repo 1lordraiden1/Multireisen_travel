@@ -20,7 +20,7 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
     super.initState();
 
     widget.homeCubit.searchHotelsHandler(
-      widget.homeCubit.city.countryCode!,
+      widget.homeCubit.city.name!,
       widget.homeCubit.checkInDate,
       widget.homeCubit.checkOutDate,
       RoomData.getAdultForEachRoom(widget.homeCubit.hotelRooms),
@@ -29,7 +29,7 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
       RoomData.getAllChildrenAgesInt(widget.homeCubit.hotelRooms),
       true,
       'all',
-      widget.homeCubit.country.countryCode!,
+      widget.homeCubit.country.name!,
     );
   }
 
@@ -49,7 +49,9 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
           );
         }
         if (state is LoadHotelsState) {
-          callerWidget = showHotels();
+          callerWidget = showHotels(
+            widget.homeCubit,
+          );
         }
       },
       builder: (context, snapshot) {
@@ -69,6 +71,8 @@ Widget callerWidget = const Center(
   child: CircularProgressIndicator(),
 );
 
-Widget showHotels() {
-  return SelectHotelBody();
+Widget showHotels(HomeCubit homeCubit) {
+  return SelectHotelBody(
+    homeCubit: homeCubit,
+  );
 }

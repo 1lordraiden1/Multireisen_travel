@@ -8,6 +8,8 @@ import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_booking_response.dart';
 import 'package:qfly/data/model/responses/get_rules_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/hotel/cities_response.dart';
+import 'package:qfly/data/model/responses/hotel/countries_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart';
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
@@ -38,6 +40,27 @@ abstract class ApiServices {
   );
 
   // Hotels
+
+  @GET("/staticdata/countries")
+  Future<CountriesResponse> getCountries(
+    @Header('AccessToken') String accessToken,
+    @Header('Accept') String accept,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/staticdata/cities/{countryCode}")
+  Future<CitiesResponse> getCities(
+    @Path('countryCode') String countryCode,
+    @Header('AccessToken') String accessToken,
+    @Header('Accept') String accept,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    //@Header('Content') String contentType,
+    @Query('page') int page,
+    @Query('items') int items,
+  );
 
   @POST(EndPoints.searchHotels)
   Future<HotelResponse> getHotels(

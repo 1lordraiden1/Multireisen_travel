@@ -53,9 +53,9 @@ class _HotelSearchViewState extends State<HotelSearchView> {
             : GestureDetector(
                 child: WhereToTripView(
                   homeCubit: widget.homeCubit,
-                  text: widget.homeCubit.country.countryName!.isEmpty
+                  text: widget.homeCubit.country.name!.isEmpty
                       ? 'Select Country'
-                      : widget.homeCubit.country.countryName!,
+                      : widget.homeCubit.country.name!,
                 ),
                 onTap: () => BottomSheetShape(
                   CountriesScreen(
@@ -65,40 +65,54 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                 ).build(context),
               ),
         15.verticalSpace,
-        widget.homeCubit.country.countryName!.isNotEmpty &&
-                widget.homeCubit.cities.isNotEmpty
-            ? widget.homeCubit.isSearchDataLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : GestureDetector(
-                    child: WhereToTripView(
-                      homeCubit: widget.homeCubit,
-                      text: widget.homeCubit.city.countryName!.isEmpty
-                          ? 'Select City'
-                          : widget.homeCubit.city.countryName!,
-                    ),
-                    onTap: () => BottomSheetShape(
-                      CountriesScreen(
-                        homeCubit: widget.homeCubit,
-                        isWhereFrom: false,
-                        isCities: true,
-                      ),
-                    ).build(context),
-                  )
-            : GestureDetector(
+        widget.homeCubit.country.name!.isEmpty
+            ? GestureDetector(
                 child: WhereToTripView(
                   homeCubit: widget.homeCubit,
-                  text: widget.homeCubit.city.countryName!.isEmpty
+                  text: widget.homeCubit.city.name!.isEmpty
                       ? 'Select City'
-                      : widget.homeCubit.city.countryName!,
+                      : widget.homeCubit.city.name!,
                 ),
                 onTap: () => ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Please enter country first'),
                   ),
                 ),
-              ),
+              )
+            : widget.homeCubit.isSearchCityLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : widget.homeCubit.cities.isEmpty
+                    ? GestureDetector(
+                        child: WhereToTripView(
+                          homeCubit: widget.homeCubit,
+                          text: widget.homeCubit.city.name!.isEmpty
+                              ? 'Select City'
+                              : widget.homeCubit.city.name!,
+                        ),
+                        onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'No Hotels Available in ${widget.homeCubit.country.name} at the moment'),
+                          ),
+                        ),
+                      )
+                    : GestureDetector(
+                        child: WhereToTripView(
+                          homeCubit: widget.homeCubit,
+                          text: widget.homeCubit.city.name!.isEmpty
+                              ? 'Select City'
+                              : widget.homeCubit.city.name!,
+                        ),
+                        onTap: () => BottomSheetShape(
+                          CountriesScreen(
+                            homeCubit: widget.homeCubit,
+                            isWhereFrom: false,
+                            isCities: true,
+                          ),
+                        ).build(context),
+                      ),
         14.verticalSpace,
         CheckInView(
           homeCubit: widget.homeCubit,

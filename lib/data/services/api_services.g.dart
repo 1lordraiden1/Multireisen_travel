@@ -57,6 +57,88 @@ class _ApiServices implements ApiServices {
   }
 
   @override
+  Future<CountriesResponse> getCountries(
+    String accessToken,
+    String accept,
+    String version,
+    String auth,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Accept': accept,
+      r'Version': version,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CountriesResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/staticdata/countries',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CountriesResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CitiesResponse> getCities(
+    String countryCode,
+    String accessToken,
+    String accept,
+    String version,
+    String auth,
+    int page,
+    int items,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'items': items,
+    };
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Accept': accept,
+      r'Version': version,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CitiesResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/staticdata/cities/${countryCode}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CitiesResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<HotelResponse> getHotels(
     String accessToken,
     String version,

@@ -34,11 +34,14 @@ class TextWithIconView extends StatelessWidget {
           height: 18,
         ),
         5.horizontalSpace,
-        Text(
-          text,
-          style: textStyle ??
-              TextStylesManager.regularStyle(fontSize: 16.sp, color: red),
-          overflow: TextOverflow.ellipsis,
+        Flexible(
+          child: Text(
+            text,
+            style: textStyle ??
+                TextStylesManager.regularStyle(fontSize: 16.sp, color: red),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
         )
       ],
     );

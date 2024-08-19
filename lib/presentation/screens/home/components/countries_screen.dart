@@ -37,14 +37,14 @@ class _CountriesScreenState extends State<CountriesScreen> {
         searchCountries = widget.isCities!
             ? widget.homeCubit.cities
                 .where(
-                  (element) => element.countryName!.toLowerCase().contains(
+                  (element) => element.name!.toLowerCase().contains(
                         value.toLowerCase(),
                       ),
                 )
                 .toList()
             : widget.homeCubit.countries
                 .where(
-                  (element) => element.countryName!.toLowerCase().contains(
+                  (element) => element.name!.toLowerCase().contains(
                         value.toLowerCase(),
                       ),
                 )
@@ -116,12 +116,12 @@ class _CountriesScreenState extends State<CountriesScreen> {
                                       child: ListTile(
                                         title: Text(
                                           searchCountries[index]
-                                              .countryName
+                                              .name
                                               .toString(),
                                         ),
                                         trailing: Text(
                                           searchCountries[index]
-                                              .countryCode
+                                              .code
                                               .toString(),
                                         ),
                                       ),
@@ -156,10 +156,10 @@ class _CountriesScreenState extends State<CountriesScreen> {
                                   },
                                   child: ListTile(
                                     title: Text(
-                                      data[index].countryName.toString(),
+                                      data[index].name.toString(),
                                     ),
                                     trailing: Text(
-                                      data[index].countryCode.toString(),
+                                      data[index].code.toString(),
                                     ),
                                   ),
                                 ),
