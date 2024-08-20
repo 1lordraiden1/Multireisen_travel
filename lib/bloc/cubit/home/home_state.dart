@@ -352,3 +352,19 @@ class SelectingHotelImageState extends HomeState {
     required Image img,
   }) : _img = img;
 }
+
+class LoadAvailableRoomsState extends HomeState {
+  final List<Room> _availableRooms;
+
+  LoadAvailableRoomsState({
+    required List<Room> availableRooms,
+  }) : _availableRooms = availableRooms;
+}
+
+class LoadHotelDetailsState extends HomeState {
+  final hotel_details.HotelDetailsResponse _hotelDetailsResponse;
+
+  LoadHotelDetailsState({
+    required hotel_details.HotelDetailsResponse hotelDetailsResponse,
+  }) : _hotelDetailsResponse = hotelDetailsResponse;
+}

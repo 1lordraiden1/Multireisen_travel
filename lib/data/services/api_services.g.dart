@@ -181,6 +181,85 @@ class _ApiServices implements ApiServices {
   }
 
   @override
+  Future<RoomFilterResponse> filterAvailableRooms(
+    String itemId,
+    String accessToken,
+    String accept,
+    String version,
+    String auth,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Accept': accept,
+      r'Version': version,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<RoomFilterResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/hotels/items/${itemId}/rooms',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = RoomFilterResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<SelectHotelResponse> selectHotelAndRoom(
+    String itemId,
+    String solutionId,
+    String accessToken,
+    String accept,
+    String version,
+    String auth,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Accept': accept,
+      r'Version': version,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<SelectHotelResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/hotels/items/${itemId}/rooms/${solutionId}/select',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = SelectHotelResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<FlightResponse> getFlights(
     String accessToken,
     String version,

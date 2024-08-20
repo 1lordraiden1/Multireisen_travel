@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:qfly/data/model/hotel/hotel_model.dart';
 import 'package:qfly/data/model/responses/check_booking_cancellation_response.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 
@@ -10,14 +8,16 @@ import 'package:qfly/data/model/responses/get_rules_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
 import 'package:qfly/data/model/responses/hotel/cities_response.dart';
 import 'package:qfly/data/model/responses/hotel/countries_response.dart';
+import 'package:qfly/data/model/responses/hotel/hotel_details_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart';
+import 'package:qfly/data/model/responses/hotel/room_filter_response.dart';
+import 'package:qfly/data/model/responses/hotel/select_hotel_response.dart';
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
 import 'package:qfly/data/model/responses/void_ticket_response.dart';
 import 'package:qfly/data/network/constant/end_points.dart';
 import 'package:retrofit/http.dart';
-import 'package:retrofit/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'api_services.g.dart';
@@ -70,6 +70,37 @@ abstract class ApiServices {
     @Header('Content') String contentType,
     @Header('Authorization') String auth,
     @Body() Map<String, dynamic> body,
+  );
+
+  @GET("/hotels/items/{itemId}/details")
+  Future<HotelDetailsResponse> getHotelDetails(
+    @Path('itemId') String itemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Accept') String accept,
+    @Header('Version') String version,
+    @Header('Authorization') String auth, 
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/hotels/items/{itemId}/rooms")
+  Future<RoomFilterResponse> filterAvailableRooms(
+    @Path('itemId') String itemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Accept') String accept,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/hotels/items/{itemId}/rooms/{solutionId}/select")
+  Future<SelectHotelResponse> selectHotelAndRoom(
+    @Path('itemId') String itemId,
+    @Path('solutionId') String solutionId,
+    @Header('AccessToken') String accessToken,
+    @Header('Accept') String accept,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    //@Header('Content') String contentType,
   );
 
   // Flights

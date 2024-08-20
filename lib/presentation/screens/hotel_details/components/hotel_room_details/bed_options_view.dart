@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/assets_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:qfly/data/model/hotel/hotel.dart';
 import '../../../../../constant/text_styles_manager.dart';
+
 class BedOptionsView extends StatelessWidget {
-  const BedOptionsView({super.key});
+  const BedOptionsView(
+      {super.key, required this.homeCubit, required this.room});
+
+  final HomeCubit homeCubit;
+  final Room room;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
         SvgPicture.asset(ImageAssets.bedIcon),
         8.horizontalSpace,
         Column(
           children: [
-         Text('Option 1:2 twin beds',style:  TextStylesManager.regularStyle(fontSize: 12.sp)),
-         8.verticalSpace,
-         Text('Option 2:1 King bed',style:  TextStylesManager.regularStyle(fontSize: 12.sp)),
+            Text('Option 1:2 twin beds',
+                style: TextStylesManager.regularStyle(fontSize: 12.sp)),
+            8.verticalSpace,
+            Text('Option 2:1 King bed',
+                style: TextStylesManager.regularStyle(fontSize: 12.sp)),
           ],
         )
-
       ],
     );
   }

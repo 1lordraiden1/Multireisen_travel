@@ -30,7 +30,7 @@ class HotelDetailsScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 900,
+                height: 600,
                 child: HotelBodyView(
                   homeCubit: homeCubit,
                   hotel: hotel,

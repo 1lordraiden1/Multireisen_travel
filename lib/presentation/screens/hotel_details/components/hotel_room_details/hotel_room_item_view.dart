@@ -32,7 +32,10 @@ class HotelRoomItemView extends StatelessWidget {
             homeCubit: homeCubit,
             room: room,
           ),
-          RoomBodyDetailsView(),
+          RoomBodyDetailsView(
+            homeCubit: homeCubit,
+            room: room,
+          ),
         ],
       ),
     );

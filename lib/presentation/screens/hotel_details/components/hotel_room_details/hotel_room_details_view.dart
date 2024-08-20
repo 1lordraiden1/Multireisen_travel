@@ -8,22 +8,25 @@ import 'package:qfly/presentation/screens/hotel_details/components/hotel_room_de
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_room_details/room_body_details_view.dart';
 
 class HotelRoomDetailsView extends StatelessWidget {
-  const HotelRoomDetailsView(
-      {super.key, required this.homeCubit, required this.hotel});
+  const HotelRoomDetailsView({
+    super.key,
+    required this.homeCubit,
+    required this.availableRooms,
+  });
 
   final HomeCubit homeCubit;
-  final Hotel hotel;
+  final List<Room> availableRooms;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+      //physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: hotel.rooms!.length,
+      itemCount: availableRooms.length,
       itemBuilder: (BuildContext context, int index) {
         return HotelRoomItemView(
           homeCubit: homeCubit,
-          room: hotel.rooms![index],
+          room: availableRooms[index],
         );
       },
     );

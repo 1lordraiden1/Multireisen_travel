@@ -17,8 +17,14 @@ import 'package:qfly/data/model/responses/get_ticket_response.dart';
 import 'package:qfly/data/model/responses/hotel/cities_response.dart'
     hide Country;
 import 'package:qfly/data/model/responses/hotel/countries_response.dart';
+import 'package:qfly/data/model/responses/hotel/hotel_details_response.dart'
+    as hotel_details hide Image;
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart'
     hide Entity, Room, Image;
+import 'package:qfly/data/model/responses/hotel/room_filter_response.dart'
+    hide Entity;
+import 'package:qfly/data/model/responses/hotel/select_hotel_response.dart'
+    hide Image, Room;
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
@@ -1085,7 +1091,18 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     ),
   ];
 
+  Image selectedImage = Image(
+    url: null,
+  );
+
+  hotel_details.HotelDetailsResponse _hotelDetailsResponse =
+      hotel_details.HotelDetailsResponse(
+    data: null,
+  );
+
   List<Room> _availableRooms = [];
+
+  SelectHotelResponse _selectHotelResponse = SelectHotelResponse();
 
   // Getters (Can't Set Data!)
 
@@ -1104,15 +1121,22 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   List<RoomItem> get requestRooms => _requestRooms;
   List<Hotel> get hotels => _hotels;
 
-  Image selectedImage = Image(
-    url: null,
-  );
+  hotel_details.HotelDetailsResponse get hotelDetailsResponse =>
+      _hotelDetailsResponse;
+
+  SelectHotelResponse get selectHotelResponse => _selectHotelResponse;
 
   // Loading
 
   bool isSearchCityLoading = false;
 
   bool isSearchHotelsLoading = false;
+
+  bool isGettingHotelDetailsLoading = false;
+
+  bool isAvailableRoomsLoading = false;
+
+  bool isHotelAndRoomSelectionLoading = false;
 
   // Hotel Functions
   handleCheckInDateChanging(DateTime checkIn) {
@@ -1401,5 +1425,102 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         img: selectedImage,
       ),
     );
+  }
+
+  getHotelDetails(String itemId) async {
+    isGettingHotelDetailsLoading = true;
+
+    try {
+      final hotel_details.HotelDetailsResponse response =
+          await ApiServices(dio).getHotelDetails(
+        itemId,
+        await SharedPreferencesUtil.getAuthToken("accessToken") ??
+            await AuthService().getOurAuth(),
+        StringsManager.contentType,
+        'v1',
+        StringsManager.ourToken,
+      );
+
+      _hotelDetailsResponse = response;
+
+      emit(
+        LoadHotelDetailsState(
+          hotelDetailsResponse: _hotelDetailsResponse,
+        ),
+      );
+
+      isGettingHotelDetailsLoading = false;
+    } catch (e) {
+      onError(e, StackTrace.current);
+      emit(NoHotelDataFoundState(error: e.toString()));
+      isGettingHotelDetailsLoading = false;
+    } finally {
+      isGettingHotelDetailsLoading = false;
+    }
+  }
+
+  filterAvailableRooms(String itemId) async {
+    isAvailableRoomsLoading = true;
+
+    try {
+      final RoomFilterResponse response =
+          await ApiServices(dio).filterAvailableRooms(
+        itemId,
+        await SharedPreferencesUtil.getAuthToken("accessToken") ??
+            await AuthService().getOurAuth(),
+        StringsManager.contentType,
+        'v1',
+        StringsManager.ourToken,
+      );
+
+      _availableRooms = response.data!.entities!;
+
+      emit(
+        LoadAvailableRoomsState(
+          availableRooms: _availableRooms,
+        ),
+      );
+
+      isAvailableRoomsLoading = false;
+    } catch (e) {
+      onError(e, StackTrace.current);
+      emit(NoHotelDataFoundState(error: e.toString()));
+      isAvailableRoomsLoading = false;
+    } finally {
+      isAvailableRoomsLoading = false;
+    }
+  }
+
+  selectHotelAndRoom(String itemId, String solutionId) async {
+    isHotelAndRoomSelectionLoading = true;
+
+    try {
+      final SelectHotelResponse response =
+          await ApiServices(dio).selectHotelAndRoom(
+        itemId,
+        solutionId,
+        await SharedPreferencesUtil.getAuthToken("accessToken") ??
+            await AuthService().getOurAuth(),
+        StringsManager.contentType,
+        'v1',
+        StringsManager.ourToken,
+      );
+
+      _selectHotelResponse = response;
+
+      emit(
+        LoadAvailableRoomsState(
+          availableRooms: _availableRooms,
+        ),
+      );
+
+      isHotelAndRoomSelectionLoading = false;
+    } catch (e) {
+      onError(e, StackTrace.current);
+      emit(NoHotelDataFoundState(error: e.toString()));
+      isHotelAndRoomSelectionLoading = false;
+    } finally {
+      isHotelAndRoomSelectionLoading = false;
+    }
   }
 }
