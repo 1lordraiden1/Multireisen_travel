@@ -44,7 +44,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       filters: json['filters'] == null
           ? null
           : Filters.fromJson(json['filters'] as Map<String, dynamic>),
-      markers: (json['markers'] ? json['markers'] as List<dynamic>? : [])
+      markers: (json['markers'] as List<dynamic>?)
           ?.map((e) => Marker.fromJson(e as Map<String, dynamic>))
           .toList(),
       entities: (json['entities'] as List<dynamic>?)

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
+import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_desc_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_facilities_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_policies_view.dart';
@@ -10,21 +12,38 @@ import 'package:qfly/presentation/widgets/container_border_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HotelDetailsView extends StatelessWidget {
-  const HotelDetailsView({super.key});
+  const HotelDetailsView({
+    super.key,
+    required this.homeCubit,
+    required this.hotel,
+  });
+
+  final HomeCubit homeCubit;
+  final Hotel hotel;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: NeverScrollableScrollPhysics(),
+      //physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       
       children: [
         30.verticalSpace,
-        ContainerBorderView(),
+        ContainerBorderView(
+          homeCubit: homeCubit,
+          hotel: hotel,
+        ),
         16.verticalSpace,
-        HotelFacilitiesView(),
-        HotelDescView(),
-        HotelPoliciesView(),
+        HotelFacilitiesView(
+          homeCubit: homeCubit,
+          facility: homeCubit
+              .hotelDetailsResponse.data!.properties!.facilities!.first,
+        ),
+        HotelDescView(
+          homeCubit: homeCubit,
+          des: homeCubit.hotelDetailsResponse.data!.properties!.description!,
+        ),
+        /*  HotelPoliciesView(), */
         30.verticalSpace,
         SizedBox(
             height: 50.h,

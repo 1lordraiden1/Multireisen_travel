@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
+import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/presentation/widgets/text_shapes/text_with_icon_view.dart';
+
 class ContainerBorderView extends StatelessWidget {
-  const ContainerBorderView({super.key});
+  const ContainerBorderView({
+    super.key,
+    required this.homeCubit,
+    required this.hotel,
+  });
+
+  final HomeCubit homeCubit;
+  final Hotel hotel;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       decoration: BoxDecoration(
-        color: primaryColor.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(10.r)
+          color: primaryColor.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(10.r)),
+      child: Center(
+        child: TextWithIconView(
+          isCenter: true,
+          iconPath: ImageAssets.costIcon,
+          text: 'lowest room price is \$ ${hotel.rooms!.first.price!.total}',
+          textStyle: TextStylesManager.mediumStyle(
+            fontSize: 16.sp,
+            color: grey,
+          ),
+        ),
       ),
-      child:
-          Center(child: TextWithIconView(isCenter: true, iconPath: ImageAssets.costIcon, text: '\$ 20 / per night',textStyle: TextStylesManager.mediumStyle(fontSize: 16.sp,color: grey,)))
-
-
     );
   }
 }

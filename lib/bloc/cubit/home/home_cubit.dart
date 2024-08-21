@@ -339,7 +339,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   handleFlightDateChanging(DateTime date) {
     _flightDate = date;
-    emit(ChangeCheckInDate(checkIn: _flightDate));
+    emit(ChangeCheckInDate(checkInDate: _flightDate));
   }
 
   handleFlightBirthDateChanging(DateTime date) {
@@ -1068,8 +1068,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   // Hotel Data
   // Init
 
-  final DateTime _checkInDate = DateTime.now();
-  final DateTime _checkOutDate = DateTime(2025);
+  DateTime _checkInDate = DateTime.now();
+  DateTime _checkOutDate = DateTime(2025);
 
   List<City> _cities = [];
   List<Country> _countries = [];
@@ -1140,11 +1140,21 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   // Hotel Functions
   handleCheckInDateChanging(DateTime checkIn) {
-    emit(ChangeCheckInDate(checkIn: checkIn));
+    _checkInDate = checkIn;
+    emit(
+      ChangeCheckInDate(
+        checkInDate: _checkInDate,
+      ),
+    );
   }
 
   handleCheckOutDateChanging(DateTime checkOut) {
-    emit(ChangeCheckInDate(checkIn: checkOut));
+    _checkOutDate = checkOut;
+    emit(
+      ChangeCheckOutDate(
+        checkOutDate: _checkOutDate,
+      ),
+    );
   }
 
   handleAdultsChanges(RoomData room, String operation) {
@@ -1358,15 +1368,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   searchHotelsHandler(
     String cityCode,
-    DateTime checkIn,
-    DateTime checkOut,
-    String adults,
-    String children,
-    String childrenAges,
-    List<int> ages,
-    bool refundable,
-    String mealType,
-    String guestNationality,
+    //String Nationality,
   ) async {
     isSearchHotelsLoading = true;
 
@@ -1378,16 +1380,17 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         StringsManager.contentType,
         StringsManager.ourToken,
         {
-          "cityId": cityCode, //"103078",
-          "checkIn": "2024-09-05",
-          "checkOut": "2024-09-10",
-          "rooms": [
+          "cityId": cityCode.isEmpty ? "103078" : cityCode,
+          "checkIn": checkInDate.toString().substring(0, 10), //"2024-09-05",
+          "checkOut": checkOutDate.toString().substring(0, 10), //"2024-09-10",
+          "rooms": _requestRooms,
+          /* [
             {
               /* "roomType": "double", */
               "adults": 2,
               "children": ["8", "1"]
             }
-          ],
+          ], */
           "category": "0",
           "nationality": "DE",
           "searchTimeout": "60"
@@ -1430,33 +1433,31 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   getHotelDetails(String itemId) async {
     isGettingHotelDetailsLoading = true;
 
-    try {
-      final hotel_details.HotelDetailsResponse response =
-          await ApiServices(dio).getHotelDetails(
-        itemId,
-        await SharedPreferencesUtil.getAuthToken("accessToken") ??
-            await AuthService().getOurAuth(),
-        StringsManager.contentType,
-        'v1',
-        StringsManager.ourToken,
-      );
+    final hotel_details.HotelDetailsResponse response =
+        await ApiServices(dio).getHotelDetails(
+      itemId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      StringsManager.contentType,
+      'v1',
+      StringsManager.ourToken,
+    );
 
-      _hotelDetailsResponse = response;
+    _hotelDetailsResponse = response;
 
-      emit(
-        LoadHotelDetailsState(
-          hotelDetailsResponse: _hotelDetailsResponse,
-        ),
-      );
+    emit(
+      LoadHotelDetailsState(
+        hotelDetailsResponse: _hotelDetailsResponse,
+      ),
+    );
 
-      isGettingHotelDetailsLoading = false;
-    } catch (e) {
-      onError(e, StackTrace.current);
-      emit(NoHotelDataFoundState(error: e.toString()));
-      isGettingHotelDetailsLoading = false;
-    } finally {
-      isGettingHotelDetailsLoading = false;
-    }
+    isGettingHotelDetailsLoading = false;
+
+    //onError(e, StackTrace.current);
+    //emit(NoHotelDetailsFoundState(error: e.toString()));
+    isGettingHotelDetailsLoading = false;
+
+    isGettingHotelDetailsLoading = false;
   }
 
   filterAvailableRooms(String itemId) async {
@@ -1484,7 +1485,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
       isAvailableRoomsLoading = false;
     } catch (e) {
       onError(e, StackTrace.current);
-      emit(NoHotelDataFoundState(error: e.toString()));
+      //emit(NoHotelDataFoundState(error: e.toString()));
       isAvailableRoomsLoading = false;
     } finally {
       isAvailableRoomsLoading = false;
@@ -1509,15 +1510,15 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
       _selectHotelResponse = response;
 
       emit(
-        LoadAvailableRoomsState(
-          availableRooms: _availableRooms,
+        HotelAndRoomSelectionState(
+          selectHotelResponse: _selectHotelResponse,
         ),
       );
 
       isHotelAndRoomSelectionLoading = false;
     } catch (e) {
       onError(e, StackTrace.current);
-      emit(NoHotelDataFoundState(error: e.toString()));
+      emit(NoHotelDetailsFoundState(error: e.toString()));
       isHotelAndRoomSelectionLoading = false;
     } finally {
       isHotelAndRoomSelectionLoading = false;

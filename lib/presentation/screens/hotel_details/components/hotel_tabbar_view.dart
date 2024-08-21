@@ -30,11 +30,20 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
+
+    getInit();
+
     super.initState();
+  }
 
-    
+  getInit() async {
+    widget.homeCubit.hotelDetailsResponse.data = null;
 
-    widget.homeCubit.filterAvailableRooms(widget.hotel.itemId!);
+    widget.homeCubit.availableRooms.clear();
+
+    await widget.homeCubit.getHotelDetails(widget.hotel.itemId!);
+
+    await widget.homeCubit.filterAvailableRooms(widget.hotel.itemId!);
   }
 
   @override
@@ -89,7 +98,14 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
                   controller: _tabController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    HotelDetailsView(),
+                    widget.homeCubit.isGettingHotelDetailsLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : HotelDetailsView(
+                            homeCubit: widget.homeCubit,
+                            hotel: widget.hotel,
+                          ),
                     widget.homeCubit.isAvailableRoomsLoading
                         ? const Center(
                             child: CircularProgressIndicator(),
@@ -98,7 +114,7 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
                             homeCubit: widget.homeCubit,
                             availableRooms: widget.homeCubit.availableRooms,
                           ),
-                    HotelReviewsView(),
+                    const HotelReviewsView(),
                   ],
                 ),
               ),

@@ -31,9 +31,19 @@ class WhereFromState extends HomeState {}
 class WhereToState extends HomeState {}
 
 class ChangeCheckInDate extends HomeState {
-  final DateTime checkIn;
+  final DateTime _checkInDate;
 
-  ChangeCheckInDate({required this.checkIn});
+  ChangeCheckInDate({
+    required DateTime checkInDate,
+  }) : _checkInDate = checkInDate;
+}
+
+class ChangeCheckOutDate extends HomeState {
+  final DateTime _checkOutDate;
+
+  ChangeCheckOutDate({
+    required DateTime checkOutDate,
+  }) : _checkOutDate = checkOutDate;
 }
 
 class ChangeFlightBirthDateState extends HomeState {
@@ -269,6 +279,14 @@ class NoHotelDataFoundState extends HomeState {
   NoHotelDataFoundState({required this.error});
 }
 
+class NoHotelDetailsFoundState extends HomeState {
+  final String error;
+
+  NoHotelDetailsFoundState({
+    required this.error,
+  });
+}
+
 class GettingFlightDetailsState extends HomeState {
   final FareQuote _details;
 
@@ -367,4 +385,12 @@ class LoadHotelDetailsState extends HomeState {
   LoadHotelDetailsState({
     required hotel_details.HotelDetailsResponse hotelDetailsResponse,
   }) : _hotelDetailsResponse = hotelDetailsResponse;
+}
+
+class HotelAndRoomSelectionState extends HomeState {
+  final SelectHotelResponse _selectHotelResponse;
+
+  HotelAndRoomSelectionState({
+    required SelectHotelResponse selectHotelResponse,
+  }) : _selectHotelResponse = selectHotelResponse;
 }

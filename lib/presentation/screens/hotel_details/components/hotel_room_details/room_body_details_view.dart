@@ -35,8 +35,11 @@ class RoomBodyDetailsView extends StatelessWidget {
           textStyle: TextStylesManager.regularStyle(fontSize: 12.sp),
         ),
         14.verticalSpace,
-        RoomFacilitiesView(),
-        RoomFooterView()
+        //RoomFacilitiesView(),
+        RoomFooterView(
+          homeCubit: homeCubit,
+          room: room,
+        ),
       ],
     );
   }

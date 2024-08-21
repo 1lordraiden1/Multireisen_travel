@@ -48,7 +48,7 @@ class _CheckInViewState extends State<CheckInView> {
       (value) {
         setState(() {
           date2 = value!;
-          widget.homeCubit.handleCheckInDateChanging(value);
+          widget.homeCubit.handleCheckOutDateChanging(value);
         });
       },
     );

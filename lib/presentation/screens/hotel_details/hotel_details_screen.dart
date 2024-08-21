@@ -3,6 +3,7 @@ import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_body_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_gallery_view.dart';
+import 'package:qfly/utils/media_query_values.dart';
 
 class HotelDetailsScreen extends StatelessWidget {
   const HotelDetailsScreen({
@@ -30,7 +31,7 @@ class HotelDetailsScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 600,
+                height: context.height,
                 child: HotelBodyView(
                   homeCubit: homeCubit,
                   hotel: hotel,

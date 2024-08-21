@@ -113,7 +113,7 @@ Map<String, dynamic> _$OptionalServiceToJson(OptionalService instance) =>
     };
 
 Option _$OptionFromJson(Map<String, dynamic> json) => Option(
-      value: json['value'],
+      value: (json['value'] as num?)?.toInt(),
       bags: json['bags'] as String?,
       maxweight: json['maxweight'] as String?,
       price: (json['price'] as num?)?.toDouble(),
@@ -223,7 +223,7 @@ Map<String, dynamic> _$PropertiesToJson(Properties instance) =>
     };
 
 Segment _$SegmentFromJson(Map<String, dynamic> json) => Segment(
-      group: 0,
+      group: (json['group'] as num?)?.toInt(),
       segmentClass: json['class'] == null
           ? null
           : Class.fromJson(json['class'] as Map<String, dynamic>),

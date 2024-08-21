@@ -1,13 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'select_hotel_response.dart';
+part of 'hotel_details_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SelectHotelResponse _$SelectHotelResponseFromJson(Map<String, dynamic> json) =>
-    SelectHotelResponse(
+HotelDetailsResponse _$HotelDetailsResponseFromJson(
+        Map<String, dynamic> json) =>
+    HotelDetailsResponse(
       accessToken: json['accessToken'] as String?,
       version: json['version'] as String?,
       serverDate: json['serverDate'] == null
@@ -22,8 +23,8 @@ SelectHotelResponse _$SelectHotelResponseFromJson(Map<String, dynamic> json) =>
           : Error.fromJson(json['error'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$SelectHotelResponseToJson(
-        SelectHotelResponse instance) =>
+Map<String, dynamic> _$HotelDetailsResponseToJson(
+        HotelDetailsResponse instance) =>
     <String, dynamic>{
       'accessToken': instance.accessToken,
       'version': instance.version,
@@ -35,60 +36,28 @@ Map<String, dynamic> _$SelectHotelResponseToJson(
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       itemId: json['itemId'] as String?,
-      rooms: (json['rooms'] as List<dynamic>?)
-          ?.map((e) => Room.fromJson(e as Map<String, dynamic>))
-          .toList(),
       properties: json['properties'] == null
           ? null
           : Properties.fromJson(json['properties'] as Map<String, dynamic>),
       links: (json['links'] as List<dynamic>?)
-          ?.map((e) => DataLink.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      optionalServices: json['optionalServices'] as bool?,
-      requiredFields: (json['requiredFields'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      payModes: (json['payModes'] as List<dynamic>?)
-          ?.map((e) => PayMode.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'itemId': instance.itemId,
-      'rooms': instance.rooms,
       'properties': instance.properties,
       'links': instance.links,
-      'optionalServices': instance.optionalServices,
-      'requiredFields': instance.requiredFields,
-      'payModes': instance.payModes,
     };
 
-DataLink _$DataLinkFromJson(Map<String, dynamic> json) => DataLink(
+Link _$LinkFromJson(Map<String, dynamic> json) => Link(
       rel: json['rel'] as String?,
-      method: json['method'] as String?,
       href: json['href'] as String?,
     );
 
-Map<String, dynamic> _$DataLinkToJson(DataLink instance) => <String, dynamic>{
+Map<String, dynamic> _$LinkToJson(Link instance) => <String, dynamic>{
       'rel': instance.rel,
-      'method': instance.method,
       'href': instance.href,
-    };
-
-PayMode _$PayModeFromJson(Map<String, dynamic> json) => PayMode(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      type: json['type'] as String?,
-      price: (json['price'] as num?)?.toInt(),
-      currency: json['currency'] as String?,
-    );
-
-Map<String, dynamic> _$PayModeToJson(PayMode instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'type': instance.type,
-      'price': instance.price,
-      'currency': instance.currency,
     };
 
 Properties _$PropertiesFromJson(Map<String, dynamic> json) => Properties(

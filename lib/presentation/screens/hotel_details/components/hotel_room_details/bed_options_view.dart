@@ -22,11 +22,15 @@ class BedOptionsView extends StatelessWidget {
         8.horizontalSpace,
         Column(
           children: [
-            Text('Option 1:2 twin beds',
-                style: TextStylesManager.regularStyle(fontSize: 12.sp)),
+            Text(
+              room.sharingBedding! ? "Sharing Beds" : "No Sharing Beds",
+              style: TextStylesManager.regularStyle(
+                fontSize: 12.sp,
+              ),
+            ),
             8.verticalSpace,
-            Text('Option 2:1 King bed',
-                style: TextStylesManager.regularStyle(fontSize: 12.sp)),
+           /*  Text('Option 2:1 King bed',
+                style: TextStylesManager.regularStyle(fontSize: 12.sp)), */
           ],
         )
       ],

@@ -1,3 +1,5 @@
+import 'package:html/parser.dart' as html_parser;
+
 class Utility {
   Utility._();
   static Duration parseDuration(String s) {
@@ -78,5 +80,12 @@ class Utility {
     }
 
     return jsonData;
+  }
+
+  static String parseHtmlString(String htmlString) {
+    var document = html_parser.parse(htmlString);
+    String parsedString =
+        html_parser.parse(document.body!.text).documentElement!.text;
+    return parsedString;
   }
 }

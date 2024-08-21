@@ -21,15 +21,6 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
 
     widget.homeCubit.searchHotelsHandler(
       widget.homeCubit.city.name!,
-      widget.homeCubit.checkInDate,
-      widget.homeCubit.checkOutDate,
-      RoomData.getAdultForEachRoom(widget.homeCubit.hotelRooms),
-      RoomData.getChildrenForEachRoom(widget.homeCubit.hotelRooms),
-      RoomData.getAllChildrenAges(widget.homeCubit.hotelRooms),
-      RoomData.getAllChildrenAgesInt(widget.homeCubit.hotelRooms),
-      true,
-      'all',
-      widget.homeCubit.country.name!,
     );
   }
 

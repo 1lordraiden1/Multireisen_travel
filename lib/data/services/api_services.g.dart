@@ -181,6 +181,45 @@ class _ApiServices implements ApiServices {
   }
 
   @override
+  Future<HotelDetailsResponse> getHotelDetails(
+    String itemId,
+    String accessToken,
+    String accept,
+    String version,
+    String auth,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Accept': accept,
+      r'Version': version,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HotelDetailsResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/hotels/items/${itemId}/details',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = HotelDetailsResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<RoomFilterResponse> filterAvailableRooms(
     String itemId,
     String accessToken,

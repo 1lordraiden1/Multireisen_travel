@@ -5,6 +5,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
+import 'package:qfly/data/model/hotel/hotel.dart';
+
 part 'select_hotel_response.g.dart';
 
 SelectHotelResponse selectHotelResponseFromJson(String str) => SelectHotelResponse.fromJson(json.decode(str));
@@ -262,7 +264,7 @@ class GeoCodes {
     Map<String, dynamic> toJson() => _$GeoCodesToJson(this);
 }
 
-@JsonSerializable()
+/* @JsonSerializable()
 class Room {
     @JsonKey(name: "itemId")
     String? itemId;
@@ -316,9 +318,9 @@ class Room {
     factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
     Map<String, dynamic> toJson() => _$RoomToJson(this);
-}
+} */
 
-@JsonSerializable()
+/* @JsonSerializable()
 class CxlPolicy {
     @JsonKey(name: "deadline")
     DateTime? deadline;
@@ -340,8 +342,8 @@ class CxlPolicy {
 
     Map<String, dynamic> toJson() => _$CxlPolicyToJson(this);
 }
-
-@JsonSerializable()
+ */
+/* @JsonSerializable()
 class RoomLink {
     @JsonKey(name: "rel")
     String? rel;
@@ -356,9 +358,9 @@ class RoomLink {
     factory RoomLink.fromJson(Map<String, dynamic> json) => _$RoomLinkFromJson(json);
 
     Map<String, dynamic> toJson() => _$RoomLinkToJson(this);
-}
+} */
 
-@JsonSerializable()
+/* @JsonSerializable()
 class Meal {
     @JsonKey(name: "code")
     String? code;
@@ -374,8 +376,8 @@ class Meal {
 
     Map<String, dynamic> toJson() => _$MealToJson(this);
 }
-
-@JsonSerializable()
+ */
+/* @JsonSerializable()
 class Price {
     @JsonKey(name: "currency")
     String? currency;
@@ -402,9 +404,9 @@ class Price {
     factory Price.fromJson(Map<String, dynamic> json) => _$PriceFromJson(json);
 
     Map<String, dynamic> toJson() => _$PriceToJson(this);
-}
+} */
 
-@JsonSerializable()
+/* @JsonSerializable()
 class View {
     @JsonKey(name: "code")
     int? code;
@@ -419,7 +421,7 @@ class View {
     factory View.fromJson(Map<String, dynamic> json) => _$ViewFromJson(json);
 
     Map<String, dynamic> toJson() => _$ViewToJson(this);
-}
+} */
 
 @JsonSerializable()
 class Error {
