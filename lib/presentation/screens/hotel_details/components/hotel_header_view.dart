@@ -43,9 +43,13 @@ class HotelHeaderView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${hotel.properties!.name!} Hotel',
-                style: TextStylesManager.mediumStyle(fontSize: 18.sp),
+              Flexible(
+                child: Text(
+                  '${hotel.properties!.name!} Hotel',
+                  style: TextStylesManager.mediumStyle(fontSize: 18.sp),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ),
               SvgPicture.asset(ImageAssets.shareIcon)
             ],

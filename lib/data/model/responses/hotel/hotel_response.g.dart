@@ -44,9 +44,10 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       filters: json['filters'] == null
           ? null
           : Filters.fromJson(json['filters'] as Map<String, dynamic>),
-      markers: (json['markers'] as List<dynamic>?)
-          ?.map((e) => Marker.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      markers:
+          (json['markers'] is bool ? [] : json['markers'] as List<dynamic>?)
+              ?.map((e) => Marker.fromJson(e as Map<String, dynamic>))
+              .toList(),
       entities: (json['entities'] as List<dynamic>?)
           ?.map((e) => Hotel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -302,7 +303,11 @@ Map<String, dynamic> _$FiltersToJson(Filters instance) => <String, dynamic>{
 
 CategoryElement _$CategoryElementFromJson(Map<String, dynamic> json) =>
     CategoryElement(
-      id: (json['id'] as num?)?.toInt(),
+      id: json['id'] is int
+          ? (json['id'] as num?)?.toInt()
+          : int.parse(
+              (json['id']),
+            ),
       value: (json['value'] as num?)?.toInt(),
     );
 

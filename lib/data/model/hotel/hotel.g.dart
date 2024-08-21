@@ -66,7 +66,9 @@ Map<String, dynamic> _$PropertiesToJson(Properties instance) =>
     };
 
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
-      numeric: (json['numeric'] as num?)?.toInt(),
+      numeric: json['numeric'] is int
+          ? (json['numeric'] as num?)?.toInt()
+          : int.parse(json['numeric']),
       textual: json['textual'],
     );
 
@@ -212,7 +214,9 @@ Map<String, dynamic> _$PriceToJson(Price instance) => <String, dynamic>{
     };
 
 View _$ViewFromJson(Map<String, dynamic> json) => View(
-      code: (json['code'] as num?)?.toInt(),
+      code: json['code'] is int
+          ? (json['code'] as num?)?.toInt()
+          : int.parse(json['code']),
       name: json['name'] as String?,
     );
 

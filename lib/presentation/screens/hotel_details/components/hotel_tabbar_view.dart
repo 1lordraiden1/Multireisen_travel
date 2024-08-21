@@ -29,7 +29,7 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
   late TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
 
     getInit();
 
@@ -78,14 +78,14 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
                       ),
                     ),
                   ),
-                  FittedBox(
+                  /*  FittedBox(
                     child: Tab(
                       child: TextWithIconView(
                         iconPath: ImageAssets.reviewIcon,
                         text: 'Reviews',
                       ),
                     ),
-                  ),
+                  ), */
                 ],
                 controller: _tabController,
                 padding: EdgeInsets.all(0),
@@ -114,7 +114,7 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
                             homeCubit: widget.homeCubit,
                             availableRooms: widget.homeCubit.availableRooms,
                           ),
-                    const HotelReviewsView(),
+                    //const HotelReviewsView(),
                   ],
                 ),
               ),

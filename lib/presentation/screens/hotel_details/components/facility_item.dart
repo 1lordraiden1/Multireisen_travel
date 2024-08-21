@@ -31,12 +31,12 @@ class _FacilityItemState extends State<FacilityItem> {
           borderRadius: BorderRadius.circular(15.r)),
       child: Column(
         children: [
-          15.verticalSpace,
+          /* 15.verticalSpace,
           Icon(Icons.settings, color: red,),
-          /* SvgPicture.asset(
+          SvgPicture.asset(
             ImageAssets.cinemaIcon,
-          ), */
-          10.verticalSpace,
+          ),
+          10.verticalSpace, */
           Text(
             widget.facility,
             style: TextStylesManager.mediumStyle(fontSize: 12.sp, color: red),

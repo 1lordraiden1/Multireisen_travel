@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
@@ -23,10 +24,17 @@ class HotelDescView extends StatelessWidget {
         Text('About Hotel',
             style: TextStylesManager.mediumStyle(fontSize: 14.sp)),
         5.verticalSpace,
-        Text(
-          Utility.parseHtmlString(des),
-          style: TextStylesManager.regularStyle(fontSize: 12.sp, color: grey),
+        HtmlWidget(
+          des,
+          textStyle: TextStylesManager.regularStyle(
+            fontSize: 12.sp,
+            color: grey,
+          ),
         ),
+        /*  Text(
+          
+          style: TextStylesManager.regularStyle(fontSize: 12.sp, color: grey),
+        ), */
       ],
     );
   }

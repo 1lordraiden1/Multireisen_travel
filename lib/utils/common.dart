@@ -83,7 +83,12 @@ class Utility {
   }
 
   static String parseHtmlString(String htmlString) {
-    var document = html_parser.parse(htmlString);
+    var document = html_parser.parse(
+      htmlString,
+      //encoding: "BOM",
+      generateSpans: true,
+    );
+
     String parsedString =
         html_parser.parse(document.body!.text).documentElement!.text;
     return parsedString;
