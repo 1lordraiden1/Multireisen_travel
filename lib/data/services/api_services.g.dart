@@ -261,7 +261,7 @@ class _ApiServices implements ApiServices {
   @override
   Future<SelectHotelResponse> selectHotelAndRoom(
     String itemId,
-    String solutionId,
+    int solutionId,
     String accessToken,
     String accept,
     String version,

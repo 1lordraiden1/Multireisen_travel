@@ -373,10 +373,13 @@ class SelectingHotelImageState extends HomeState {
 
 class LoadAvailableRoomsState extends HomeState {
   final List<Room> _availableRooms;
+  final RoomFilterResponse _roomFilterResponse;
 
   LoadAvailableRoomsState({
     required List<Room> availableRooms,
-  }) : _availableRooms = availableRooms;
+    required RoomFilterResponse roomFilterResponse,
+  })  : _availableRooms = availableRooms,
+        _roomFilterResponse = roomFilterResponse;
 }
 
 class LoadHotelDetailsState extends HomeState {

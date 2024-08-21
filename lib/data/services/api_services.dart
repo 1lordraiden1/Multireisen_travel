@@ -11,6 +11,7 @@ import 'package:qfly/data/model/responses/hotel/countries_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_details_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart';
 import 'package:qfly/data/model/responses/hotel/room_filter_response.dart';
+import 'package:qfly/data/model/responses/hotel/save_hotel_passengers_response.dart';
 import 'package:qfly/data/model/responses/hotel/select_hotel_response.dart';
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
@@ -78,7 +79,7 @@ abstract class ApiServices {
     @Header('AccessToken') String accessToken,
     @Header('Accept') String accept,
     @Header('Version') String version,
-    @Header('Authorization') String auth, 
+    @Header('Authorization') String auth,
     //@Header('Content') String contentType,
   );
 
@@ -95,13 +96,39 @@ abstract class ApiServices {
   @GET("/hotels/items/{itemId}/rooms/{solutionId}/select")
   Future<SelectHotelResponse> selectHotelAndRoom(
     @Path('itemId') String itemId,
-    @Path('solutionId') String solutionId,
+    @Path('solutionId') int solutionId,
     @Header('AccessToken') String accessToken,
     @Header('Accept') String accept,
     @Header('Version') String version,
     @Header('Authorization') String auth,
     //@Header('Content') String contentType,
   );
+
+  @POST("/hotels/items/{itemId}/rooms/{solutionId}/passengers")
+  Future<SaveHotelPassengersResponse> saveHotelPassengers(
+    @Path('itemId') String itemId,
+    @Path('solutionId') int solutionId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    @Header('Content') String contentType,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @PUT("/hotels/items/{itemId}/rooms/{solutionId}/book/{bookingId}")
+  Future<FinalizeBookingResponse> finalizeHotelBooking(
+    @Path('itemId') String itemId,
+    @Path('solutionId') int solutionId,
+    @Path('bookingId') String bookingId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+    @Header('Content') String contentType,
+  );
+
+  
 
   // Flights
 

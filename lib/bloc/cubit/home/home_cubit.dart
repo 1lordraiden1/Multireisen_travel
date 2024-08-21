@@ -1104,6 +1104,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   SelectHotelResponse _selectHotelResponse = SelectHotelResponse();
 
+  RoomFilterResponse _roomFilterResponse = RoomFilterResponse();
+
   // Getters (Can't Set Data!)
 
   DateTime get checkInDate => _checkInDate;
@@ -1126,6 +1128,8 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   SelectHotelResponse get selectHotelResponse => _selectHotelResponse;
 
+  RoomFilterResponse get roomFilterResponse => _roomFilterResponse;
+
   // Loading
 
   bool isSearchCityLoading = false;
@@ -1139,6 +1143,27 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   bool isHotelAndRoomSelectionLoading = false;
 
   // Hotel Functions
+
+  String getPassengerType(String type, int? age) {
+    String result = '';
+    switch (type) {
+      case "Adult":
+        result = "ADT";
+        break;
+      case "Child":
+        if (age! > 1) {
+          result = "CHD";
+        } else {
+          result = "INF";
+        }
+
+        break;
+      default:
+        result = "ADT";
+    }
+    return result;
+  }
+
   handleCheckInDateChanging(DateTime checkIn) {
     _checkInDate = checkIn;
     emit(
@@ -1474,11 +1499,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         StringsManager.ourToken,
       );
 
+      _roomFilterResponse = response;
+
       _availableRooms = response.data!.entities!;
 
       emit(
         LoadAvailableRoomsState(
           availableRooms: _availableRooms,
+          roomFilterResponse: _roomFilterResponse,
         ),
       );
 
@@ -1492,7 +1520,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  selectHotelAndRoom(String itemId, String solutionId) async {
+  selectHotelAndRoom(String itemId, int solutionId) async {
     isHotelAndRoomSelectionLoading = true;
 
     try {

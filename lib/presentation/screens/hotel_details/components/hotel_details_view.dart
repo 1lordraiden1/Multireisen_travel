@@ -3,6 +3,8 @@ import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
+import 'package:qfly/presentation/screens/checkout/checkout_screen.dart';
+import 'package:qfly/presentation/screens/checkout/save_passengers_screen.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_desc_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_facilities_view.dart';
 import 'package:qfly/presentation/screens/hotel_details/components/hotel_policies_view.dart';
@@ -24,10 +26,9 @@ class HotelDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      
       //physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      
+
       children: [
         30.verticalSpace,
         ContainerBorderView(
@@ -50,7 +51,15 @@ class HotelDetailsView extends StatelessWidget {
             height: 50.h,
             child: RoundedBtnWithIcon(
               title: 'Book',
-              onTap: () {},
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SavePassengersScreen(
+                    homeCubit: homeCubit,
+                    hotel: hotel,
+                  ),
+                ),
+              ),
               style: TextStylesManager.mediumStyle(
                 fontSize: 18.sp,
                 color: white,

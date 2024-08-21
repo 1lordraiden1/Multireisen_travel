@@ -95,6 +95,17 @@ class HotelGalleryView extends StatelessWidget {
                     ),
                   ),
                 ),
+                Positioned(
+                  top: 15,
+                  left: 10,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(
+                      Icons.arrow_back,
+                    ),
+                    color: white,
+                  ),
+                ),
               ],
             ),
           );

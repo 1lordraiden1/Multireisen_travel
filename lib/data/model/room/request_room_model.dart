@@ -46,6 +46,22 @@ class RoomItem {
     required this.children,
   });
 
+  static int calculateAdultsInRooms(List<RoomItem> requestRooms) {
+    int ads = 0;
+    for (RoomItem room in requestRooms) {
+      ads += room.adults;
+    }
+    return ads;
+  }
+
+  static int calculateChildrenInRooms(List<RoomItem> requestRooms) {
+    int cds = 0;
+    for (RoomItem room in requestRooms) {
+      cds += room.children.length;
+    }
+    return cds;
+  }
+
   factory RoomItem.fromJson(Map<String, dynamic> json) => RoomItem(
         adults: json["adults"],
         children: json["children"] == null
