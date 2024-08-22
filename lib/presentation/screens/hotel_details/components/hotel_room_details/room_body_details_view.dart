@@ -13,10 +13,11 @@ class RoomBodyDetailsView extends StatelessWidget {
   const RoomBodyDetailsView({
     super.key,
     required this.homeCubit,
-    required this.room,
+    required this.room, required this.hotel,
   });
 
   final HomeCubit homeCubit;
+  final Hotel hotel;
   final Room room;
 
   @override
@@ -38,6 +39,7 @@ class RoomBodyDetailsView extends StatelessWidget {
         //RoomFacilitiesView(),
         RoomFooterView(
           homeCubit: homeCubit,
+          hotel : hotel,
           room: room,
         ),
       ],

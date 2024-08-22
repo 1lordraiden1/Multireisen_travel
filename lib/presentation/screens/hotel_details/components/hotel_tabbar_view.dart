@@ -112,6 +112,7 @@ class _HotelTabbarViewState extends State<HotelTabbarView>
                           )
                         : HotelRoomDetailsView(
                             homeCubit: widget.homeCubit,
+                            hotel: widget.hotel,
                             availableRooms: widget.homeCubit.availableRooms,
                           ),
                     //const HotelReviewsView(),

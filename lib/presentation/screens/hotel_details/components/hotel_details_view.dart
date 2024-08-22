@@ -47,27 +47,6 @@ class HotelDetailsView extends StatelessWidget {
         ),
         /*  HotelPoliciesView(), */
         30.verticalSpace,
-        SizedBox(
-            height: 50.h,
-            child: RoundedBtnWithIcon(
-              title: 'Book',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SavePassengersScreen(
-                    homeCubit: homeCubit,
-                    hotel: hotel,
-                    itemId: homeCubit.availableRooms.first.itemId!,
-                    solutionId: homeCubit.availableRooms.first.solutionId!,
-                  ),
-                ),
-              ),
-              style: TextStylesManager.mediumStyle(
-                fontSize: 18.sp,
-                color: white,
-              ),
-            )),
-        22.verticalSpace
       ],
     );
   }

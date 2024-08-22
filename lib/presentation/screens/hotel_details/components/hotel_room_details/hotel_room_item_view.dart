@@ -12,9 +12,11 @@ class HotelRoomItemView extends StatelessWidget {
     super.key,
     required this.homeCubit,
     required this.room,
+    required this.hotel,
   });
 
   final HomeCubit homeCubit;
+  final Hotel hotel;
   final Room room;
 
   @override
@@ -34,6 +36,7 @@ class HotelRoomItemView extends StatelessWidget {
           ),
           RoomBodyDetailsView(
             homeCubit: homeCubit,
+            hotel: hotel,
             room: room,
           ),
         ],

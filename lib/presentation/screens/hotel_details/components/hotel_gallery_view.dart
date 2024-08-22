@@ -26,6 +26,7 @@ class HotelGalleryView extends StatelessWidget {
         bloc: homeCubit,
         builder: (context, snapshot) {
           return InkWell(
+            
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(

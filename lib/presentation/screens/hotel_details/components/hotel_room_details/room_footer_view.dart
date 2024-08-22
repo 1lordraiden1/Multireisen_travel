@@ -6,6 +6,7 @@ import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/colors.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
+import 'package:qfly/presentation/screens/checkout/save_passengers_screen.dart';
 import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
 import 'package:qfly/presentation/widgets/text_shapes/text_with_icon_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,9 +16,11 @@ class RoomFooterView extends StatelessWidget {
     super.key,
     required this.homeCubit,
     required this.room,
+    required this.hotel,
   });
 
   final HomeCubit homeCubit;
+  final Hotel hotel;
   final Room room;
 
   @override
@@ -75,7 +78,20 @@ class RoomFooterView extends StatelessWidget {
                 style: TextStylesManager.regularStyle(fontSize: 9.sp),
               ),
               16.verticalSpace,
-              RoundedBtn(title: 'Select and customize', onTap: () {})
+              RoundedBtn(
+                title: 'Select and customize',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SavePassengersScreen(
+                      homeCubit: homeCubit,
+                      hotel: hotel,
+                      itemId: room.itemId!,
+                      solutionId: room.solutionId!,
+                    ),
+                  ),
+                ),
+              )
             ],
           );
         });
