@@ -397,3 +397,27 @@ class HotelAndRoomSelectionState extends HomeState {
     required SelectHotelResponse selectHotelResponse,
   }) : _selectHotelResponse = selectHotelResponse;
 }
+
+class SavingHotelPassengerState extends HomeState {
+  final SaveHotelPassengersResponse _hotelPassengersResponse;
+
+  SavingHotelPassengerState({
+    required SaveHotelPassengersResponse hotelPassengersResponse,
+  }) : _hotelPassengersResponse = hotelPassengersResponse;
+}
+
+class FinalizingHotelBookingState extends HomeState {
+  final FinalizeHotelBookingResponse _finalizeHotelBookingResponse;
+
+  FinalizingHotelBookingState({
+    required FinalizeHotelBookingResponse finalizeHotelBookingResponse,
+  }) : _finalizeHotelBookingResponse = finalizeHotelBookingResponse;
+}
+
+class GettingVoucherStatus extends HomeState {
+  final GetVoucherResponse _getVoucherResponse;
+
+  GettingVoucherStatus({
+    required GetVoucherResponse getVoucherResponse,
+  }) : _getVoucherResponse = getVoucherResponse;
+}

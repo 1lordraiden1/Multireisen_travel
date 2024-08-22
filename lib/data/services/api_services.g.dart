@@ -299,6 +299,172 @@ class _ApiServices implements ApiServices {
   }
 
   @override
+  Future<SaveHotelPassengersResponse> saveHotelPassengers(
+    String itemId,
+    int solutionId,
+    String accessToken,
+    String version,
+    String auth,
+    String accept,
+    String contentType,
+    Map<String, dynamic> body,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Version': version,
+      r'Authorization': auth,
+      r'Accept': accept,
+      r'Content': contentType,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<SaveHotelPassengersResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/hotels/items/${itemId}/rooms/${solutionId}/passengers',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = SaveHotelPassengersResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FinalizeHotelBookingResponse> finalizeHotelBooking(
+    String itemId,
+    int solutionId,
+    int bookingId,
+    String accessToken,
+    String version,
+    String auth,
+    String accept,
+    String contentType,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Version': version,
+      r'Authorization': auth,
+      r'Accept': accept,
+      r'Content': contentType,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<FinalizeHotelBookingResponse>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/hotels/items/${itemId}/rooms/${solutionId}/book/${bookingId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = FinalizeHotelBookingResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BookingHotelDetailsResponse> getBookingHotelDetails(
+    String bookingId,
+    String accessToken,
+    String version,
+    String accept,
+    String auth,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Version': version,
+      r'Accept': accept,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<BookingHotelDetailsResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/bookings/${bookingId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BookingHotelDetailsResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<GetVoucherResponse> getVoucher(
+    String bookingId,
+    String bookingItemId,
+    String accessToken,
+    String version,
+    String accept,
+    String auth,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'AccessToken': accessToken,
+      r'Version': version,
+      r'Accept': accept,
+      r'Authorization': auth,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<GetVoucherResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/bookings/${bookingId}/voucher/${bookingItemId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = GetVoucherResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<FlightResponse> getFlights(
     String accessToken,
     String version,

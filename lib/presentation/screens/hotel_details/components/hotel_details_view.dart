@@ -57,6 +57,8 @@ class HotelDetailsView extends StatelessWidget {
                   builder: (context) => SavePassengersScreen(
                     homeCubit: homeCubit,
                     hotel: hotel,
+                    itemId: homeCubit.availableRooms.first.itemId!,
+                    solutionId: homeCubit.availableRooms.first.solutionId!,
                   ),
                 ),
               ),

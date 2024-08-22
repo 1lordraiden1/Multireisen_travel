@@ -6,8 +6,11 @@ import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_booking_response.dart';
 import 'package:qfly/data/model/responses/get_rules_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
+import 'package:qfly/data/model/responses/hotel/booking_hotel_details_response.dart';
 import 'package:qfly/data/model/responses/hotel/cities_response.dart';
 import 'package:qfly/data/model/responses/hotel/countries_response.dart';
+import 'package:qfly/data/model/responses/hotel/finalize_hotel_booking_response.dart';
+import 'package:qfly/data/model/responses/hotel/get_voucher_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_details_response.dart';
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart';
 import 'package:qfly/data/model/responses/hotel/room_filter_response.dart';
@@ -117,10 +120,10 @@ abstract class ApiServices {
   );
 
   @PUT("/hotels/items/{itemId}/rooms/{solutionId}/book/{bookingId}")
-  Future<FinalizeBookingResponse> finalizeHotelBooking(
+  Future<FinalizeHotelBookingResponse> finalizeHotelBooking(
     @Path('itemId') String itemId,
     @Path('solutionId') int solutionId,
-    @Path('bookingId') String bookingId,
+    @Path('bookingId') int bookingId,
     @Header('AccessToken') String accessToken,
     @Header('Version') String version,
     @Header('Authorization') String auth,
@@ -128,7 +131,28 @@ abstract class ApiServices {
     @Header('Content') String contentType,
   );
 
-  
+  @GET("/bookings/{bookingId}")
+  Future<BookingHotelDetailsResponse> getBookingHotelDetails(
+    @Path('bookingId') String bookingId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
+
+  @GET("/bookings/{bookingId}/voucher/{bookingItemId}")
+  Future<GetVoucherResponse> getVoucher(
+    @Path('bookingId') String bookingId,
+    @Path('bookingItemId') String bookingItemId,
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Accept') String accept,
+    @Header('Authorization') String auth,
+
+    //@Header('Content') String contentType,
+  );
 
   // Flights
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
+import 'package:qfly/data/model/hotel/hotel.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/screens/login/login_screen.dart';
 import 'package:qfly/presentation/screens/payment/components/card_payment_view.dart';
@@ -13,34 +14,39 @@ import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
 import 'package:qfly/presentation/widgets/text_shapes/text_with_value_view.dart';
 import 'package:readmore/readmore.dart';
 
-class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({
+class HotelPaymentScreen extends StatefulWidget {
+  const HotelPaymentScreen({
     super.key,
     required this.homeCubit,
-    required this.flight,
+    required this.hotel,
     required this.itemId,
+    required this.solutionId,
   });
 
   final HomeCubit homeCubit;
-  final Entity flight;
+  final Hotel hotel;
   final String itemId;
+  final int solutionId;
 
   @override
-  State<PaymentScreen> createState() => _PaymentScreenState();
+  State<HotelPaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _PaymentScreenState extends State<HotelPaymentScreen> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     // Clear Data
-    widget.homeCubit.savePassengersResponse.data = null;
-    widget.homeCubit.finalizeBookingResponse.data = null;
+    widget.homeCubit.hotelPassengersResponse.data = null;
+    widget.homeCubit.finalizeHotelBookingResponse.data = null;
 
     // Get Data
-    widget.homeCubit.savePassengers(widget.itemId);
+    widget.homeCubit.saveHotelPassengers(
+      widget.itemId,
+      widget.solutionId,
+    );
 
     try {} catch (e) {
       callerWidget = Center(
@@ -56,7 +62,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return BlocConsumer<HomeCubit, HomeState>(
         bloc: widget.homeCubit,
         listener: (context, state) {
-          if (state is FinalizingBookingState &&
+          if (state is FinalizingHotelBookingState &&
               widget.homeCubit.isSavePassengersLoading == false) {
             callerWidget = showPaymentWidget(context, widget.homeCubit);
           }
@@ -115,14 +121,14 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
           5.verticalSpace,
           TextWithValueView(
             text: 'Booking ID',
-            value:
-                homeCubit.finalizeBookingResponse.data!.bookingId!.toString(),
+            value: homeCubit.finalizeHotelBookingResponse.data!.bookingId!
+                .toString(),
           ),
           5.verticalSpace,
           TextWithValueView(
             text: 'Is Refundable',
-            value:
-                homeCubit.finalizeBookingResponse.data!.refundable!.toString(),
+            value: homeCubit.finalizeHotelBookingResponse.data!.refundable!
+                .toString(),
           ),
           5.verticalSpace,
           TextWithValueView(
@@ -136,8 +142,8 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
 
               trimLines: 1,
               //isExpandable: true,
-              homeCubit
-                  .finalizeBookingResponse.data!.bookings![0].bookingNumber!
+              homeCubit.finalizeHotelBookingResponse.data!.bookings![0]
+                  .bookingNumber!
                   .toString(),
             ).data,
           ),
@@ -148,7 +154,7 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
           Align(
             alignment: Alignment.bottomCenter,
             child: RoundedBtn(
-              title: 'Get Ticket',
+              title: 'Get Voucher',
               onTap: () {
                 showDialogPopup(context, homeCubit);
               },
@@ -163,8 +169,8 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
 
 void showDialogPopup(BuildContext context, HomeCubit homeCubit) async {
   await homeCubit.issueTicket(
-    homeCubit.finalizeBookingResponse.data!.bookingId.toString(),
-    homeCubit.finalizeBookingResponse.data!.bookings![0].bookingItemId!
+    homeCubit.finalizeHotelBookingResponse.data!.bookingId.toString(),
+    homeCubit.finalizeHotelBookingResponse.data!.bookings![0].bookingItemId!
         .toString(),
   );
 
@@ -172,69 +178,70 @@ void showDialogPopup(BuildContext context, HomeCubit homeCubit) async {
     context: context,
     builder: (BuildContext context) {
       return BlocConsumer<HomeCubit, HomeState>(
-          bloc: homeCubit,
-          listener: (context, state) {},
-          builder: (context, snapshot) {
-            return homeCubit.isGettingTicketLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 16,
-                    child: Container(
-                      height: 400,
-                      child: Column(
-                        children: <Widget>[
-                          const Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Ticket",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
+        bloc: homeCubit,
+        listener: (context, state) {},
+        builder: (context, snapshot) {
+          return homeCubit.isGettingTicketLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 16,
+                  child: Container(
+                    height: 400,
+                    child: Column(
+                      children: <Widget>[
+                        const Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Ticket",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          Expanded(
-                            child: homeCubit.isIssuingTicketLoading
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : Column(
-                                    children: [
-                                      Text(
-                                        homeCubit.issueTicketResponse.data!
-                                                .success!
-                                            ? "Success"
-                                            : "Failed",
-                                      ), // Get Ticket
-                                      Text(
-                                        homeCubit.issueTicketResponse.data!
-                                                .success!
-                                            ? "Now your ticket is stored in your trips and you can back login below and ticket much trips as you can"
-                                            : "There is might ",
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
+                        ),
+                        Expanded(
+                          child: homeCubit.isIssuingTicketLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Column(
+                                  children: [
+                                    Text(
+                                      homeCubit.issueTicketResponse.data!
+                                              .success!
+                                          ? "Success"
+                                          : "Failed",
+                                    ), // Get Ticket
+                                    Text(
+                                      homeCubit.issueTicketResponse.data!
+                                              .success!
+                                          ? "Now your ticket is stored in your trips and you can back login below and ticket much trips as you can"
+                                          : "There is might ",
+                                    ),
+                                  ],
                                 ),
-                                (Route<dynamic> route) => false,
-                              ); // Close the dialog
-                            },
-                            child: const Text("Go Back Login"),
-                          ),
-                        ],
-                      ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                              (Route<dynamic> route) => false,
+                            ); // Close the dialog
+                          },
+                          child: const Text("Go Back Login"),
+                        ),
+                      ],
                     ),
-                  );
-          });
+                  ),
+                );
+        },
+      );
     },
   );
 }

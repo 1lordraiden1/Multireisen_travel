@@ -17,12 +17,16 @@ import 'package:qfly/data/model/responses/get_ticket_response.dart';
 import 'package:qfly/data/model/responses/hotel/cities_response.dart'
     hide Country;
 import 'package:qfly/data/model/responses/hotel/countries_response.dart';
+import 'package:qfly/data/model/responses/hotel/finalize_hotel_booking_response.dart';
+import 'package:qfly/data/model/responses/hotel/get_voucher_response.dart'
+    hide Passenger;
 import 'package:qfly/data/model/responses/hotel/hotel_details_response.dart'
     as hotel_details hide Image;
 import 'package:qfly/data/model/responses/hotel/hotel_response.dart'
     hide Entity, Room, Image;
 import 'package:qfly/data/model/responses/hotel/room_filter_response.dart'
     hide Entity;
+import 'package:qfly/data/model/responses/hotel/save_hotel_passengers_response.dart';
 import 'package:qfly/data/model/responses/hotel/select_hotel_response.dart'
     hide Image, Room;
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
@@ -669,19 +673,22 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
     emit(SavingPassengerState(savePassengersResponse: _savePassengersResponse));
 
-    finalizeBooking(itemId);
+    finalizeBooking(
+      itemId,
+      _savePassengersResponse.data!.bookingId!.toString(),
+    );
 
     isSavePassengersLoading = false;
   }
 
-  finalizeBooking(String itemId) async {
+  finalizeBooking(String itemId, String bookingId) async {
     isBookingFinalizationLoading = true;
 
     // getting response
     final FinalizeBookingResponse response =
         await ApiServices(dio).finalizeBooking(
       itemId,
-      _savePassengersResponse.data!.bookingId!.toString(),
+      bookingId,
       await SharedPreferencesUtil.getAuthToken("accessToken") ??
           await AuthService().getOurAuth(),
       'v1',
@@ -751,7 +758,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
     isIssuingTicketLoading = false;
 
-    getTicket(bookingId, bookingItemId);
+    if (_issueTicketResponse.data!.properties!.type! == "hotel") {
+      getVoucher(
+        int.parse(bookingId),
+        int.parse(bookingItemId),
+      );
+    } else {
+      getTicket(bookingId, bookingItemId);
+    }
   }
 
   getTicket(String bookingId, String bookingItemId) async {
@@ -1106,6 +1120,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   RoomFilterResponse _roomFilterResponse = RoomFilterResponse();
 
+  SaveHotelPassengersResponse _hotelPassengersResponse =
+      SaveHotelPassengersResponse();
+
+  FinalizeHotelBookingResponse _finalizeHotelBookingResponse =
+      FinalizeHotelBookingResponse();
+
+  GetVoucherResponse _getVoucherResponse = GetVoucherResponse();
+
   // Getters (Can't Set Data!)
 
   DateTime get checkInDate => _checkInDate;
@@ -1129,6 +1151,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   SelectHotelResponse get selectHotelResponse => _selectHotelResponse;
 
   RoomFilterResponse get roomFilterResponse => _roomFilterResponse;
+
+  SaveHotelPassengersResponse get hotelPassengersResponse =>
+      _hotelPassengersResponse;
+
+  FinalizeHotelBookingResponse get finalizeHotelBookingResponse =>
+      _finalizeHotelBookingResponse;
+
+  GetVoucherResponse get getVoucherResponse => _getVoucherResponse;
 
   // Loading
 
@@ -1551,5 +1581,220 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     } finally {
       isHotelAndRoomSelectionLoading = false;
     }
+  }
+
+  saveHotelPassengers(String itemId, int solutionId) async {
+    isSavePassengersLoading = true;
+
+    // getting response
+    final SaveHotelPassengersResponse response =
+        await ApiServices(dio).saveHotelPassengers(
+      itemId,
+      solutionId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.ourToken,
+      StringsManager.contentType,
+      StringsManager.contentType,
+      {
+        "passengers": [
+          {
+            "type": "ADT",
+            "title": "MR",
+            "firstName": "John",
+            "lastName": "Doe",
+            "birthDate": "1978-01-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "1234567",
+              "issueCountry": "DE",
+              "expiry": "2025-05-01"
+            },
+            /* "options": {
+              "1": {"id": "OutwardLuggageOptions", "value": "1"},
+              "2": {"id": "ReturnLuggageOptions", "value": "1"}
+            } */
+          },
+          /* {
+            "type": "ADT",
+            "title": "MRS",
+            "firstName": "Helene",
+            "lastName": "Doe",
+            "birthDate": "1963-08-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "456546",
+              "issueCountry": "DE",
+              "expiry": "2025-09-01"
+            },
+            /* "options": {
+              "1": {"id": "OutwardLuggageOptions", "value": "1"},
+              "2": {"id": "ReturnLuggageOptions", "value": "1"}
+            } */
+          },
+          {
+            "type": "CHD",
+            "title": "MR",
+            "firstName": "Jason",
+            "lastName": "Doe",
+            "birthDate": "2016-06-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "3456786783456",
+              "issueCountry": "DE",
+              "expiry": "2029-10-11"
+            }
+          },
+          {
+            "type": "INF",
+            "title": "MS",
+            "firstName": "Baby",
+            "lastName": "Doe",
+            "birthDate": "2024-02-01",
+            "nationality": "DE",
+            "passport": {
+              "type": "P",
+              "number": "3456783456",
+              "issueCountry": "DE",
+              "expiry": "2029-10-11"
+            }
+          } */
+        ],
+        "contact": {
+          "title": "MR",
+          "firstName": "Contact",
+          "lastName": "Person",
+          "phone": "+49-12-3456789",
+          "email": "user_23432@gmail.com",
+          "country": "DE",
+          "zip": "34663",
+          "city": "Berlin",
+          "address": "Some street 1."
+        },
+        /* "invoice": {
+        "name": "Multiresisen Gmbh.",
+        "country": "DE",
+        "zip": "34663",
+        "city": "Berlin",
+        "address": "Some street 1."
+    },
+    "options": [
+        {
+            "id": "SpeedyBoarding",
+            "value": "1"
+        }
+    ], */
+        "paymentId": "9"
+      },
+    );
+
+    _hotelPassengersResponse = response;
+
+    if (response.data == null) {
+      isSavePassengersLoading = false;
+      print("Error in User Data");
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Booking ID!! : ${_hotelPassengersResponse.data!.bookingId!.toString()}",
+    );
+
+    emit(
+      SavingHotelPassengerState(
+        hotelPassengersResponse: _hotelPassengersResponse,
+      ),
+    );
+
+    // Finalize Hotel Booking -----
+    finalizeHotelBooking(
+      itemId,
+      solutionId,
+      _hotelPassengersResponse.data!.bookingId!,
+    );
+
+    isSavePassengersLoading = false;
+  }
+
+  finalizeHotelBooking(String itemId, int solutionId, int bookingId) async {
+    isBookingFinalizationLoading = true;
+
+    // getting response
+    final FinalizeHotelBookingResponse response =
+        await ApiServices(dio).finalizeHotelBooking(
+      itemId,
+      solutionId,
+      bookingId,
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.ourToken,
+      StringsManager.contentType,
+      StringsManager.contentType,
+    );
+
+    _finalizeHotelBookingResponse = response;
+
+    if (response.error != null) {
+      isBookingFinalizationLoading = false;
+      print(response.error!.message.toString());
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Final Booking ID!! : ${_finalizeHotelBookingResponse.data!.bookings!.first.bookingNumber!.toString()}",
+    );
+    emit(
+      FinalizingHotelBookingState(
+        finalizeHotelBookingResponse: _finalizeHotelBookingResponse,
+      ),
+    );
+
+    //_entities = response.data!.entities!;
+
+    isBookingFinalizationLoading = false;
+  }
+
+  getVoucher(int bookingId, int bookingItemId) async {
+    isGettingTicketLoading = true;
+
+    // getting response
+    final GetVoucherResponse response = await ApiServices(dio).getVoucher(
+      bookingId.toString(),
+      bookingItemId.toString(),
+      await SharedPreferencesUtil.getAuthToken("accessToken") ??
+          await AuthService().getOurAuth(),
+      'v1',
+      StringsManager.contentType,
+      StringsManager.ourToken,
+    );
+
+    _getVoucherResponse = response;
+
+    if (response.error != null) {
+      isGettingTicketLoading = false;
+      print(response.error!.message.toString());
+      emit(NoDataFoundState());
+      return;
+    }
+
+    print(
+      " Got Voucher Reserve Code!! : ${_getVoucherResponse.data!.properties!.bookingNumber!.toString()}",
+    );
+    emit(
+      GettingVoucherStatus(
+        getVoucherResponse: _getVoucherResponse,
+      ),
+    );
+
+    //_entities = response.data!.entities!;
+
+    isGettingTicketLoading = false;
   }
 }
