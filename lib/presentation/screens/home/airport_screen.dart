@@ -57,6 +57,10 @@ class _AirportScreenState extends State<AirportScreen> {
     return _airports;
   }
 
+  updateAirports(String value) async {
+    await widget.homeCubit.getAirportsData(value);
+  }
+
   String searchValue = 'dx';
 
   @override
@@ -108,16 +112,27 @@ class _AirportScreenState extends State<AirportScreen> {
                         _controller.text.toString().trim(),
                       );
                     },
+                    onChanged: _controller.text.isEmpty
+                        ? (value) async {
+                            await Future.delayed(
+                              Duration(
+                                seconds: 2,
+                              ),
+                            );
+                            widget.homeCubit.isSearchDataLoading = true;
+                            await widget.homeCubit.getAirportsData(value!);
+                          }
+                        : null,
                   ),
                 ],
               ),
             ),
-            widget.homeCubit.isSearchDataLoading || _controller.text.isNotEmpty
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : _controller.text.isEmpty
-                    ? SizedBox(
+            _controller.text.isEmpty
+                ? widget.homeCubit.isSearchDataLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : SizedBox(
                         height: context.height - 450,
                         child: ListView.builder(
                           itemCount: widget.homeCubit.popularAirports.length,
@@ -147,45 +162,62 @@ class _AirportScreenState extends State<AirportScreen> {
                           },
                         ),
                       )
+                : widget.homeCubit.isSearchDataLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
                     : SizedBox(
                         height: context.height - 450, //300,
-                        child: widget.homeCubit.airport.isEmpty
-                            ? Center(child: Text("No Data Found"))
-                            : ListView.builder(
-                                itemCount: widget.homeCubit.airport.length,
-                                itemBuilder: (context, index) {
-                                  final airport =
-                                      widget.homeCubit.airport[index];
-                                  return GestureDetector(
-                                    onTap: () {
-                                      widget.homeCubit.selectingAirport(
-                                        airport,
-                                        widget.isWhereFrom,
+                        child: widget.homeCubit.isSearchDataLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : widget.homeCubit.airport.isEmpty
+                                ? const Center(
+                                    child: Text("No Data Found"),
+                                  )
+                                : ListView.builder(
+                                    itemCount: widget.homeCubit.airport.length,
+                                    itemBuilder: (context, index) {
+                                      final airport =
+                                          widget.homeCubit.airport[index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          widget.homeCubit.selectingAirport(
+                                            airport,
+                                            widget.isWhereFrom,
+                                          );
+                                          _controller.clear();
+                                          Navigator.pop(context);
+                                        },
+                                        child: ListTile(
+                                          title: Text(
+                                            airport.name
+                                                .substring(
+                                                    airport.name.indexOf('-'))
+                                                .replaceFirst('-', '')
+                                                .trim(),
+                                          ),
+                                          subtitle: Text(airport.country),
+                                          trailing:
+                                              BoxTextView(text: airport.code),
+                                        ),
                                       );
-                                      _controller.clear();
-                                      Navigator.pop(context);
                                     },
-                                    child: ListTile(
-                                      title: Text(
-                                        airport.name
-                                            .substring(
-                                                airport.name.indexOf('-'))
-                                            .replaceFirst('-', '')
-                                            .trim(),
-                                      ),
-                                      subtitle: Text(airport.country),
-                                      trailing: BoxTextView(text: airport.code),
-                                    ),
-                                  );
-                                },
-                              ),
+                                  ),
                       ),
             SizedBox(
               height: 10,
             ),
             RoundedBtn(
               title: 'Done',
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                widget.homeCubit.selectingAirport(
+                  widget.homeCubit.airport.first,
+                  widget.isWhereFrom,
+                );
+                Navigator.pop(context);
+              },
             ).build(context),
           ],
         );

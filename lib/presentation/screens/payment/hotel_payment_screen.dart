@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/assets_manager.dart';
@@ -34,10 +38,12 @@ class HotelPaymentScreen extends StatefulWidget {
   State<HotelPaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<HotelPaymentScreen> {
+class _PaymentScreenState extends State<HotelPaymentScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
   @override
   void initState() {
-    // TODO: implement initState
+    _controller = AnimationController(vsync: this);
     super.initState();
 
     // Clear Data
@@ -60,6 +66,16 @@ class _PaymentScreenState extends State<HotelPaymentScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void startAnimation() {
+    _controller.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeState>(
         bloc: widget.homeCubit,
@@ -73,7 +89,8 @@ class _PaymentScreenState extends State<HotelPaymentScreen> {
           }
           if (state is FinalizingHotelBookingState &&
               widget.homeCubit.isSavePassengersLoading == false) {
-            callerWidget = showPaymentWidget(context, widget.homeCubit);
+            callerWidget =
+                showPaymentWidget(context, widget.homeCubit, _controller);
           }
         },
         builder: (context, state) {
@@ -108,7 +125,8 @@ Widget callerWidget = Center(
   child: CircularProgressIndicator(),
 );
 
-Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
+Widget showPaymentWidget(
+    BuildContext context, HomeCubit homeCubit, AnimationController controller) {
   return Expanded(
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -157,7 +175,8 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
             child: RoundedBtn(
               title: 'Get Voucher',
               onTap: () {
-                showDialogPopup(context, homeCubit);
+                showDialogPopup(context, homeCubit, controller);
+                controller.forward();
               },
             ),
           ),
@@ -168,7 +187,11 @@ Widget showPaymentWidget(BuildContext context, HomeCubit homeCubit) {
   );
 }
 
-void showDialogPopup(BuildContext context, HomeCubit homeCubit) async {
+void showDialogPopup(
+  BuildContext context,
+  HomeCubit homeCubit,
+  AnimationController controller,
+) async {
   await homeCubit.issueTicket(
     homeCubit.finalizeHotelBookingResponse.data!.bookingId.toString(),
     homeCubit.finalizeHotelBookingResponse.data!.bookings![0].bookingItemId!
@@ -218,11 +241,26 @@ void showDialogPopup(BuildContext context, HomeCubit homeCubit) async {
                                     ), // Get Ticket
                                     homeCubit.issueTicketResponse.data!.success!
                                         ? Card(
-                                            child: Lottie.asset(
+                                            child: LottieBuilder.asset(
+                                              ImageAssets.success,
+                                              // reverse: true,
+                                              frameRate: FrameRate.max,
+                                              repeat: false,
+
+                                              onLoaded: (com) {
+                                                controller.duration =
+                                                    Duration(seconds: 1);
+                                                /*  controller
+                                                  ..duration = com.duration
+                                                  ..reset(); */
+                                              },
+                                            ),
+                                          )
+                                        : Card(
+                                            child: LottieBuilder.asset(
                                               ImageAssets.success,
                                             ),
                                           )
-                                        : Card()
                                   ],
                                 ),
                         ),

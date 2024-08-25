@@ -12,7 +12,8 @@ class ImageAssets {
   static const String firstSpecsImg = '$imagePath/first_specs_img.png';
   static const String secondSpecsImg = '$imagePath/second_specs_img.png';
 
-  static const String success = "$iconPath/success_ic.svg";
+  static const String success = "$iconPath/lottie_successmark.json";
+  static const String error = "$iconPath/lottie_error.json";
 
   /////////////icons
 

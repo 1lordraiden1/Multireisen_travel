@@ -34,7 +34,7 @@ class TextInputView extends StatefulWidget {
   final bool isPassword;
   bool? isLoading;
 
-  final String? Function(String?)? onChanged;
+  final void Function(String?)? onChanged;
   final VoidCallback? onEditingComplete;
   TextEditingController? controller;
   FocusNode? focusNode;

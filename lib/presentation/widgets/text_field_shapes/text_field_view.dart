@@ -31,7 +31,7 @@ class TextFieldRectangle extends StatefulWidget {
   bool? isLoading;
   final TextEditingController controller;
   final String? Function(String?)? validate;
-  final String? Function(String?)? onChanged;
+  final void Function(String?)? onChanged;
   final VoidCallback? onEditingComplete;
   final VoidCallback? onTap;
   final void Function(PointerDownEvent)? onTapOutside;
