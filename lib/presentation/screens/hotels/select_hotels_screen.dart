@@ -29,11 +29,6 @@ class _SelectHotelScreenState extends State<SelectHotelScreen> {
     return BlocConsumer<HomeCubit, HomeState>(
       bloc: widget.homeCubit,
       listener: (context, state) {
-        if (state is NoDataFoundState) {
-          callerWidget = Center(
-            child: Text('No Data Found'),
-          );
-        }
         if (state is NoHotelDataFoundState) {
           callerWidget = Center(
             child: Text(state.error),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
+import 'package:qfly/data/model/passenger_model.dart';
 import 'package:qfly/data/model/room/request_room_model.dart';
 import 'package:qfly/presentation/screens/checkout/hotel_passengers_widget.dart';
 import 'package:qfly/presentation/screens/payment/hotel_payment_screen.dart';
@@ -61,14 +62,14 @@ class _SavePassengersScreenState extends State<SavePassengersScreen> {
         builder: (context, snapshot) {
           return Scaffold(
             body: widget.homeCubit.isHotelAndRoomSelectionLoading
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CustomAppBarView(
+                        const CustomAppBarView(
                           title: 'Passengers',
                         ),
                         Padding(
@@ -82,16 +83,27 @@ class _SavePassengersScreenState extends State<SavePassengersScreen> {
                           alignment: Alignment.bottomCenter,
                           child: RoundedBtn(
                             title: "Book",
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HotelPaymentScreen(
-                                    homeCubit: widget.homeCubit,
-                                    hotel: widget.hotel,
-                                    itemId: widget.itemId,
-                                    solutionId: widget.solutionId,
-                                  ),
-                                )),
+                            onTap: () {
+                              widget.homeCubit.checKPassengerData()
+                                  ? ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            "Please Enter All Passengers' Data"),
+                                      ),
+                                    )
+                                  : Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            HotelPaymentScreen(
+                                          homeCubit: widget.homeCubit,
+                                          hotel: widget.hotel,
+                                          itemId: widget.itemId,
+                                          solutionId: widget.solutionId,
+                                        ),
+                                      ),
+                                    );
+                            },
                           ),
                         ),
                       ],

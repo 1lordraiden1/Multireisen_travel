@@ -15,6 +15,7 @@ import 'package:qfly/data/services/home_services.dart';
 import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
 import 'package:qfly/presentation/widgets/text_shapes/box_text_view.dart';
 import 'package:qfly/presentation/widgets/text_shapes/text_input_view.dart';
+import 'package:qfly/utils/media_query_values.dart';
 
 class AirportScreen extends StatefulWidget {
   AirportScreen({
@@ -45,6 +46,7 @@ class _AirportScreenState extends State<AirportScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    updateList("dx");
     popularAirports = widget.homeCubit.popularAirports;
     //updateList('u');
   }
@@ -110,11 +112,13 @@ class _AirportScreenState extends State<AirportScreen> {
                 ],
               ),
             ),
-            widget.homeCubit.isSearchDataLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _controller.text.isEmpty && _controllerTo.text.isEmpty
+            widget.homeCubit.isSearchDataLoading || _controller.text.isNotEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : _controller.text.isEmpty
                     ? SizedBox(
-                        height: 300,
+                        height: context.height - 450,
                         child: ListView.builder(
                           itemCount: widget.homeCubit.popularAirports.length,
                           itemBuilder: (context, index) {
@@ -144,7 +148,7 @@ class _AirportScreenState extends State<AirportScreen> {
                         ),
                       )
                     : SizedBox(
-                        height: 300,
+                        height: context.height - 450, //300,
                         child: widget.homeCubit.airport.isEmpty
                             ? Center(child: Text("No Data Found"))
                             : ListView.builder(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
+import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
-import 'package:qfly/data/model/hotel/hotel.dart';
+import 'package:qfly/data/model/hotel/hotel.dart' hide Image;
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/screens/login/login_screen.dart';
 import 'package:qfly/presentation/screens/payment/components/card_payment_view.dart';
@@ -62,41 +64,40 @@ class _PaymentScreenState extends State<HotelPaymentScreen> {
     return BlocConsumer<HomeCubit, HomeState>(
         bloc: widget.homeCubit,
         listener: (context, state) {
+          if (state is DioExceptionState) {
+            callerWidget = Center(
+              child: Text(
+                state.message,
+              ),
+            );
+          }
           if (state is FinalizingHotelBookingState &&
               widget.homeCubit.isSavePassengersLoading == false) {
             callerWidget = showPaymentWidget(context, widget.homeCubit);
           }
         },
         builder: (context, state) {
-          return WillPopScope(
-            onWillPop: state is GettingAlreadyBookedTicketState // temp
-                ? null
-                : () async {
-                    return false;
-                  },
-            child: Scaffold(
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CustomAppBarView(
-                    title: 'Payment',
-                    canPop: false,
-                  ),
-                  widget.homeCubit.isBookingFinalizationLoading &&
-                          widget.homeCubit.isSavePassengersLoading
-                      ? const Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(),
-                              Text('Checking everything is ok')
-                            ],
-                          ),
-                        )
-                      : callerWidget
-                ],
-              ),
+          return Scaffold(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomAppBarView(
+                  title: 'Payment',
+                ),
+                widget.homeCubit.isBookingFinalizationLoading ||
+                        widget.homeCubit.isSavePassengersLoading
+                    ? const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            Text('Checking everything is ok')
+                          ],
+                        ),
+                      )
+                    : callerWidget
+              ],
             ),
           );
         });
@@ -215,12 +216,13 @@ void showDialogPopup(BuildContext context, HomeCubit homeCubit) async {
                                           ? "Success"
                                           : "Failed",
                                     ), // Get Ticket
-                                    Text(
-                                      homeCubit.issueTicketResponse.data!
-                                              .success!
-                                          ? "Now your ticket is stored in your trips and you can back login below and ticket much trips as you can"
-                                          : "There is might ",
-                                    ),
+                                    homeCubit.issueTicketResponse.data!.success!
+                                        ? Card(
+                                            child: Lottie.asset(
+                                              ImageAssets.success,
+                                            ),
+                                          )
+                                        : Card()
                                   ],
                                 ),
                         ),

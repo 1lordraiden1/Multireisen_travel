@@ -421,3 +421,12 @@ class GettingVoucherStatus extends HomeState {
     required GetVoucherResponse getVoucherResponse,
   }) : _getVoucherResponse = getVoucherResponse;
 }
+
+// Dio Exceptions
+
+class DioExceptionState extends HomeState {
+  final int code;
+  final String message;
+
+  DioExceptionState({required this.code, required this.message});
+}

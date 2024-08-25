@@ -25,7 +25,7 @@ class _CheckInViewState extends State<CheckInView> {
   _showDate1Picker() {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: widget.homeCubit.checkInDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2025),
     ).then(
@@ -41,9 +41,13 @@ class _CheckInViewState extends State<CheckInView> {
   _showDate2Picker() {
     showDatePicker(
       context: context,
-      initialDate: date1,
-      firstDate: date1,
-      lastDate: DateTime(2025),
+      initialDate: widget.homeCubit.checkInDate.add(
+        const Duration(days: 5),
+      ),
+      firstDate: widget.homeCubit.checkInDate,
+      lastDate: widget.homeCubit.checkInDate.add(
+        const Duration(days: 60),
+      ),
     ).then(
       (value) {
         setState(() {
@@ -74,7 +78,7 @@ class _CheckInViewState extends State<CheckInView> {
                 Expanded(
                   child: GestureDetector(
                     child: DateView(
-                      date: date1,
+                      date: widget.homeCubit.checkInDate,
                     ),
                     onTap: () => _showDate1Picker(),
                   ),
@@ -83,7 +87,7 @@ class _CheckInViewState extends State<CheckInView> {
                 Expanded(
                   child: GestureDetector(
                     child: DateView(
-                      date: date2,
+                      date: widget.homeCubit.checkOutDate,
                     ),
                     onTap: () => _showDate2Picker(),
                   ),

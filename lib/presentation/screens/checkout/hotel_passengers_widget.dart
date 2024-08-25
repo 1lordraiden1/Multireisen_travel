@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
@@ -119,19 +120,24 @@ class PassengerForm extends StatefulWidget {
 }
 
 class _PassengerFormState extends State<PassengerForm> {
+  final ExpansionTileController expansionTileController =
+      ExpansionTileController();
   @override
   Widget build(BuildContext context) {
-    final ExpansionTileController expansionTileController =
-        ExpansionTileController();
-
     final _formKey = GlobalKey<FormBuilderState>();
     final _firstController = TextEditingController(
       text: widget.passenger.firstName!,
     );
-    final _lastController = TextEditingController();
+    final _lastController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
 
-    final _addressController = TextEditingController();
-    final _nationalityController = TextEditingController();
+    final _addressController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
+    final _nationalityController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
 
     return ExpansionTile(
       controller: expansionTileController,
@@ -191,6 +197,11 @@ class _PassengerFormState extends State<PassengerForm> {
                   icon: Icon(Icons.date_range_outlined),
                 ),
                 onSaved: (newValue) {
+                  DateTime now = DateTime.now();
+                  widget.passenger.type = widget.homeCubit.getPassengerType(
+                    widget.type,
+                    now.difference(newValue!).inDays,
+                  );
                   widget.passenger.birthDate = newValue;
                 },
               ),
@@ -203,37 +214,13 @@ class _PassengerFormState extends State<PassengerForm> {
                   return Validation().emptyField(value, 'Country Exist ');
                 },
                 onSaved: (value) {
-                  /*                     passenger.country!.countryCode = CountriesData.countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .code;
-                  passenger.country!.countryName = CountriesData.countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .name;
-    
-                  passenger.city!.countryCode = CountriesData.countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .code;
-    
-                  passenger.nationality!.countryCode = CountriesData
-                      .countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .code;
-                  passenger.nationality!.countryName = CountriesData
-                      .countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .name; */
-
-                  print(widget.passenger.toJson());
+                  widget.passenger.nationality = value;
                 },
               ),
               10.verticalSpace,
               FormBuilderRadioGroup(
                 name: 'Gender',
+                initialValue: 1,
                 separator: SizedBox(width: 30),
                 options: [
                   const FormBuilderFieldOption(
@@ -259,7 +246,10 @@ class _PassengerFormState extends State<PassengerForm> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    expansionTileController.collapse();
+                    print(widget.passenger.toJson());
+                    expansionTileController.isExpanded
+                        ? expansionTileController.collapse()
+                        : null;
                   }
                 },
               ),

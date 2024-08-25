@@ -1,9 +1,7 @@
-
 const String imagePath = 'assets/images';
 const String iconPath = 'assets/icons';
 
 class ImageAssets {
-
   static const String splashBgImg = '$imagePath/splash_bg.png';
   static const String onboardBgImg = '$imagePath/onboard_bg.png';
   static const String onboard2BgImg = '$imagePath/onboard2_bg.png';
@@ -14,7 +12,7 @@ class ImageAssets {
   static const String firstSpecsImg = '$imagePath/first_specs_img.png';
   static const String secondSpecsImg = '$imagePath/second_specs_img.png';
 
-
+  static const String success = "$iconPath/success_ic.svg";
 
   /////////////icons
 
@@ -28,7 +26,8 @@ class ImageAssets {
   static const String flightTripIcon = '$iconPath/flight_trip_ic.svg';
   static const String roundTripIcon = '$iconPath/round_trip_ic.svg';
   static const String userGroupIcon = '$iconPath/user_group_ic.svg';
-  static const String horizontalRoundTripIcon = '$iconPath/horizontal_rounded_ic.svg';
+  static const String horizontalRoundTripIcon =
+      '$iconPath/horizontal_rounded_ic.svg';
   static const String offerIcon = '$iconPath/offer_ic.svg';
   static const String visaIcon = '$iconPath/visa_ic.svg';
   static const String paypalIcon = '$iconPath/paypal_ic.svg';

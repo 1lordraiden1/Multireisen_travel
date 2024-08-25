@@ -292,6 +292,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     );
   } */
 
+  List<Map<String, dynamic>> passengersToJson() {
+    List<Map<String, dynamic>> map = [];
+    for (Passenger passenger in passengers) {
+      map.add(passenger.toJson());
+    }
+    return map;
+  }
+
   getAirportsData(String searchValue) async {
     try {
       isSearchDataLoading = true;
@@ -312,8 +320,12 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
           )
           .toList();
 
-      emit(AirportDataImportedSuccessfully(
-          airports: _airports, popularAirports: _popularAirports));
+      emit(
+        AirportDataImportedSuccessfully(
+          airports: _airports,
+          popularAirports: _popularAirports,
+        ),
+      );
     } catch (e) {
       isSearchDataLoading = false;
       throw Exception('Failed to load airports from HomeCubit');
@@ -554,17 +566,19 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
     isSavePassengersLoading = true;
 
     // getting response
-    final SavePassengersResponse response =
-        await ApiServices(dio).savePassengers(
-      itemId,
-      await SharedPreferencesUtil.getAuthToken("accessToken") ??
-          await AuthService().getOurAuth(),
-      'v1',
-      StringsManager.ourToken,
-      StringsManager.contentType,
-      StringsManager.contentType,
-      {
-        "passengers": [
+    try {
+      final SavePassengersResponse response =
+          await ApiServices(dio).savePassengers(
+        itemId,
+        await SharedPreferencesUtil.getAuthToken("accessToken") ??
+            await AuthService().getOurAuth(),
+        'v1',
+        StringsManager.ourToken,
+        StringsManager.contentType,
+        StringsManager.contentType,
+        {
+          "passengers": passengersToJson(),
+          /*  [
           {
             "type": "ADT",
             "title": "MR",
@@ -629,19 +643,19 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
               "expiry": "2029-10-11"
             }
           } */
-        ],
-        "contact": {
-          "title": "MR",
-          "firstName": "Contact",
-          "lastName": "Person",
-          "phone": "+49-12-3456789",
-          "email": "user_23432@gmail.com",
-          "country": "DE",
-          "zip": "34663",
-          "city": "Berlin",
-          "address": "Some street 1."
-        },
-        /* "invoice": {
+        ], */
+          "contact": {
+            "title": "MR",
+            "firstName": "Contact",
+            "lastName": "Person",
+            "phone": "+49-12-3456789",
+            "email": "user_23432@gmail.com",
+            "country": "DE",
+            "zip": "34663",
+            "city": "Berlin",
+            "address": "Some street 1."
+          },
+          /* "invoice": {
         "name": "Multiresisen Gmbh.",
         "country": "DE",
         "zip": "34663",
@@ -654,31 +668,43 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
             "value": "1"
         }
     ], */
-        "paymentId": "9"
-      },
-    );
+          "paymentId": "9"
+        },
+      );
 
-    _savePassengersResponse = response;
+      _savePassengersResponse = response;
 
-    if (response.data == null) {
+      print(
+        " Booking ID!! : ${_savePassengersResponse.data!.bookingId!.toString()}",
+      );
+
+      emit(SavingPassengerState(
+          savePassengersResponse: _savePassengersResponse));
+
+      finalizeBooking(
+        itemId,
+        _savePassengersResponse.data!.bookingId!.toString(),
+      );
+    } on DioException catch (e) {
+      if (e.response!.data["error"]["code"] == 3) {
+        emit(
+          DioExceptionState(
+            code: e.response!.data["error"]["code"],
+            message: "Session Expired ,Please start a new search",
+          ),
+        );
+      } else {
+        emit(
+          DioExceptionState(
+            code: e.response!.data["error"]["code"],
+            message: e.response!.data["error"]["message"],
+          ),
+        );
+      }
       isSavePassengersLoading = false;
-      print("Error in User Data");
-      emit(NoDataFoundState());
-      return;
+    } finally {
+      isSavePassengersLoading = false;
     }
-
-    print(
-      " Booking ID!! : ${_savePassengersResponse.data!.bookingId!.toString()}",
-    );
-
-    emit(SavingPassengerState(savePassengersResponse: _savePassengersResponse));
-
-    finalizeBooking(
-      itemId,
-      _savePassengersResponse.data!.bookingId!.toString(),
-    );
-
-    isSavePassengersLoading = false;
   }
 
   finalizeBooking(String itemId, String bookingId) async {
@@ -1174,6 +1200,15 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   // Hotel Functions
 
+  bool checKPassengerData() {
+    for (Passenger passenger in passengers) {
+      if (passenger.isEmpty()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   String getPassengerType(String type, int? age) {
     String result = '';
     switch (type) {
@@ -1181,7 +1216,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
         result = "ADT";
         break;
       case "Child":
-        if (age! > 1) {
+        if (age! > 364) {
           result = "CHD";
         } else {
           result = "INF";
@@ -1196,6 +1231,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
 
   handleCheckInDateChanging(DateTime checkIn) {
     _checkInDate = checkIn;
+
     emit(
       ChangeCheckInDate(
         checkInDate: _checkInDate,
@@ -1466,11 +1502,14 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
       print(_hotels);
 
       emit(LoadHotelsState(hotels: _hotels));
-    } catch (e) {
+    } on DioException catch (e) {
       isSearchHotelsLoading = false;
-      onError(e, StackTrace.current);
-      emit(NoDataFoundState());
-      //throw Exception(e.toString());
+      onError(e, e.stackTrace);
+      emit(
+        NoHotelDataFoundState(
+          error: e.response!.data["error"]["message"],
+        ),
+      );
     } finally {
       isSearchHotelsLoading = false;
     }
@@ -1586,38 +1625,42 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   saveHotelPassengers(String itemId, int solutionId) async {
     isSavePassengersLoading = true;
 
+    print(passengersToJson());
+
     // getting response
-    final SaveHotelPassengersResponse response =
-        await ApiServices(dio).saveHotelPassengers(
-      itemId,
-      solutionId,
-      await SharedPreferencesUtil.getAuthToken("accessToken") ??
-          await AuthService().getOurAuth(),
-      'v1',
-      StringsManager.ourToken,
-      StringsManager.contentType,
-      StringsManager.contentType,
-      {
-        "passengers": [
-          {
-            "type": "ADT",
-            "title": "MR",
-            "firstName": "John",
-            "lastName": "Doe",
-            "birthDate": "1978-01-01",
-            "nationality": "DE",
-            "passport": {
-              "type": "P",
-              "number": "1234567",
-              "issueCountry": "DE",
-              "expiry": "2025-05-01"
-            },
-            /* "options": {
+    try {
+      final SaveHotelPassengersResponse response =
+          await ApiServices(dio).saveHotelPassengers(
+        itemId,
+        solutionId,
+        await SharedPreferencesUtil.getAuthToken("accessToken") ??
+            await AuthService().getOurAuth(),
+        'v1',
+        StringsManager.ourToken,
+        StringsManager.contentType,
+        StringsManager.contentType,
+        {
+          "passengers": passengersToJson(),
+          /*  [
+            {
+              "type": "ADT",
+              "title": "MR",
+              "firstName": "John",
+              "lastName": "Doe",
+              "birthDate": "1978-01-01",
+              "nationality": "DE",
+              "passport": {
+                "type": "P",
+                "number": "1234567",
+                "issueCountry": "DE",
+                "expiry": "2025-05-01"
+              },
+              /* "options": {
               "1": {"id": "OutwardLuggageOptions", "value": "1"},
               "2": {"id": "ReturnLuggageOptions", "value": "1"}
             } */
-          },
-          /* {
+            },
+            /* {
             "type": "ADT",
             "title": "MRS",
             "firstName": "Helene",
@@ -1663,19 +1706,19 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
               "expiry": "2029-10-11"
             }
           } */
-        ],
-        "contact": {
-          "title": "MR",
-          "firstName": "Contact",
-          "lastName": "Person",
-          "phone": "+49-12-3456789",
-          "email": "user_23432@gmail.com",
-          "country": "DE",
-          "zip": "34663",
-          "city": "Berlin",
-          "address": "Some street 1."
-        },
-        /* "invoice": {
+          ], */
+          "contact": {
+            "title": "MR",
+            "firstName": "Contact",
+            "lastName": "Person",
+            "phone": "+49-12-3456789",
+            "email": "user_23432@gmail.com",
+            "country": "DE",
+            "zip": "34663",
+            "city": "Berlin",
+            "address": "Some street 1."
+          },
+          /* "invoice": {
         "name": "Multiresisen Gmbh.",
         "country": "DE",
         "zip": "34663",
@@ -1688,37 +1731,48 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
             "value": "1"
         }
     ], */
-        "paymentId": "9"
-      },
-    );
+          "paymentId": "9"
+        },
+      );
 
-    _hotelPassengersResponse = response;
+      _hotelPassengersResponse = response;
 
-    if (response.data == null) {
+      print(
+        " Booking ID!! : ${_hotelPassengersResponse.data!.bookingId!.toString()}",
+      );
+
+      emit(
+        SavingHotelPassengerState(
+          hotelPassengersResponse: _hotelPassengersResponse,
+        ),
+      );
+
+      // Finalize Hotel Booking -----
+      finalizeHotelBooking(
+        itemId,
+        solutionId,
+        _hotelPassengersResponse.data!.bookingId!,
+      );
+    } on DioException catch (e) {
+      if (e.response!.data["error"]["code"] == 3) {
+        emit(
+          DioExceptionState(
+            code: e.response!.data["error"]["code"],
+            message: "Session Expired ,Please start a new search",
+          ),
+        );
+      } else {
+        emit(
+          DioExceptionState(
+            code: e.response!.data["error"]["code"],
+            message: e.response!.data["error"]["message"],
+          ),
+        );
+      }
       isSavePassengersLoading = false;
-      print("Error in User Data");
-      emit(NoDataFoundState());
-      return;
+    } finally {
+      isSavePassengersLoading = false;
     }
-
-    print(
-      " Booking ID!! : ${_hotelPassengersResponse.data!.bookingId!.toString()}",
-    );
-
-    emit(
-      SavingHotelPassengerState(
-        hotelPassengersResponse: _hotelPassengersResponse,
-      ),
-    );
-
-    // Finalize Hotel Booking -----
-    finalizeHotelBooking(
-      itemId,
-      solutionId,
-      _hotelPassengersResponse.data!.bookingId!,
-    );
-
-    isSavePassengersLoading = false;
   }
 
   finalizeHotelBooking(String itemId, int solutionId, int bookingId) async {

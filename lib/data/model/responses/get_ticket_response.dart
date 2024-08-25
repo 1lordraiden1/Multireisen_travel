@@ -113,6 +113,18 @@ class Passenger {
     );
   }
 
+  bool isEmpty() {
+    return title == null ||
+        title!.isEmpty ||
+        firstName == null ||
+        firstName!.isEmpty ||
+        lastName == null ||
+        lastName!.isEmpty ||
+        birthDate == null ||
+        type == null ||
+        nationality == null;
+  }
+
   factory Passenger.fromJson(Map<String, dynamic> json) =>
       _$PassengerFromJson(json);
 
