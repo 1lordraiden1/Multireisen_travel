@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
-import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:qfly/data/Shared/countries.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
 
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
 import 'package:qfly/data/model/room/request_room_model.dart';
 
-import 'package:qfly/presentation/screens/payment/payment_screen.dart';
-import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
-import 'package:qfly/presentation/widgets/text_shapes/text_input_view.dart';
 import 'package:qfly/utils/validation.dart';
 
 import '../../../../constant/colors.dart';
@@ -132,9 +126,6 @@ class _PassengerFormState extends State<PassengerForm> {
       text: widget.passenger.firstName!,
     );
 
-    final _addressController = TextEditingController(
-      text: widget.passenger.firstName!,
-    );
     final _nationalityController = TextEditingController(
       text: widget.passenger.firstName!,
     );
@@ -149,6 +140,7 @@ class _PassengerFormState extends State<PassengerForm> {
         });
       }, */
       maintainState: true,
+      initiallyExpanded: true,
       title: Text(
         'Traveler ${widget.travelerNumber} (${widget.type})',
         style: TextStylesManager.regularStyle(fontSize: 14.sp),

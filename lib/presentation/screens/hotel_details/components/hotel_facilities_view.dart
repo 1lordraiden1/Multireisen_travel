@@ -46,34 +46,10 @@ class _HotelFacilitiesViewState extends State<HotelFacilitiesView> {
       children: [
         CategoryHeaderView(
           title: 'Hotel Facilities',
-          onPressed: () {
-            BottomSheetShape(
-              GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 4,
-                  crossAxisSpacing: 0,
-                ),
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(0),
-                itemCount: facilities.length,
-                itemBuilder: (context, index) {
-                  return FacilityItem(
-                    homeCubit: widget.homeCubit,
-                    facility: facilities[index],
-                  );
-                },
-              ),
-            ).build(context);
-          },
         ),
         14.verticalSpace,
-        GridView.builder(
+        ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 2,
-          ),
           shrinkWrap: true,
           padding: const EdgeInsets.all(0),
           itemCount: facilities.length,

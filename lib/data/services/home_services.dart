@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
 import 'package:qfly/data/Shared/sharedPreferences.dart';
-import 'package:qfly/data/model/airport_model.dart';
+import 'package:qfly/data/model/responses/airports_response.dart';
 import 'package:qfly/data/model/global/country_model.dart';
 import 'package:qfly/data/network/constant/end_points.dart';
 import 'package:qfly/data/services/api_services.dart';

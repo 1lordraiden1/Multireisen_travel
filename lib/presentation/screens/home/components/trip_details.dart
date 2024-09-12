@@ -37,13 +37,26 @@ class _TripDetailsViewState extends State<TripDetailsView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    widget.homeCubit.airport.isEmpty ? widget.homeCubit.getAirports() : null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
       return Column(
         children: [
-          TripWayView(
-            homeCubit: widget.homeCubit,
-          ),
+          widget.homeCubit.isGettingAirportsLoading
+              ? const SizedBox(
+                  height: 50,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : TripWayView(
+                  homeCubit: widget.homeCubit,
+                ),
           GestureDetector(
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -65,8 +78,8 @@ class _TripDetailsViewState extends State<TripDetailsView> {
           RoundedBtn(
             title: 'Search and book!',
             onTap: () {
-              if (widget.homeCubit.airportTo.name.isEmpty ||
-                  widget.homeCubit.airportFrom.name.isEmpty) {
+              if (widget.homeCubit.airportTo.name!.isEmpty ||
+                  widget.homeCubit.airportFrom.name!.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content:

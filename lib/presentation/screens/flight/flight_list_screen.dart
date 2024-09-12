@@ -33,12 +33,12 @@ class _FlightListScreenState extends State<FlightListScreen> {
 
     // get init data (page 1)
     widget.homeCubit.handleSearchingForFlights(
-      widget.homeCubit.airportFrom.code.isEmpty
+      widget.homeCubit.airportFrom.code!.isEmpty
           ? "CAI"
-          : widget.homeCubit.airportFrom.code,
-      widget.homeCubit.airportTo.code.isEmpty
+          : widget.homeCubit.airportFrom.code!,
+      widget.homeCubit.airportTo.code!.isEmpty
           ? "RUH"
-          : widget.homeCubit.airportTo.code,
+          : widget.homeCubit.airportTo.code!,
       widget.homeCubit.adults,
       Child.getChildrenAges(widget.homeCubit.flightChildren),
       widget.homeCubit.selectedClassType,
@@ -124,9 +124,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
           return Scaffold(
             body: Column(
               children: [
-                CustomAppBarView(
-                  title: 'Time Remaining: ${_seconds ~/ 60} : ${_seconds % 60}',
-                ),
+                const CustomAppBarView(title: 'Available Flights'),
                 FlightDestinationView(
                   homeCubit: widget.homeCubit,
                 ),

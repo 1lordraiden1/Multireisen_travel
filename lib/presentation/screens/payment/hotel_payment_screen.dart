@@ -66,16 +66,6 @@ class _PaymentScreenState extends State<HotelPaymentScreen>
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void startAnimation() {
-    _controller.forward();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeState>(
         bloc: widget.homeCubit,
@@ -176,7 +166,6 @@ Widget showPaymentWidget(
               title: 'Get Voucher',
               onTap: () {
                 showDialogPopup(context, homeCubit, controller);
-                controller.forward();
               },
             ),
           ),

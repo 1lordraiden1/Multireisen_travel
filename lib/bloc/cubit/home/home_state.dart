@@ -329,6 +329,14 @@ class CreatingPassengersState extends HomeState {
   }) : _passengers = passengers;
 }
 
+class LoadAirportsState extends HomeState {
+  final List<Airport> _airports;
+
+  LoadAirportsState({
+    required List<Airport> airports,
+  }) : _airports = airports;
+}
+
 // Hotel New
 
 class LoadCountriesState extends HomeState {

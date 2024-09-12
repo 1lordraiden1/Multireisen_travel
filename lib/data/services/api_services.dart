@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:qfly/data/model/responses/airports_response.dart';
 import 'package:qfly/data/model/responses/check_booking_cancellation_response.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 
@@ -155,6 +156,14 @@ abstract class ApiServices {
   );
 
   // Flights
+
+  @GET("/staticdata/airports")
+  Future<AirportsResponse> getAirports(
+    @Header('AccessToken') String accessToken,
+    @Header('Version') String version,
+    @Header('Authorization') String auth,
+    @Header('Accept') String accept,
+  );
 
   @POST(EndPoints.newFlightSearch)
   Future<FlightResponse> getFlights(

@@ -9,8 +9,9 @@ import 'package:qfly/data/Shared/sharedPreferences.dart';
 import 'package:qfly/data/model/Flight/Flight_details_model.dart';
 import 'package:qfly/data/model/Flight/Flight_model.dart';
 
-import 'package:qfly/data/model/airport_model.dart';
+//import 'package:qfly/data/model/responses/airports_response.dart';
 import 'package:qfly/data/model/hotel/hotel.dart';
+import 'package:qfly/data/model/responses/airports_response.dart';
 import 'package:qfly/data/model/responses/finalize_booking_response.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
@@ -28,7 +29,7 @@ import 'package:qfly/data/model/responses/hotel/room_filter_response.dart'
     hide Entity;
 import 'package:qfly/data/model/responses/hotel/save_hotel_passengers_response.dart';
 import 'package:qfly/data/model/responses/hotel/select_hotel_response.dart'
-    hide Image, Room;
+    hide Image;
 import 'package:qfly/data/model/responses/issue_ticket_response.dart';
 import 'package:qfly/data/model/responses/save_passengers_response.dart';
 import 'package:qfly/data/model/responses/select_flight_response.dart';
@@ -147,6 +148,7 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
   int flightSearchPage = 1;
 
   bool isSearchDataLoading = false;
+  bool isGettingAirportsLoading = false;
   bool isSearchFlightLoading = false;
   bool isFilterSearchLoading = false;
   bool isFlightSelectionLoading = false;
@@ -298,6 +300,38 @@ class HomeCubit extends Bloc<HomeEvent, HomeState> {
       map.add(passenger.toJson());
     }
     return map;
+  }
+
+  getAirports() async {
+    try {
+      isGettingAirportsLoading = true;
+
+      final AirportsResponse response = await ApiServices(dio).getAirports(
+        await AuthService().getOurAuth(),
+        'v1',
+        StringsManager.ourToken,
+        StringsManager.contentType,
+      );
+
+      _airports = response.data!.airports![0];
+
+      emit(LoadAirportsState(airports: _airports));
+    } on DioException catch (e) {
+      isGettingAirportsLoading = false;
+      
+      print("Error ${e.error}");
+      print(e.response!.toString());
+      
+      emit(
+        DioExceptionState(
+          code: e.response!.statusCode!,
+          message: e.response!.statusMessage!,
+        ),
+      );
+      onError(e, StackTrace.current);
+    } finally {
+      isGettingAirportsLoading = false;
+    }
   }
 
   getAirportsData(String searchValue) async {

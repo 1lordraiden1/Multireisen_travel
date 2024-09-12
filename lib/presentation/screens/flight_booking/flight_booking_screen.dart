@@ -34,7 +34,6 @@ class FlightBookingScreen extends StatefulWidget {
 class _FlightBookingScreenState extends State<FlightBookingScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // clear data
     widget.homeCubit.selectFlightResponse.data = null;
@@ -48,14 +47,6 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
     widget.homeCubit.selectFlight(widget.itemId);
 
     print(widget.homeCubit.passengers);
-
-    /*  widget.homeCubit.handleGettingFlightDetails(
-      widget.flight.allData!.segments![0][0].origin.toString(),
-      widget.flight.allData!.segments![0][0].origin.toString(),
-      widget.itemId,
-      widget.flight.isLcc!,
-      widget.flight.companyName!,
-    ); */
   }
 
   @override
@@ -65,12 +56,12 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
         listener: (context, state) {},
         builder: (context, snapshot) {
           return Scaffold(
-            body: SingleChildScrollView(
-              child: widget.homeCubit.isFlightSelectionLoading
-                  ? callerWidget // Loading Screen
-                  : Column(
+            body: widget.homeCubit.isFlightSelectionLoading
+                ? callerWidget // Loading Screen
+                : SingleChildScrollView(
+                    child: Column(
                       children: [
-                        CustomAppBarView(
+                        const CustomAppBarView(
                           title: 'Enter Passengers Info',
                         ),
                         Padding(
@@ -108,28 +99,28 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                                   RoundedBtn(
                                     title: 'Next',
                                     onTap: () {
-                                      /*   widget.homeCubit.passengers.any(
-                                  (element) => element.isEmpty(),
-                                )
-                                    ? ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            "Please Enter All Passengers Data",
-                                          ),
-                                        ),
+                                      widget.homeCubit.passengers.any(
+                                        (element) => element.isEmpty(),
                                       )
-                                    :  */
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PaymentScreen(
-                                            homeCubit: widget.homeCubit,
-                                            flight: widget.flight,
-                                            itemId: widget.itemId,
-                                          ),
-                                        ),
-                                      );
+                                          ? ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  "Please Enter All Passengers Data",
+                                                ),
+                                              ),
+                                            )
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PaymentScreen(
+                                                  homeCubit: widget.homeCubit,
+                                                  flight: widget.flight,
+                                                  itemId: widget.itemId,
+                                                ),
+                                              ),
+                                            );
                                     },
                                   ),
                                 ],
@@ -140,7 +131,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen> {
                         )
                       ],
                     ),
-            ),
+                  ),
           );
         });
   }

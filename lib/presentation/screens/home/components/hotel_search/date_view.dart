@@ -19,17 +19,15 @@ class DateView extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: lightGray),
       ),
-      child: Flexible(
-        child: TextWithIconView(
-          isCenter: isCenter,
-          iconPath: ImageAssets.dateIcon,
-          text: date.year.toString() +
-              '-' +
-              date.month.toString() +
-              '-' +
-              date.day.toString(),
-          textStyle: TextStylesManager.regularStyle(fontSize: 14.sp),
-        ),
+      child: TextWithIconView(
+        isCenter: isCenter,
+        iconPath: ImageAssets.dateIcon,
+        text: date.year.toString() +
+            '-' +
+            date.month.toString() +
+            '-' +
+            date.day.toString(),
+        textStyle: TextStylesManager.regularStyle(fontSize: 14.sp),
       ),
     );
   }

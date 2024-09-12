@@ -31,11 +31,8 @@ class FlightDestinationView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DestinationItemView(
-                destination: homeCubit.airportFrom.name.substring(
-                  homeCubit.airportFrom.name.indexOf('-') + 1,
-                  homeCubit.airportFrom.name.lastIndexOf('-'),
-                ),
-                airport: homeCubit.airportFrom.code,
+                destination: homeCubit.airportFrom.country!,
+                airport: homeCubit.airportFrom.name!,
                 date: homeCubit.flightDate.toString().substring(0, 10),
                 time: homeCubit.flightDate.toString().substring(10, 19),
               ),
@@ -43,11 +40,8 @@ class FlightDestinationView extends StatelessWidget {
                 homeCubit: homeCubit,
               ),
               DestinationItemView(
-                destination: homeCubit.airportTo.name.substring(
-                  homeCubit.airportTo.name.indexOf('-') + 1,
-                  homeCubit.airportTo.name.lastIndexOf('-'),
-                ),
-                airport: homeCubit.airportTo.code,
+                destination: homeCubit.airportTo.country!,
+                airport: homeCubit.airportTo.name!,
               ),
             ],
           ),

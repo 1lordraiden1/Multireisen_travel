@@ -122,19 +122,24 @@ class PassengerForm extends StatefulWidget {
 }
 
 class _PassengerFormState extends State<PassengerForm> {
+  final ExpansionTileController expansionTileController =
+      ExpansionTileController();
   @override
   Widget build(BuildContext context) {
-    final ExpansionTileController expansionTileController =
-        ExpansionTileController();
-
     final _formKey = GlobalKey<FormBuilderState>();
-    final _firstController = TextEditingController();
-    final _lastController = TextEditingController();
-    final _emailController = TextEditingController();
-    final _phoneController = TextEditingController();
-    final _addressController = TextEditingController();
-    final _nationalityController = TextEditingController();
+    final _firstController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
+    final _lastController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
 
+    final _passportController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
+    final _nationalityController = TextEditingController(
+      text: widget.passenger.firstName!,
+    );
     return ExpansionTile(
       controller: expansionTileController,
       /* onExpansionChanged: (bool expanded) {
@@ -206,6 +211,11 @@ class _PassengerFormState extends State<PassengerForm> {
                   icon: Icon(Icons.date_range_outlined),
                 ),
                 onSaved: (newValue) {
+                  DateTime now = DateTime.now();
+                  widget.passenger.type = widget.homeCubit.getPassengerType(
+                    widget.type,
+                    now.difference(newValue!).inDays,
+                  );
                   widget.passenger.birthDate = newValue;
                 },
               ),
@@ -226,63 +236,28 @@ class _PassengerFormState extends State<PassengerForm> {
                   return Validation().emptyField(value, 'Country Exist ');
                 },
                 onSaved: (value) {
-                  /*                     passenger.country!.countryCode = CountriesData.countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .code;
-                  passenger.country!.countryName = CountriesData.countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .name;
-    
-                  passenger.city!.countryCode = CountriesData.countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .code;
-    
-                  passenger.nationality!.countryCode = CountriesData
-                      .countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .code;
-                  passenger.nationality!.countryName = CountriesData
-                      .countries
-                      .firstWhere(
-                          (element) => element.name.contains(value!))
-                      .name; */
-
-                  print(widget.passenger.toJson());
+                  widget.passenger.nationality = value;
+                  widget.passenger.passport!.issueCountry = value;
                 },
               ),
               10.verticalSpace,
               OutlinedInputFieldWidget(
-                controller: _addressController,
+                controller: _passportController,
                 homeCubit: widget.homeCubit,
-                label: 'Address',
+                label: 'Passport',
                 validation: (value) {
-                  return Validation().emptyField(value, 'Address');
+                  return Validation().emptyField(value, 'Passport');
                 },
                 onSaved: (value) {
                   widget.passenger.passport!.number = value;
                 },
               ),
               10.verticalSpace,
-              /* OutlinedInputFieldWidget(
-                controller: _emailController,
-                homeCubit: widget.homeCubit,
-                label: 'Email',
-                validation: (value) {
-                  return Validation().emailValidator(value);
-                },
-                onSaved: (value) {
-                  widget.passenger.email = value;
-                },
-              ),
-              10.verticalSpace, */
               FormBuilderRadioGroup(
                 name: 'Gender',
-                separator: SizedBox(width: 30),
-                options: [
+                separator: const SizedBox(width: 30),
+                initialValue: 1,
+                options: const [
                   const FormBuilderFieldOption(
                     value: 1,
                     child: Text('Male'),
@@ -307,6 +282,7 @@ class _PassengerFormState extends State<PassengerForm> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     expansionTileController.collapse();
+                    print(widget.passenger.toJson());
                   }
                 },
               ),

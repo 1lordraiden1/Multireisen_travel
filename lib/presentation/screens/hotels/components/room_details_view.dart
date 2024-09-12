@@ -19,48 +19,43 @@ class RoomDetailsView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Price',
-                style:
-                    TextStylesManager.regularStyle(fontSize: 9.sp, color: grey),
-              ),
-              Row(
-                children: [
-                  Text(
-                    hotel.rooms!.isEmpty
-                        ? "No available rooms"
-                        : '\$${hotel.rooms!.first.price!.total}',
-                    style: TextStylesManager.mediumStyle(
-                        fontSize: 12.sp, color: primaryColor),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '/pernight',
-                          style: TextStylesManager.regularStyle(
-                              fontSize: 9.sp, color: grey),
-                        ),
-                        Text(
-                          'Hotel rooms : ${hotel.rooms!.length}',
-                          style: TextStylesManager.mediumStyle(
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                        5.horizontalSpace
-                      ],
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Price',
+              style:
+                  TextStylesManager.regularStyle(fontSize: 9.sp, color: grey),
+            ),
+            Wrap(
+              children: [
+                Text(
+                  hotel.rooms!.isEmpty
+                      ? "No available rooms"
+                      : '\$${hotel.rooms!.first.price!.total}',
+                  style: TextStylesManager.mediumStyle(
+                      fontSize: 12.sp, color: primaryColor),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '/pernight',
+                      style: TextStylesManager.regularStyle(
+                          fontSize: 9.sp, color: grey),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                    Text(
+                      'Hotel rooms : ${hotel.rooms!.length}',
+                      style: TextStylesManager.mediumStyle(
+                        fontSize: 10.sp,
+                      ),
+                    ),
+                    5.horizontalSpace
+                  ],
+                ),
+              ],
+            )
+          ],
         ),
         Flexible(
           child: RoundedBtnWithIcon(

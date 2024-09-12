@@ -29,18 +29,14 @@ class _FacilityItemState extends State<FacilityItem> {
       decoration: BoxDecoration(
           color: blue.withOpacity(0.05),
           borderRadius: BorderRadius.circular(15.r)),
-      child: Column(
+      child: Row(
         children: [
-          /* 15.verticalSpace,
-          Icon(Icons.settings, color: red,),
-          SvgPicture.asset(
-            ImageAssets.cinemaIcon,
-          ),
-          10.verticalSpace, */
+          Icon(Icons.circle),
+          5.horizontalSpace,
           Text(
             widget.facility,
             style: TextStylesManager.mediumStyle(fontSize: 12.sp, color: red),
-          )
+          ),
         ],
       ),
     );

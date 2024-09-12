@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:qfly/data/services/auth_services.dart';
@@ -26,12 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    AuthService().authMe();
+    //AuthService().authMe();
+
     getStatus();
     _homeCubit = context.read<HomeCubit>();
   }
 
-  String? getStatus() {
+  getStatus() {
     AuthService().getOurAuth().then(
           (value) => value,
           onError: (value) => value,
@@ -40,39 +40,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: context.height,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: BlocBuilder<HomeCubit, HomeState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                HomeHeaderView(),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: [
-                      ServicesView(),
-                      _homeCubit.serviceIndex == 0
-                          ? TripDetailsView(
-                              homeCubit: _homeCubit,
-                            )
-                          : HotelSearchView(
-                              homeCubit: _homeCubit,
-                            ),
-                      20.verticalSpace,
-                      30.verticalSpace,
-                      TopFlightsView(),
-                      20.verticalSpace,
-                      LatestOfferView(),
-                      20.verticalSpace,
-                    ],
+    return Scaffold(
+      body: SizedBox(
+        height: context.height,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  HomeHeaderView(),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        ServicesView(),
+                        _homeCubit.serviceIndex == 0
+                            ? TripDetailsView(
+                                homeCubit: _homeCubit,
+                              )
+                            : HotelSearchView(
+                                homeCubit: _homeCubit,
+                              ),
+                        20.verticalSpace,
+                        30.verticalSpace,
+                        TopFlightsView(),
+                        20.verticalSpace,
+                        LatestOfferView(),
+                        20.verticalSpace,
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

@@ -32,7 +32,9 @@ class _HotelSearchViewState extends State<HotelSearchView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.homeCubit.searchCountryHandler();
+    widget.homeCubit.countries.isEmpty
+        ? widget.homeCubit.searchCountryHandler()
+        : null;
   }
 
   @override
@@ -154,14 +156,12 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                           30.horizontalSpace,
                           SizedBox(
                             width: 150,
-                            child: Flexible(
-                              child: UsersNumPeopleView(
-                                room: widget.homeCubit.requestRooms[index],
-                                index: index,
-                                homeCubit: widget.homeCubit,
-                                title: 'Adult',
-                                iconPath: ImageAssets.userGroupIcon,
-                              ),
+                            child: UsersNumPeopleView(
+                              room: widget.homeCubit.requestRooms[index],
+                              index: index,
+                              homeCubit: widget.homeCubit,
+                              title: 'Adult',
+                              iconPath: ImageAssets.userGroupIcon,
                             ),
                           ),
                         ],
@@ -178,14 +178,12 @@ class _HotelSearchViewState extends State<HotelSearchView> {
                           30.horizontalSpace,
                           SizedBox(
                             width: 150,
-                            child: Flexible(
-                              child: UsersNumPeopleView(
-                                room: widget.homeCubit.requestRooms[index],
-                                homeCubit: widget.homeCubit,
-                                index: index,
-                                title: 'Children',
-                                iconPath: ImageAssets.userIcon,
-                              ),
+                            child: UsersNumPeopleView(
+                              room: widget.homeCubit.requestRooms[index],
+                              homeCubit: widget.homeCubit,
+                              index: index,
+                              title: 'Children',
+                              iconPath: ImageAssets.userIcon,
                             ),
                           ),
                         ],

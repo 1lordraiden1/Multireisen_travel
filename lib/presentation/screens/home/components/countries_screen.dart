@@ -96,79 +96,71 @@ class _CountriesScreenState extends State<CountriesScreen> {
                           )
                         : SizedBox(
                             height: 300,
-                            child: Expanded(
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        widget.isCities!
-                                            ? widget.homeCubit
-                                                .handleHotelCitySelection(
-                                                searchCountries[index],
-                                              )
-                                            : widget.homeCubit
-                                                .handleHotelSelection(
-                                                searchCountries[index],
-                                              );
-                                        Navigator.pop(context);
-                                      },
-                                      child: ListTile(
-                                        title: Text(
-                                          searchCountries[index]
-                                              .name
-                                              .toString(),
-                                        ),
-                                        trailing: Text(
-                                          searchCountries[index]
-                                              .code
-                                              .toString(),
-                                        ),
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      widget.isCities!
+                                          ? widget.homeCubit
+                                              .handleHotelCitySelection(
+                                              searchCountries[index],
+                                            )
+                                          : widget.homeCubit
+                                              .handleHotelSelection(
+                                              searchCountries[index],
+                                            );
+                                      Navigator.pop(context);
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                        searchCountries[index].name.toString(),
+                                      ),
+                                      trailing: Text(
+                                        searchCountries[index].code.toString(),
                                       ),
                                     ),
-                                  );
-                                },
-                                itemCount: searchCountries.length,
-                              ),
+                                  ),
+                                );
+                              },
+                              itemCount: searchCountries.length,
                             ),
                           )
                     : SizedBox(
                         height: 300,
-                        child: Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    widget.isCities!
-                                        ? widget.homeCubit
-                                            .handleHotelCitySelection(
-                                            searchCountries.isEmpty
-                                                ? data[index]
-                                                : searchCountries[index],
-                                          )
-                                        : widget.homeCubit.handleHotelSelection(
-                                            searchCountries.isEmpty
-                                                ? data[index]
-                                                : searchCountries[index],
-                                          );
-                                    Navigator.pop(context);
-                                  },
-                                  child: ListTile(
-                                    title: Text(
-                                      data[index].name.toString(),
-                                    ),
-                                    trailing: Text(
-                                      data[index].code.toString(),
-                                    ),
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  widget.isCities!
+                                      ? widget.homeCubit
+                                          .handleHotelCitySelection(
+                                          searchCountries.isEmpty
+                                              ? data[index]
+                                              : searchCountries[index],
+                                        )
+                                      : widget.homeCubit.handleHotelSelection(
+                                          searchCountries.isEmpty
+                                              ? data[index]
+                                              : searchCountries[index],
+                                        );
+                                  Navigator.pop(context);
+                                },
+                                child: ListTile(
+                                  title: Text(
+                                    data[index].name.toString(),
+                                  ),
+                                  trailing: Text(
+                                    data[index].code.toString(),
                                   ),
                                 ),
-                              );
-                            },
-                            itemCount: data.length,
-                          ),
+                              ),
+                            );
+                          },
+                          itemCount: data.length,
                         ),
-                      )
+                      ),
               ],
             );
           },
