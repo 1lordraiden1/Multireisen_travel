@@ -113,7 +113,11 @@ Map<String, dynamic> _$OptionalServiceToJson(OptionalService instance) =>
     };
 
 Option _$OptionFromJson(Map<String, dynamic> json) => Option(
-      value: (json['value'] as num?)?.toInt(),
+      value: json['value'] is int
+          ? (json['value'] as num?)?.toInt()
+          : int.parse(
+              (json['value']),
+            ),
       bags: json['bags'] as String?,
       maxweight: json['maxweight'] as String?,
       price: (json['price'] as num?)?.toDouble(),
@@ -192,7 +196,11 @@ Map<String, dynamic> _$PriceBreakDownToJson(PriceBreakDown instance) =>
 
 TaxBreakDown _$TaxBreakDownFromJson(Map<String, dynamic> json) => TaxBreakDown(
       id: (json['id'] as num?)?.toInt(),
-      value: (json['value'] as num?)?.toDouble(),
+      value: json['value'] is double
+          ? (json['value'] as num?)?.toDouble()
+          : double.parse(
+              (json['value'].toString()),
+            ),
     );
 
 Map<String, dynamic> _$TaxBreakDownToJson(TaxBreakDown instance) =>

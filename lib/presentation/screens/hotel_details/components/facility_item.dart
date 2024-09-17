@@ -33,9 +33,12 @@ class _FacilityItemState extends State<FacilityItem> {
         children: [
           Icon(Icons.circle),
           5.horizontalSpace,
-          Text(
-            widget.facility,
-            style: TextStylesManager.mediumStyle(fontSize: 12.sp, color: red),
+          Flexible(
+            child: Text(
+              widget.facility,
+              style: TextStylesManager.mediumStyle(fontSize: 12.sp, color: red),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
