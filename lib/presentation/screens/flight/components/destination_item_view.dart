@@ -22,8 +22,11 @@ class DestinationItemView extends StatelessWidget {
         date != null
             ? Text(
                 date!,
-                style:
-                    TextStylesManager.lightStyle(fontSize: 10.sp, color: grey),
+                style: TextStylesManager.lightStyle(
+                  fontSize: 10.sp,
+                  color: grey,
+                ),
+                overflow: TextOverflow.ellipsis,
               )
             : SizedBox(
                 height: 10.h,
@@ -39,12 +42,15 @@ class DestinationItemView extends StatelessWidget {
               ),
         2.verticalSpace,
         Text(
-          airport,
+          airport.length > 10 ? '${airport.substring(0, 7)}...' : airport,
           style: TextStylesManager.mediumStyle(fontSize: 18.sp),
+          overflow: TextOverflow.ellipsis,
         ),
         2.verticalSpace,
         Text(
-          destination,
+          destination.length > 10
+              ? '${destination.substring(0, 9)}...'
+              : destination,
           style: TextStylesManager.lightStyle(fontSize: 10.sp, color: grey),
           overflow: TextOverflow.ellipsis,
         ),

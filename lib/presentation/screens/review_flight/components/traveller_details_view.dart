@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
-import 'package:qfly/constant/assets_manager.dart';
 import 'package:qfly/constant/text_styles_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:qfly/data/Shared/countries.dart';
-import 'package:qfly/data/model/Flight/Flight_model.dart';
 
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/data/model/responses/get_ticket_response.dart';
 
-import 'package:qfly/presentation/screens/payment/payment_screen.dart';
-import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
-import 'package:qfly/presentation/widgets/text_shapes/text_input_view.dart';
 import 'package:qfly/utils/validation.dart';
 
 import '../../../../constant/colors.dart';
@@ -39,8 +33,8 @@ class TravellerDetailsView extends StatelessWidget {
         ),
         10.verticalSpace,
         ListView.builder(
-          padding: EdgeInsets.all(0),
-          physics: NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(0),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: homeCubit.adults,
           itemBuilder: (context, index) {
@@ -54,8 +48,8 @@ class TravellerDetailsView extends StatelessWidget {
         ),
         homeCubit.children > 0
             ? ListView.builder(
-                padding: EdgeInsets.all(0),
-                physics: NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: homeCubit.children,
                 itemBuilder: (context, index) {
@@ -70,8 +64,8 @@ class TravellerDetailsView extends StatelessWidget {
             : const SizedBox(),
         homeCubit.infant > 0
             ? ListView.builder(
-                padding: EdgeInsets.all(0),
-                physics: NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: homeCubit.infant,
                 itemBuilder: (context, index) {
@@ -150,6 +144,7 @@ class _PassengerFormState extends State<PassengerForm> {
         });
       }, */
       maintainState: true,
+      initiallyExpanded: true,
       title: Text(
         'Traveler ${widget.travelerNumber} (${widget.type})',
         style: TextStylesManager.regularStyle(fontSize: 14.sp),
@@ -205,10 +200,10 @@ class _PassengerFormState extends State<PassengerForm> {
                 enableInteractiveSelection: false,
                 name: 'Birth Date',
                 decoration: InputDecoration(
-                  label: Text('Birth Date'),
+                  label: const Text('Birth Date'),
                   labelStyle: TextStylesManager.lightStyle(),
                   border: const OutlineInputBorder(),
-                  icon: Icon(Icons.date_range_outlined),
+                  icon: const Icon(Icons.date_range_outlined),
                 ),
                 onSaved: (newValue) {
                   DateTime now = DateTime.now();

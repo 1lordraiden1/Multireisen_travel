@@ -18,7 +18,7 @@ class FlightTripDestinationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SvgPicture.asset(ImageAssets.flightTripImg),
+        SvgPicture.asset(ImageAssets.flightTripImg, width: 90,),
         Row(
           children: [
             Text(

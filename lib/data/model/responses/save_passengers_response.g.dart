@@ -99,7 +99,11 @@ Map<String, dynamic> _$PriceBreakDownToJson(PriceBreakDown instance) =>
     };
 
 TaxBreakDown _$TaxBreakDownFromJson(Map<String, dynamic> json) => TaxBreakDown(
-      id: (json['id'] as num?)?.toInt(),
+      id: json['id'] is int
+          ? (json['id'] as num?)?.toInt()
+          : int.parse(
+              json['id'].toString(),
+            ),
       value: json['value'] is double
           ? (json['value'] as num?)?.toDouble()
           : double.parse(

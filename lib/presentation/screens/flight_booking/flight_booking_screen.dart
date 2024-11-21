@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:qfly/bloc/cubit/home/home_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qfly/data/model/Flight/Flight_details_model.dart';
-import 'package:qfly/data/model/Flight/Flight_model.dart';
 import 'package:qfly/data/model/responses/flight_response.dart';
 import 'package:qfly/presentation/screens/flight/components/ticket/ticket_view.dart';
 import 'package:qfly/presentation/screens/payment/payment_screen.dart';
-import 'package:qfly/presentation/screens/review_flight/components/flight_amenities_view.dart';
 import 'package:qfly/presentation/screens/review_flight/components/flight_details_view.dart';
 import 'package:qfly/presentation/screens/review_flight/components/traveller_details_view.dart';
 import 'package:qfly/presentation/widgets/app_bar/custom_app_bar_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qfly/presentation/widgets/btn_shapes/rounded_btn_view.dart';
-
-import '../../../config/routes/app_routes.dart';
 
 class FlightBookingScreen extends StatefulWidget {
   const FlightBookingScreen({
